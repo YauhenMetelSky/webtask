@@ -44,7 +44,7 @@ public class HelloServlet extends HttpServlet {
 			ResultSet resultSet = statement.executeQuery(sql);
 			while (resultSet.next()) {
 				int id = resultSet.getInt(1);
-				String text = resultSet.getString(2);
+				String text = resultSet.getString("text");
 				list.add(new Message(id, text));
 			}
 		} catch (SQLException e) {
