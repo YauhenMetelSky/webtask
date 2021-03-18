@@ -38,7 +38,7 @@ public class HelloServlet extends HttpServlet {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb", "root","Gfhjkmr,l"); 
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb", "root","MyPassword"); 
 			Statement statement = connection.createStatement()) {
 			String sql = "SELECT message_id, text FROM messages";
 			ResultSet resultSet = statement.executeQuery(sql);
