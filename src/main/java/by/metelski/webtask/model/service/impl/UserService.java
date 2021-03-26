@@ -18,7 +18,7 @@ public class UserService implements UserServiceInterface {
 		try {
 			users = userDao.FindAllUsers();
 		} catch (DaoException e) {
-					e.printStackTrace();
+			e.printStackTrace();
 		}
 		return users;
 	}
@@ -26,10 +26,9 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public List<User> FindUsersByName(String userName) {
 		List<User> users = new ArrayList<>();
-			try {
+		try {
 			users = userDao.FindUsersByName(userName);
 		} catch (DaoException e) {
-			
 			e.printStackTrace();
 		}
 		return users;
