@@ -17,7 +17,8 @@ public class ConnectionCreator {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//TODO Exception???
+			logger.log(Level.ERROR, "exception in getConnection" +e.getMessage());
 		}
 		logger.log(Level.INFO, "return connection ");
 		return DriverManager.getConnection("jdbc:mysql://localhost:3306/projectdb", "root", "Gfhjkmr,l");
