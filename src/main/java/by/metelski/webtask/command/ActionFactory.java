@@ -24,7 +24,7 @@ public class ActionFactory {
 			CommandType currentType = CommandType.valueOf(action.toUpperCase());
 			current = currentType.getCurrentCommand();
 		} catch (IllegalArgumentException e) {
-			logger.log(Level.INFO, "empty command from catch ");
+			logger.log(Level.ERROR, "empty command from catch ");
 			current = new EmptyCommand();
 		}
 		return current;
