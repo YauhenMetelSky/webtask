@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="w3-container w3-teal">
-	<h1>Start page.</h1>
+	<h1>Hello, ${user.name}</h1>
 	</div>
 	<br />
 	<div class ="w3-container w3-teal">

@@ -1,7 +1,8 @@
 package by.metelski.webtask.command;
 
-import by.metelski.webtask.command.impl.EmptyCommand;
-import by.metelski.webtask.command.impl.FindByNameCommand;
+import by.metelski.webtask.command.impl.UnknownCommand;
+import by.metelski.webtask.command.impl.FindUsersByNameCommand;
+import by.metelski.webtask.command.impl.LogInCommand;
 import by.metelski.webtask.command.impl.ShowAllUsersCommand;
 
 public enum CommandType {
@@ -20,9 +21,9 @@ public enum CommandType {
 //		this.command = new SortByAreaCommand();
 		}
 	},
-	EMPTY_COMMAND{
+	UNKNOWN_COMMAND{
 		{
-		this.command = new EmptyCommand();
+		this.command = new UnknownCommand();
 		}
 	},
 	SHOW_ALL_USERS{
@@ -37,12 +38,17 @@ public enum CommandType {
 	},
 	FIND_BY_NAME{
 		{
-			this.command = new FindByNameCommand();
+			this.command = new FindUsersByNameCommand();
 		}
 	},
 	FIND_BY_SURNAME{
 		{
 //		this.command = new FindByIdCommand();
+		}
+	},
+	LOG_IN{
+		{
+		this.command = new LogInCommand();
 		}
 	};
 	Command command;

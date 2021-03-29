@@ -1,7 +1,6 @@
 package by.metelski.webtask.command.impl;
 
-import java.util.List;
-
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -13,22 +12,32 @@ import by.metelski.webtask.model.entity.User;
 import by.metelski.webtask.model.service.UserServiceInterface;
 import by.metelski.webtask.model.service.impl.UserService;
 
-public class ShowAllUsersCommand implements Command {
+public class LogInCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserServiceInterface userService = new UserService();
 
 	@Override
 	public String execute(HttpServletRequest request) {
-		List<User> users;
-		String page;
+		String page = null;
+		logger.log(Level.INFO, "execute method logIn");
+	User user;
+	String login = request.getParameter("login");
+	String password = request.getParameter("password");
+		Optional<User> optionalUser;
 		try {
-			users = userService.FindAllUsers();
-			page = PagePath.RESULT;
-			request.setAttribute("lst", users);		
+			optionalUser = userService.FindUsersByLoginPassword(login, password);
+			if(optionalUser.isPresent()) {
+				user = optionalUser.get();
+				page = PagePath.MAIN;
+				request.setAttribute("user", user);
+			} else {
+				page = PagePath.SIGN_IN;
+				request.setAttribute("wrong", true);
+			}		
 		} catch (UserServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");
 			page = PagePath.ERROR;
-		}
+		}		
 		return page;
 	}
 }

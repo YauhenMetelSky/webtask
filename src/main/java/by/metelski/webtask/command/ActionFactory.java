@@ -6,26 +6,26 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import by.metelski.webtask.command.impl.EmptyCommand;
+import by.metelski.webtask.command.impl.UnknownCommand;
 
 public class ActionFactory {
 	private static final Logger logger = LogManager.getLogger();
 	
-	public static Command defineCommand(HttpServletRequest req) {
+	public static Command defineCommand(HttpServletRequest request) {
 		Command current = null;
-		String action = req.getParameter(RequestParameter.COMMAND);
+		String action = request.getParameter(RequestParameter.COMMAND);
 		logger.log(Level.INFO, "definded command: " + action);
 		
 		if (action == null || action.isEmpty()) {
 			logger.log(Level.INFO, "empty command ");
-			return new EmptyCommand();
+			return new UnknownCommand();
 		}
 		try {
 			CommandType currentType = CommandType.valueOf(action.toUpperCase());
 			current = currentType.getCurrentCommand();
 		} catch (IllegalArgumentException e) {
 			logger.log(Level.ERROR, "empty command from catch ");
-			current = new EmptyCommand();
+			current = new UnknownCommand();
 		}
 		return current;
 	}

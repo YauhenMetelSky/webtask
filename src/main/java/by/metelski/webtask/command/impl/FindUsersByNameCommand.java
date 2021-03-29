@@ -8,26 +8,32 @@ import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.RequestParameter;
+import by.metelski.webtask.exception.UserServiceException;
 import by.metelski.webtask.model.entity.User;
 import by.metelski.webtask.model.service.UserServiceInterface;
 import by.metelski.webtask.model.service.impl.UserService;
 
-public class FindByNameCommand implements Command{
+public class FindUsersByNameCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserServiceInterface userService = new UserService();
+
 	@Override
 	public String execute(HttpServletRequest request) {
 		List<User> users;
 		String page;
 		String userName = request.getParameter(RequestParameter.USER_NAME);
 		logger.log(Level.INFO, "Find by name: " + userName);
-		if(userName.isEmpty()||userName==null) {
-			page = PagePath.EMPTY_RESULT;
-		}else {
+		try {
 			users = userService.FindUsersByName(userName);
-		// TODO try-catch block??
-		page =PagePath.RESULT;
-		request.setAttribute("lst", users);
+			if (users.size()>0) {
+				page = PagePath.RESULT;
+				request.setAttribute("lst", users);
+			} else {
+				page = PagePath.EMPTY_RESULT;
+			}
+		} catch (UserServiceException e) {
+			logger.log(Level.ERROR, "UserServiceException in method execute");
+			page = PagePath.ERROR;
 		}
 		return page;
 	}

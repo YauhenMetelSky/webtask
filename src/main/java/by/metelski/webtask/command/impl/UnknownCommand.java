@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 
-public class EmptyCommand implements Command {
+public class UnknownCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 
 	@Override
