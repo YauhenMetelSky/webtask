@@ -7,8 +7,8 @@ import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.entity.User;
 
 public interface BaseDao {
-	List<User>FindAllUsers() throws DaoException;
-	List<User>FindUsersByName(String userName) throws DaoException;
+	List<User>findAllUsers() throws DaoException;
+	List<User>findUsersByName(String userName) throws DaoException;
 	Optional<String>findPasswordByLogin(String login) throws DaoException;
 	Optional<User>findUserByLogin(String login) throws DaoException;
 }

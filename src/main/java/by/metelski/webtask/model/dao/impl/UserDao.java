@@ -25,7 +25,7 @@ public class UserDao implements BaseDao {
 	// TODO correct query
 
 	@Override
-	public List<User> FindAllUsers() throws DaoException {
+	public List<User> findAllUsers() throws DaoException {
 		List<User> users = new ArrayList<User>();
 		try (Connection connection = ConnectionCreator.getConnection();
 				Statement statement = connection.createStatement()) {
@@ -44,7 +44,7 @@ public class UserDao implements BaseDao {
 	}
 
 	@Override
-	public List<User> FindUsersByName(String userName) throws DaoException {
+	public List<User> findUsersByName(String userName) throws DaoException {
 		List<User> users = new ArrayList<User>();
 		try (Connection connection = ConnectionCreator.getConnection();
 				PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_NAME)) {

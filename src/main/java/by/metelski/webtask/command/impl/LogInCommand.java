@@ -9,12 +9,12 @@ import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.exception.UserServiceException;
 import by.metelski.webtask.model.entity.User;
-import by.metelski.webtask.model.service.UserServiceInterface;
-import by.metelski.webtask.model.service.impl.UserService;
+import by.metelski.webtask.model.service.UserService;
+import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
 public class LogInCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	private UserServiceInterface userService = new UserService();
+	private UserService userService = new UserServiceImpl();
 
 	@Override
 	public String execute(HttpServletRequest request) {
@@ -25,7 +25,7 @@ public class LogInCommand implements Command {
 	String password = request.getParameter("password");
 		Optional<User> optionalUser;
 		try {
-			optionalUser = userService.FindUsersByLoginPassword(login, password);
+			optionalUser = userService.findUsersByLoginPassword(login, password);
 			if(optionalUser.isPresent()) {
 				user = optionalUser.get();
 				page = PagePath.MAIN;

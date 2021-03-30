@@ -15,18 +15,18 @@ import by.metelski.webtask.exception.UserServiceException;
 import by.metelski.webtask.model.dao.BaseDao;
 import by.metelski.webtask.model.dao.impl.UserDao;
 import by.metelski.webtask.model.entity.User;
-import by.metelski.webtask.model.service.UserServiceInterface;
+import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.validator.UserValidator;
 
-public class UserService implements UserServiceInterface {
+public class UserServiceImpl implements UserService {
 	private static final Logger logger = LogManager.getLogger();
 	BaseDao userDao = new UserDao();
 
 	@Override
-	public List<User> FindAllUsers() throws UserServiceException {
+	public List<User> findAllUsers() throws UserServiceException {
 		List<User> users = new ArrayList<>();
 		try {
-			users = userDao.FindAllUsers();
+			users = userDao.findAllUsers();
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method FindAllUsers");
 			throw new UserServiceException(e);
@@ -35,11 +35,11 @@ public class UserService implements UserServiceInterface {
 	}
 
 	@Override
-	public List<User> FindUsersByName(String userName) throws UserServiceException {
+	public List<User> findUsersByName(String userName) throws UserServiceException {
 		List<User> users = new ArrayList<>();
 		if (UserValidator.isValidName(userName)) {
 			try {
-				users = userDao.FindUsersByName(userName);
+				users = userDao.findUsersByName(userName);
 			} catch (DaoException e) {
 				logger.log(Level.ERROR, "dao exception in method FindUsersByName");
 				throw new UserServiceException(e);
@@ -49,7 +49,7 @@ public class UserService implements UserServiceInterface {
 	}
 
 	@Override
-	public Optional<User> FindUsersByLoginPassword(String login, String password) throws UserServiceException {
+	public Optional<User> findUsersByLoginPassword(String login, String password) throws UserServiceException {
 		Optional<User> optionalUser = null;
 		if(UserValidator.isValidEmail(login)) {
 		Base64.Encoder encoder = Base64.getEncoder();

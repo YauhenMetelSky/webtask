@@ -10,12 +10,12 @@ import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.RequestParameter;
 import by.metelski.webtask.exception.UserServiceException;
 import by.metelski.webtask.model.entity.User;
-import by.metelski.webtask.model.service.UserServiceInterface;
-import by.metelski.webtask.model.service.impl.UserService;
+import by.metelski.webtask.model.service.UserService;
+import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
 public class FindUsersByNameCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	private UserServiceInterface userService = new UserService();
+	private UserService userService = new UserServiceImpl();
 
 	@Override
 	public String execute(HttpServletRequest request) {
@@ -24,7 +24,7 @@ public class FindUsersByNameCommand implements Command {
 		String userName = request.getParameter(RequestParameter.USER_NAME);
 		logger.log(Level.INFO, "Find by name: " + userName);
 		try {
-			users = userService.FindUsersByName(userName);
+			users = userService.findUsersByName(userName);
 			if (users.size()>0) {
 				page = PagePath.RESULT;
 				request.setAttribute("lst", users);
