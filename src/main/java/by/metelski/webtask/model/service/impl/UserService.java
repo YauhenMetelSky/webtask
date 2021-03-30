@@ -51,6 +51,7 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public Optional<User> FindUsersByLoginPassword(String login, String password) throws UserServiceException {
 		Optional<User> optionalUser = null;
+		if(UserValidator.isValidEmail(login)) {
 		Base64.Encoder encoder = Base64.getEncoder();
 		byte[] bytesEncoded = encoder.encode(password.getBytes());
 		BigInteger bigInt = new BigInteger(1, bytesEncoded);
@@ -74,6 +75,9 @@ public class UserService implements UserServiceInterface {
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword");
 			throw new UserServiceException(e);
+		}
+		} else {
+			optionalUser = Optional.empty();
 		}
 		return optionalUser;
 	}
