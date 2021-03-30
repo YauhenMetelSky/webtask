@@ -32,7 +32,7 @@ public class LogInCommand implements Command {
 				request.setAttribute("user", user);
 			} else {
 				page = PagePath.SIGN_IN;
-				request.setAttribute("wrong", true);
+				request.setAttribute("wrong", "login or password");
 			}		
 		} catch (UserServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");
