@@ -9,14 +9,16 @@
 <body>
 	<div class="w3-container w3-teal">
 		<form action="controller" method="POST">
-			Login:<br />
-			 <input type="text" name="login" required pattern="[A-Za-z]+@[A-Za-z]+\.[A-Za-z]{2,6}"> 
-			<br />Password:
-			<br />	
+			Login:
+			<br /> 
+			<input type="text" name="login" required pattern="[A-Za-z0-9_]+@[A-Za-z]+\.[A-Za-z]{2,6}"> 
+			<br />
+			Password:
+			<br /> 
 			<input type="password" name="password" required> 
 			<br />
-			 <input	type="hidden" name="command" value="log_in" class="w3-input">
-			<c:if test="${wrong}"><p>Wrong login or password</p></c:if>
+			<input type="hidden" name="command" value="log_in" class="w3-input">
+					<p>${wrong}</p>
 			<input type="submit" name="submit" value="Go">
 		</form>
 	</div>

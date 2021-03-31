@@ -29,11 +29,11 @@ public class Controller extends HttpServlet {
 		processRequest(request, response);
 	}
 	private void processRequest(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException{
-		String page = null;
+		String page;
 		Command command = ActionFactory.defineCommand(request);
 		page = command.execute(request);
-		logger.log(Level.INFO, "page from command " + page);
-		logger.log(Level.INFO, "attribute list:" + request.getAttribute("lst"));
+		logger.log(Level.DEBUG, "page from command " + page);
+		logger.log(Level.DEBUG, "is wrong: " + request.getAttribute("wrong"));
 		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 		dispatcher.forward(request, response);
 	}

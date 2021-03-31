@@ -20,24 +20,24 @@ public class LogInCommand implements Command {
 	public String execute(HttpServletRequest request) {
 		String page = null;
 		logger.log(Level.INFO, "execute method logIn");
-	User user;
-	String login = request.getParameter("login");
-	String password = request.getParameter("password");
+		User user;
+		String login = request.getParameter("login");
+		String password = request.getParameter("password");
 		Optional<User> optionalUser;
 		try {
 			optionalUser = userService.findUsersByLoginPassword(login, password);
-			if(optionalUser.isPresent()) {
+			if (optionalUser.isPresent()) {
 				user = optionalUser.get();
 				page = PagePath.MAIN;
 				request.setAttribute("user", user);
 			} else {
 				page = PagePath.SIGN_IN;
-				request.setAttribute("wrong", "login or password");
-			}		
+				request.setAttribute("wrong", "incorrect login or password");
+			}
 		} catch (UserServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");
 			page = PagePath.ERROR;
-		}		
+		}
 		return page;
 	}
 }

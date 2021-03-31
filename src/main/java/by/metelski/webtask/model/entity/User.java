@@ -1,6 +1,6 @@
 package by.metelski.webtask.model.entity;
 
-public class User {
+public class User extends Entity{
 	private long userId;
 	private String name;
 	private String surname;
