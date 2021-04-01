@@ -24,8 +24,8 @@
 	<div class ="w3-center w3-teal">
 	<h2>Show all users.</h2>
 	<form action="controller" method="post">
-	<input type="hidden" name="command" value="show_all_users">
-	 <input type="submit" name="command" value="Find users">
+	<input type="hidden" name="command" value="find_all_users">
+	 <input type="submit" name="command" value="show all users">
 	</form>
 	<a href="controller">Hello Servlet</a>	
 	</div>
