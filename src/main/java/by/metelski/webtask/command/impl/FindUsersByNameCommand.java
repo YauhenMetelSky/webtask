@@ -25,7 +25,7 @@ public class FindUsersByNameCommand implements Command {
 		logger.log(Level.INFO, "Find by name: " + userName);
 		try {
 			users = userService.findUsersByName(userName);
-			if (users.size()>0) {
+			if (users.size() > 0) {
 				page = PagePath.RESULT;
 				request.setAttribute("lst", users);
 			} else {

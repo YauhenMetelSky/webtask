@@ -6,6 +6,7 @@ public final class PagePath {
 	public static final String RESULT = "/views/result.jsp";
 	public static final String EMPTY_RESULT = "/views/empty.jsp";
 	public static final String ERROR = "/views/error.jsp";
-	
-   private PagePath() {}
+
+	private PagePath() {
+	}
 }

@@ -28,17 +28,17 @@ public class ConnectionCreator {
 		try (InputStream inputStream = ConnectionCreator.class.getClassLoader()
 				.getResourceAsStream(DATABASE_PROPERTIES)) {
 			properties.load(inputStream);
-		} catch (FileNotFoundException e) {
-			// TODO exception handling
-		} catch (IOException ex) {
-			// TODO exception handling
-		}
-		try {
 			DATABASE_URL = properties.getProperty(PROPERTY_URL);
 			DATABASE_PASSWORD = properties.getProperty(PROPERTY_PASSWORD);
 			DATABASE_USER = properties.getProperty(PROPERTY_USER);
 			DATABASE_DRIVER = properties.getProperty(PROPERTY_DRIVER);
 			Class.forName(DATABASE_DRIVER);
+		} catch (FileNotFoundException e) {
+			logger.log(Level.FATAL, "FileNotFoundException " + e.getMessage());
+			throw new RuntimeException();
+		} catch (IOException ex) {
+			logger.log(Level.FATAL, "IOException " + ex.getMessage());
+			throw new RuntimeException();
 		} catch (ClassNotFoundException e) {
 			logger.log(Level.FATAL, "driver: " + properties.getProperty(PROPERTY_DRIVER) + "not found");
 			throw new RuntimeException();

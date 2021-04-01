@@ -3,55 +3,33 @@ package by.metelski.webtask.command;
 import by.metelski.webtask.command.impl.UnknownCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
 import by.metelski.webtask.command.impl.LogInCommand;
-import by.metelski.webtask.command.impl.ShowAllUsersCommand;
+import by.metelski.webtask.command.impl.FindAllUsersCommand;
 
 public enum CommandType {
-	SORT_BY_ID{;
-	{
-//		this.command = new SortByIdCommand();
-	}
-	},
-	SORT_BY_NAME{
+	// TODO Sort commands
+	UNKNOWN_COMMAND {
 		{
-//		this.command = new SortByAreaCommand();
+			this.command = new UnknownCommand();
 		}
 	},
-	SORT_BY_SURNAME{
+	FIND_ALL_USERS {
 		{
-//		this.command = new SortByAreaCommand();
+			this.command = new FindAllUsersCommand();
 		}
 	},
-	UNKNOWN_COMMAND{
-		{
-		this.command = new UnknownCommand();
-		}
-	},
-	SHOW_ALL_USERS{
-		{
-			this.command = new ShowAllUsersCommand();
-		}
-	},
-	FIND_BY_ID{
-		{
-//			this.command = new FindByPerimeterRangeCommand();
-		}
-	},
-	FIND_BY_NAME{
+	FIND_BY_NAME {
 		{
 			this.command = new FindUsersByNameCommand();
 		}
 	},
-	FIND_BY_SURNAME{
+	LOG_IN {
 		{
-//		this.command = new FindByIdCommand();
-		}
-	},
-	LOG_IN{
-		{
-		this.command = new LogInCommand();
+			this.command = new LogInCommand();
 		}
 	};
+
 	Command command;
+
 	public Command getCurrentCommand() {
 		return command;
 	}

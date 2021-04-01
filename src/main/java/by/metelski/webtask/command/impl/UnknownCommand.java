@@ -1,7 +1,6 @@
 package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,8 +12,8 @@ public class UnknownCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request) {
-		String page =PagePath.MAIN;
-		logger.log(Level.INFO, "empty command ");
+		String page = PagePath.MAIN;
+		logger.log(Level.INFO, "unknown command ");
 		return page;
 	}
 }

@@ -4,13 +4,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Optional;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.entity.Entity;
-import by.metelski.webtask.model.entity.User;
 
 public interface BaseDao<T extends Entity> {
+	public static final Logger logger = LogManager.getLogger();
 	List<T> findAll() throws DaoException ;
 	
 	default void close(Statement statement) {

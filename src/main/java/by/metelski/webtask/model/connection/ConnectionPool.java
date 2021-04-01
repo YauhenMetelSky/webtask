@@ -1,16 +1,14 @@
 package by.metelski.webtask.model.connection;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
+import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,14 +20,14 @@ public class ConnectionPool {
 	private static Lock locker = new ReentrantLock(true);
 	private BlockingQueue<Connection> freeConnection;
 	private Queue<Connection> givenAwayConnections;
+	// TODO default pool size from connection or properties
 	private final static int DEFAULT_POOL_SIZE = 32;
 
 	private ConnectionPool() {
-		// TODO register driver, init pool params, init connection
-		freeConnection = new LinkedBlockingDeque(DEFAULT_POOL_SIZE);
-		givenAwayConnections = new ArrayDeque();
+		freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
+		givenAwayConnections = new ArrayDeque<>();
 		for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-			try  {
+			try {
 				Connection connection = ConnectionCreator.getConnection();
 				boolean isAddded = freeConnection.add(connection);
 				logger.log(Level.INFO, "connection added to freeConnection: " + isAddded);
@@ -40,7 +38,6 @@ public class ConnectionPool {
 		}
 	}
 
-//TODO realization
 	public static ConnectionPool getInstance() {
 		if (!isCreated) {
 			locker.lock();
@@ -67,14 +64,18 @@ public class ConnectionPool {
 	}
 
 	public void releaseConnection(Connection connection) {
-		logger.log(Level.DEBUG, "release connection " + connection);
-		givenAwayConnections.remove(connection);
-		freeConnection.offer(connection);
+		if (connection != null) {
+			logger.log(Level.DEBUG, "release connection " + connection);
+			givenAwayConnections.remove(connection);
+			freeConnection.offer(connection);
+		}
+		// TODO connection = null?
 	}
 
 	public void destroyPool() {
 		for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
 			try {
+				logger.log(Level.DEBUG, "destroyPool");
 				freeConnection.take().close();
 			} catch (InterruptedException e) {
 				logger.log(Level.ERROR, "InterruptedException in method destroyPool " + e.getMessage());
@@ -82,10 +83,16 @@ public class ConnectionPool {
 				logger.log(Level.ERROR, "SQLException in method destroyPool " + e.getMessage());
 			}
 		}
-
+		deregisterDrivers();
 	}
 
 	private void deregisterDrivers() {
-
+		DriverManager.getDrivers().asIterator().forEachRemaining(driver -> {
+			try {
+				DriverManager.deregisterDriver(driver);
+			} catch (SQLException e) {
+				logger.log(Level.ERROR, "SQLException in method deregisterDrivers " + e.getMessage());
+			}
+		});
 	}
 }

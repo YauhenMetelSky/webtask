@@ -19,7 +19,7 @@ public class LogInCommand implements Command {
 	@Override
 	public String execute(HttpServletRequest request) {
 		String page = null;
-		logger.log(Level.INFO, "execute method logIn");
+		logger.log(Level.DEBUG, "execute method logIn");
 		User user;
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");

@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.exception.DaoException;
-import by.metelski.webtask.model.connection.ConnectionCreator;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.model.dao.ColumnName;
 import by.metelski.webtask.model.dao.UserDao;
@@ -36,7 +35,7 @@ public class UserDaoImpl implements UserDao {
 				int userId = resultSet.getInt(ColumnName.USER_ID);
 				String name = resultSet.getString(ColumnName.USER_NAME);
 				String surname = resultSet.getString(ColumnName.USER_SURNAME);
-				logger.log(Level.INFO, "user id:" + userId + " user name:" + name + " user surname:" + surname);
+				logger.log(Level.DEBUG, "user id:" + userId + " user name:" + name + " user surname:" + surname);
 				users.add(new User(userId, name, surname));
 			}
 		} catch (SQLException e) {
@@ -50,21 +49,23 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<User> findUsersByName(String userName) throws DaoException {
-		//TODO connection pool
 		List<User> users = new ArrayList<User>();
-		try (Connection connection = ConnectionCreator.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_BY_NAME)) {
+		Connection connection = connectionPool.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_BY_NAME);
 			statement.setString(1, userName);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				int userId = resultSet.getInt(ColumnName.USER_ID);
 				String name = resultSet.getString(ColumnName.USER_NAME);
 				String surname = resultSet.getString(ColumnName.USER_SURNAME);
-				logger.log(Level.INFO, "user id:" + userId + "FIO: " + name + " " + surname);
+				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
 				users.add(new User(userId, name, surname));
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Dao exception", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
 		}
 		return users;
 	}
@@ -87,22 +88,22 @@ public class UserDaoImpl implements UserDao {
 				optionalPassword = Optional.empty();
 			}
 		} catch (SQLException e) {
-			logger.log(Level.ERROR, "SQLException in method findPasswordByLogin " +e.getMessage());
+			logger.log(Level.ERROR, "SQLException in method findPasswordByLogin " + e.getMessage());
 			throw new DaoException("Dao exception", e);
 		} finally {
-				connectionPool.releaseConnection(connection);
+			connectionPool.releaseConnection(connection);
 		}
 		return optionalPassword;
 	}
 
 	@Override
 	public Optional<User> findUserByLogin(String login) throws DaoException {
-		//TODO connection pool
 		logger.log(Level.INFO, "Find user by login, login=  " + login);
 		Optional<User> optionalUser;
-		try (Connection connection = ConnectionCreator.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USER_BY_LOGIN)) {
-			logger.log(Level.INFO, "in try block, login");
+		Connection connection = connectionPool.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement(SQL_FIND_USER_BY_LOGIN);
+			logger.log(Level.DEBUG, "in try block, login");
 			statement.setString(1, login);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
@@ -110,7 +111,7 @@ public class UserDaoImpl implements UserDao {
 				String name = resultSet.getString(ColumnName.USER_NAME);
 				String surname = resultSet.getString(ColumnName.USER_SURNAME);
 				User user = new User(userId, name, surname);
-				logger.log(Level.INFO, "user id:" + userId + "FIO: " + name + " " + surname);
+				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
 				optionalUser = Optional.of(user);
 			} else {
 				logger.log(Level.INFO, "didn't find user with login:" + login);
@@ -119,6 +120,8 @@ public class UserDaoImpl implements UserDao {
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-- " + e.getErrorCode());
 			throw new DaoException("Dao exception in method findUserByLogin", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
 		}
 		return optionalUser;
 	}
