@@ -4,15 +4,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<meta name="viewport" content="width=device-width, initial-scale=1,  shrink-to-fit=no">
+<script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script defer src="js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
 <title>Result page</title>
 </head>
 <body>
-	<div class="w3-center w3-teal">
+	<div class="container-sm bg-primary text-white">
 		<h1>Result list.</h1>
 	</div>
 	<br />
-	<table class="w3-table w3-striped w3-bordered">
+	<table class="table table-striped">
 		<tr>
 			<th>Number</th>
 			<th>User id</th>

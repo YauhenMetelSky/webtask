@@ -18,10 +18,10 @@ public class ConnectionPool {
 	private static boolean isCreated;
 	private static ConnectionPool instance = new ConnectionPool();
 	private static Lock locker = new ReentrantLock(true);
-	private BlockingQueue<Connection> freeConnection;
-	private Queue<Connection> givenAwayConnections;
+	private BlockingQueue<ProxyConnection> freeConnection;
+	private Queue<ProxyConnection> givenAwayConnections;
 	// TODO default pool size from connection or properties
-	private final static int DEFAULT_POOL_SIZE = 32;
+	private static final int DEFAULT_POOL_SIZE = 8;
 
 	private ConnectionPool() {
 		freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
@@ -29,12 +29,16 @@ public class ConnectionPool {
 		for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
 			try {
 				Connection connection = ConnectionCreator.getConnection();
-				boolean isAddded = freeConnection.add(connection);
+				ProxyConnection proxyConnection = new ProxyConnection(connection);
+				boolean isAddded = freeConnection.add(proxyConnection);
 				logger.log(Level.INFO, "connection added to freeConnection: " + isAddded);
 			} catch (SQLException e) {
-				logger.log(Level.FATAL, "coudn't create connection to data base: ");
-				throw new RuntimeException();
+				logger.log(Level.ERROR, "coudn't create connection to data base: " + e.getMessage());
 			}
+		}
+		if (freeConnection.size() == 0) {
+			logger.log(Level.FATAL, "connections poll don't created, pool size: " + freeConnection.size());
+			throw new RuntimeException("connections poll don't created");
 		}
 	}
 
@@ -56,27 +60,33 @@ public class ConnectionPool {
 		try {
 			connection = freeConnection.take();
 			logger.log(Level.DEBUG, "Gave connection " + connection);
-			givenAwayConnections.offer(connection);
+			givenAwayConnections.add((ProxyConnection) connection);
 		} catch (InterruptedException e) {
 			logger.log(Level.ERROR, "InterruptedException in method getConnection " + e.getMessage());
+			Thread.currentThread().interrupt();
 		}
 		return connection;
 	}
 
 	public void releaseConnection(Connection connection) {
-		if (connection != null) {
+		if (connection instanceof ProxyConnection) {
 			logger.log(Level.DEBUG, "release connection " + connection);
-			givenAwayConnections.remove(connection);
-			freeConnection.offer(connection);
+			if (givenAwayConnections.remove(connection)) {
+				try {
+					freeConnection.put((ProxyConnection) connection);
+				} catch (InterruptedException e) {
+					logger.log(Level.ERROR, "InterruptedException in method getConnection " + e.getMessage());
+					Thread.currentThread().interrupt();
+				}
+			}
 		}
-		// TODO connection = null?
 	}
 
 	public void destroyPool() {
 		for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
 			try {
 				logger.log(Level.DEBUG, "destroyPool");
-				freeConnection.take().close();
+				freeConnection.take().reallyClose();
 			} catch (InterruptedException e) {
 				logger.log(Level.ERROR, "InterruptedException in method destroyPool " + e.getMessage());
 			} catch (SQLException e) {

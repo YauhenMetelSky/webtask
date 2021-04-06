@@ -3,31 +3,57 @@
 <!DOCTYPE html>
 <html> 
 <head>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<meta name="viewport" content="width=device-width, initial-scale=1,  shrink-to-fit=no">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
 <title>Main page</title>
 </head>
 <body>
-<div class="w3-container w3-teal">
+<div class="container-sm bg-success text-white">
 	<h1>Hello, ${user.name}</h1>
 	</div>
+	    <main class="container">
+        <header class="col-sm-12">
+            <span>Bootstrap Calender</span>
+        </header>
+        <section class="col-sm-12">
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+        </section>
 	<br />
-	<div class ="w3-container w3-teal">
+	<div class="container-sm">
 	<form action="controller" method="POST">
 		<p>
 		   <label>Name</label>
-			<input type="text" name="name" value="" class="w3-input"> </p>
-			<input type="hidden" name="command"	value="find_by_name" class="w3-input">
-			<input type="submit" value="Find users" class="w3-input">
+			<input type="text" name="name" value="" class="form-control"> </p>
+			<input type="hidden" name="command"	value="find_by_name">
+			<button type="submit" class="btn btn-primary">Find</button>
+
+	<input type="hidden" name="command" value="find_all_users">
+	<button type="submit" class="btn btn-primary">Find all users</button>
 	</form>
 	</div>
 	<br />
-	<div class ="w3-center w3-teal">
-	<h2>Show all users.</h2>
-	<form action="controller" method="post">
-	<input type="hidden" name="command" value="find_all_users">
-	 <input type="submit" name="command" value="show all users">
-	</form>
+	<div class="container-sm bg-success text-white">
 	<a href="controller">Hello Servlet</a>	
 	</div>
+	</script>
+    <script type="text/javascript">
+        $(function() {
+            $('#datetimepicker1').datetimepicker();
+        });
+    </script>
 </body>
 </html>

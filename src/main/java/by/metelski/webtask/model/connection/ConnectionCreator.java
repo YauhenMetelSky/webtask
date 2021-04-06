@@ -46,7 +46,7 @@ public class ConnectionCreator {
 	}
 
 	private ConnectionCreator() {
-	};
+	}
 
 	public static Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
