@@ -19,10 +19,13 @@ public class Controller extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/html");
-		PrintWriter out = resp.getWriter();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
 		out.print("Hello from doGet");
+
 	}
 
 	@Override
@@ -33,6 +36,8 @@ public class Controller extends HttpServlet {
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
 		String page;
 		Command command = CommandProvider.defineCommand(request);
 		page = command.execute(request);

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -19,10 +20,11 @@ import by.metelski.webtask.model.entity.User;
 
 public class UserDaoImpl implements UserDao {
 	private static final Logger logger = LogManager.getLogger();
-	private static final String SQL_FIND_ALL_USERS = "SELECT user_id,name,surname FROM users";
-	private static final String SQL_FIND_USERS_BY_NAME = "SELECT user_id,name,surname FROM users WHERE name=?";
-	private static final String SQL_FIND_PASSWORD_BY_LOGIN = "SELECT user_id,name,surname, password FROM users WHERE login=?";
-	private static final String SQL_FIND_USER_BY_LOGIN = "SELECT user_id,name,surname FROM users WHERE login=?";
+	private static final String SQL_FIND_ALL_USERS = "SELECT user_id,name,surname,login,email,phone,isBlocked FROM users";
+	private static final String SQL_FIND_USERS_BY_NAME = "SELECT user_id,name,surname,login,email,phone,isBlocked FROM users WHERE name=?";
+	private static final String SQL_FIND_PASSWORD_BY_LOGIN = "SELECT password FROM users WHERE login=?";
+	private static final String SQL_FIND_USER_BY_LOGIN = "SELECT user_id,name,surname,login,email,phone,isBlocked FROM users WHERE login=?";
+	private static final String SQL_ADD_USER = "INSERT INTO users (name,surname,login,password,email,phone) values(?,?,?,?,?,?)";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
@@ -35,8 +37,12 @@ public class UserDaoImpl implements UserDao {
 				int userId = resultSet.getInt(ColumnName.USER_ID);
 				String name = resultSet.getString(ColumnName.USER_NAME);
 				String surname = resultSet.getString(ColumnName.USER_SURNAME);
+				String email = resultSet.getString(ColumnName.USER_EMAIL);
+				String phone = resultSet.getString(ColumnName.USER_PHONE);
+				String login = resultSet.getString(ColumnName.USER_LOGIN);
+				boolean isBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
 				logger.log(Level.DEBUG, "user id:" + userId + " user name:" + name + " user surname:" + surname);
-				users.add(new User(userId, name, surname));
+				users.add(new User(userId, name, surname, email, phone, login, isBlocked));
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
@@ -59,8 +65,12 @@ public class UserDaoImpl implements UserDao {
 				int userId = resultSet.getInt(ColumnName.USER_ID);
 				String name = resultSet.getString(ColumnName.USER_NAME);
 				String surname = resultSet.getString(ColumnName.USER_SURNAME);
+				String email = resultSet.getString(ColumnName.USER_EMAIL);
+				String phone = resultSet.getString(ColumnName.USER_PHONE);
+				String login = resultSet.getString(ColumnName.USER_LOGIN);
+				boolean isBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
 				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
-				users.add(new User(userId, name, surname));
+				users.add(new User(userId, name, surname, email, phone, login, isBlocked));
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Dao exception", e);
@@ -77,7 +87,7 @@ public class UserDaoImpl implements UserDao {
 		Connection connection = connectionPool.getConnection();
 		try {
 			PreparedStatement statement = connection.prepareStatement(SQL_FIND_PASSWORD_BY_LOGIN);
-			logger.log(Level.INFO, "in try block");
+			logger.log(Level.DEBUG, "in try block");
 			statement.setString(1, login);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
@@ -110,7 +120,11 @@ public class UserDaoImpl implements UserDao {
 				int userId = resultSet.getInt(ColumnName.USER_ID);
 				String name = resultSet.getString(ColumnName.USER_NAME);
 				String surname = resultSet.getString(ColumnName.USER_SURNAME);
-				User user = new User(userId, name, surname);
+				String email = resultSet.getString(ColumnName.USER_EMAIL);
+				String phone = resultSet.getString(ColumnName.USER_PHONE);
+				String loginFromDB = resultSet.getString(ColumnName.USER_LOGIN);
+				boolean isBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
+				User user = new User(userId, name, surname, email, phone, loginFromDB, isBlocked);
 				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
 				optionalUser = Optional.of(user);
 			} else {
@@ -118,11 +132,38 @@ public class UserDaoImpl implements UserDao {
 				optionalUser = Optional.empty();
 			}
 		} catch (SQLException e) {
-			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-- " + e.getErrorCode());
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
 			throw new DaoException("Dao exception in method findUserByLogin", e);
 		} finally {
 			connectionPool.releaseConnection(connection);
 		}
 		return optionalUser;
+	}
+
+	@Override
+	public boolean addUser(Map<String, String> userData, String password) throws DaoException {
+		logger.log(Level.INFO, "Try to add user in db" + userData);
+		boolean userAdded = false;
+		Connection connection = connectionPool.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement(SQL_ADD_USER);
+			statement.setString(1, userData.get(ColumnName.USER_NAME));
+			statement.setString(2, userData.get(ColumnName.USER_SURNAME));
+			statement.setString(3, userData.get(ColumnName.USER_LOGIN));
+			statement.setString(4, password);
+			statement.setString(5, userData.get(ColumnName.USER_EMAIL));
+			statement.setString(6, userData.get(ColumnName.USER_PHONE));
+			int rowCount = statement.executeUpdate();
+			if (rowCount != 0) {
+				userAdded = true;
+				logger.log(Level.INFO, "user added");
+			} else {
+				logger.log(Level.ERROR, "user was not added");
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException("Dao exception in method findUserByLogin", e);
+		}
+		return userAdded;
 	}
 }

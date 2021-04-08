@@ -7,6 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
+import by.metelski.webtask.command.RequestAttribute;
+import by.metelski.webtask.command.RequestParameter;
 import by.metelski.webtask.exception.UserServiceException;
 import by.metelski.webtask.model.entity.User;
 import by.metelski.webtask.model.service.UserService;
@@ -21,21 +23,22 @@ public class LogInCommand implements Command {
 		String page = null;
 		logger.log(Level.DEBUG, "execute method logIn");
 		User user;
-		String login = request.getParameter("login");
-		String password = request.getParameter("password");
+		String login = request.getParameter(RequestParameter.USER_LOGIN);
+		String password = request.getParameter(RequestParameter.USER_PASSWORD);
+		logger.log(Level.DEBUG, "login: " + login + " password: " + password);
 		Optional<User> optionalUser;
 		try {
 			optionalUser = userService.findUsersByLoginPassword(login, password);
 			if (optionalUser.isPresent()) {
 				user = optionalUser.get();
-				page = PagePath.MAIN;
-				request.setAttribute("user", user);
+				page = PagePath.ADMIN;
+				request.setAttribute(RequestAttribute.USER, user);// TODO attribute class?
 			} else {
 				page = PagePath.SIGN_IN;
-				request.setAttribute("wrong", "incorrect login or password");
+				request.setAttribute(RequestAttribute.MESSAGE, "incorrect login or password неверно");//TODO remove Неверно
 			}
 		} catch (UserServiceException e) {
-			logger.log(Level.ERROR, "UserServiceException in method execute");
+			logger.log(Level.ERROR, "UserServiceException in method execute" + e);
 			page = PagePath.ERROR;
 		}
 		return page;

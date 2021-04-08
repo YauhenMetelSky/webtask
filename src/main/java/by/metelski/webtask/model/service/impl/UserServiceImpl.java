@@ -2,12 +2,14 @@ package by.metelski.webtask.model.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.UserServiceException;
+import by.metelski.webtask.model.dao.ColumnName;
 import by.metelski.webtask.model.dao.UserDao;
 import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.entity.User;
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
 			try {
 				users = userDao.findUsersByName(userName);
 			} catch (DaoException e) {
-				logger.log(Level.ERROR, "dao exception in method FindUsersByName");
+				logger.log(Level.ERROR, "dao exception in method FindUsersByName" + e);
 				throw new UserServiceException(e);
 			}
 		}
@@ -46,9 +48,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public Optional<User> findUsersByLogin(String login) throws UserServiceException {
+		Optional<User> user = null;
+		if (UserValidator.isValidLogin(login)) {
+			try {
+				user = userDao.findUserByLogin(login);
+			} catch (DaoException e) {
+				logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword" + e);
+				throw new UserServiceException(e);
+			}
+		}
+		return user;
+	}
+
+	@Override
 	public Optional<User> findUsersByLoginPassword(String login, String password) throws UserServiceException {
 		Optional<User> optionalUser = null;
-		if (UserValidator.isValidEmail(login)) {
+		if (UserValidator.isValidLogin(login)) {
 			String encodedPassword = Encoder.encodePassword(password);
 			logger.log(Level.DEBUG, "Encoded password: " + encodedPassword);
 			try {
@@ -67,12 +83,25 @@ public class UserServiceImpl implements UserService {
 					optionalUser = Optional.empty();
 				}
 			} catch (DaoException e) {
-				logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword");
+				logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword" + e);
 				throw new UserServiceException(e);
 			}
 		} else {
 			optionalUser = Optional.empty();
 		}
 		return optionalUser;
+	}
+
+	@Override
+	public boolean addUser(Map<String, String> userData, String password) throws UserServiceException {
+		String encodedPassword = Encoder.encodePassword(password);
+		boolean userAdded = false;
+		try {
+			userAdded = userDao.addUser(userData, encodedPassword);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method addUser" + e);
+			throw new UserServiceException(e);
+		}
+		return userAdded;
 	}
 }

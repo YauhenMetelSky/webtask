@@ -1,8 +1,10 @@
 package by.metelski.webtask.command;
 
 import by.metelski.webtask.command.impl.UnknownCommand;
+import by.metelski.webtask.command.impl.toSignUpCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
 import by.metelski.webtask.command.impl.LogInCommand;
+import by.metelski.webtask.command.impl.SignUpCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
 
 public enum CommandType {
@@ -25,6 +27,16 @@ public enum CommandType {
 	LOG_IN {
 		{
 			this.command = new LogInCommand();
+		}
+	},
+	SIGN_UP {
+		{
+			this.command = new SignUpCommand();
+		}
+	},
+	TO_SIGN_UP {
+		{
+			this.command = new toSignUpCommand();
 		}
 	};
 

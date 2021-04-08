@@ -17,6 +17,7 @@ public class FindUsersByNameCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserService userService = new UserServiceImpl();
 
+//TODO Find russian language
 	@Override
 	public String execute(HttpServletRequest request) {
 		List<User> users;

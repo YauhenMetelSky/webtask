@@ -14,6 +14,14 @@ public class UserValidator {
 		return isValid;
 	}
 
+	public static boolean isValidLogin(String login) {
+		boolean isValid = true;
+		if (login.isBlank()) {
+			isValid = false;
+		}
+		return isValid;
+	}
+
 	public static boolean isValidEmail(String email) {
 		boolean isValid = true;
 		if (!email.isBlank()) {
