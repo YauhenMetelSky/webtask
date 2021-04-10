@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.DaoException;
-import by.metelski.webtask.model.entity.User;
 
 public interface UserDao {
 	List<User> findAll() throws DaoException;

@@ -12,11 +12,12 @@ import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.model.dao.ColumnName;
 import by.metelski.webtask.model.dao.UserDao;
-import by.metelski.webtask.model.entity.User;
 
 public class UserDaoImpl implements UserDao {
 	private static final Logger logger = LogManager.getLogger();

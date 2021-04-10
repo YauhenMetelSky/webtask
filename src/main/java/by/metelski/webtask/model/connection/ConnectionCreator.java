@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ConnectionCreator {
+class ConnectionCreator {
 	private static final Logger logger = LogManager.getLogger();
 	private static final Properties properties = new Properties();
 	private static final String DATABASE_PROPERTIES = "database.properties";
@@ -48,7 +48,7 @@ public class ConnectionCreator {
 	private ConnectionCreator() {
 	}
 
-	public static Connection getConnection() throws SQLException {
+	static Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
 	}
 }

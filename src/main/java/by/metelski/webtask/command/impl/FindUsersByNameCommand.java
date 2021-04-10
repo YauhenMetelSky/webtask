@@ -8,8 +8,8 @@ import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.RequestParameter;
-import by.metelski.webtask.exception.UserServiceException;
-import by.metelski.webtask.model.entity.User;
+import by.metelski.webtask.entity.User;
+import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
@@ -17,7 +17,6 @@ public class FindUsersByNameCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserService userService = new UserServiceImpl();
 
-//TODO Find russian language
 	@Override
 	public String execute(HttpServletRequest request) {
 		List<User> users;
@@ -32,7 +31,7 @@ public class FindUsersByNameCommand implements Command {
 			} else {
 				page = PagePath.EMPTY_RESULT;
 			}
-		} catch (UserServiceException e) {
+		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");
 			page = PagePath.ERROR;
 		}

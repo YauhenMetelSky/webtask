@@ -7,6 +7,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.apache.logging.log4j.Level;
@@ -15,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ConnectionPool {
 	public static final Logger logger = LogManager.getLogger();
-	private static boolean isCreated;
+	private static AtomicBoolean isCreated = new AtomicBoolean();
 	private static ConnectionPool instance = new ConnectionPool();
 	private static Lock locker = new ReentrantLock(true);
 	private BlockingQueue<ProxyConnection> freeConnection;
@@ -43,11 +44,11 @@ public class ConnectionPool {
 	}
 
 	public static ConnectionPool getInstance() {
-		if (!isCreated) {
+		if (!isCreated.get()) {
 			locker.lock();
 			if (instance == null) {
 				instance = new ConnectionPool();
-				isCreated = true;
+				isCreated.set(true);
 			}
 			locker.unlock();
 		}
@@ -69,15 +70,13 @@ public class ConnectionPool {
 	}
 
 	public void releaseConnection(Connection connection) {
-		if (connection instanceof ProxyConnection) {
+		if (connection instanceof ProxyConnection && givenAwayConnections.remove(connection)) {
 			logger.log(Level.DEBUG, "release connection " + connection);
-			if (givenAwayConnections.remove(connection)) {
-				try {
-					freeConnection.put((ProxyConnection) connection);
-				} catch (InterruptedException e) {
-					logger.log(Level.ERROR, "InterruptedException in method getConnection " + e.getMessage());
-					Thread.currentThread().interrupt();
-				}
+			try {
+				freeConnection.put((ProxyConnection) connection);
+			} catch (InterruptedException e) {
+				logger.log(Level.ERROR, "InterruptedException in method getConnection " + e.getMessage());
+				Thread.currentThread().interrupt();
 			}
 		}
 	}

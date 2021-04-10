@@ -13,7 +13,7 @@ import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.RequestAttribute;
 import by.metelski.webtask.command.RequestParameter;
-import by.metelski.webtask.exception.UserServiceException;
+import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ColumnName;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
@@ -27,7 +27,6 @@ public class SignUpCommand implements Command {
 		String page = null;
 		Map<String, String> userData = new HashMap<>();
 		logger.log(Level.DEBUG, "execute method SignUp");
-		// TODO realization
 		String login = request.getParameter(RequestParameter.USER_LOGIN);
 		String name = request.getParameter(RequestParameter.USER_NAME);
 		String surname = request.getParameter(RequestParameter.USER_SURNAME);
@@ -54,7 +53,7 @@ public class SignUpCommand implements Command {
 					// TODO messages in separate file
 					request.setAttribute(RequestAttribute.MESSAGE, "user with that login already exists");
 				}
-			} catch (UserServiceException e) {
+			} catch (ServiceException e) {
 				logger.log(Level.ERROR, "UserServiceException in method execute SignUpCommand" + e);
 				page = PagePath.ERROR;
 			}

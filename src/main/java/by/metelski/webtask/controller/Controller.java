@@ -24,8 +24,7 @@ public class Controller extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		out.print("Hello from doGet");
-
+		out.print("Hello from doGet");// TODO invoke processRequest
 	}
 
 	@Override

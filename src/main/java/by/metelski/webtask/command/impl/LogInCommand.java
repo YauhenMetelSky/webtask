@@ -9,8 +9,8 @@ import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.RequestAttribute;
 import by.metelski.webtask.command.RequestParameter;
-import by.metelski.webtask.exception.UserServiceException;
-import by.metelski.webtask.model.entity.User;
+import by.metelski.webtask.entity.User;
+import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
@@ -32,12 +32,12 @@ public class LogInCommand implements Command {
 			if (optionalUser.isPresent()) {
 				user = optionalUser.get();
 				page = PagePath.ADMIN;
-				request.setAttribute(RequestAttribute.USER, user);// TODO attribute class?
+				request.setAttribute(RequestAttribute.USER, user);
 			} else {
 				page = PagePath.SIGN_IN;
-				request.setAttribute(RequestAttribute.MESSAGE, "incorrect login or password неверно");//TODO remove Неверно
+				request.setAttribute(RequestAttribute.MESSAGE, "incorrect login or password");
 			}
-		} catch (UserServiceException e) {
+		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute" + e);
 			page = PagePath.ERROR;
 		}

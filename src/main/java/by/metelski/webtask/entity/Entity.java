@@ -1,4 +1,4 @@
-package by.metelski.webtask.model.entity;
+package by.metelski.webtask.entity;
 
 import java.io.Serializable;
 

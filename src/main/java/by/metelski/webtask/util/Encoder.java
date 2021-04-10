@@ -1,4 +1,4 @@
-package by.metelski.webtask.model.util;
+package by.metelski.webtask.util;
 
 import java.math.BigInteger;
 import java.util.Base64;

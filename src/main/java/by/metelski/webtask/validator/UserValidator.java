@@ -1,4 +1,4 @@
-package by.metelski.webtask.model.validator;
+package by.metelski.webtask.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
