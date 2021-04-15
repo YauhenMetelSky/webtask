@@ -12,12 +12,11 @@ import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.connection.ConnectionPool;
-import by.metelski.webtask.model.dao.ColumnName;
 import by.metelski.webtask.model.dao.UserDao;
+import static by.metelski.webtask.model.dao.ColumnName.*;
 
 public class UserDaoImpl implements UserDao {
 	private static final Logger logger = LogManager.getLogger();
@@ -31,17 +30,17 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<User> findAll() throws DaoException {
 		List<User> users = new ArrayList<User>();
-		Connection connection = connectionPool.getConnection();
+		Connection connection = connectionPool.getConnection();//TODO in try with resources
 		try (Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_USERS)) {
 			while (resultSet.next()) {
-				int userId = resultSet.getInt(ColumnName.USER_ID);
-				String name = resultSet.getString(ColumnName.USER_NAME);
-				String surname = resultSet.getString(ColumnName.USER_SURNAME);
-				String email = resultSet.getString(ColumnName.USER_EMAIL);
-				String phone = resultSet.getString(ColumnName.USER_PHONE);
-				String login = resultSet.getString(ColumnName.USER_LOGIN);
-				boolean isBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
+				int userId = resultSet.getInt(USER_ID);
+				String name = resultSet.getString(USER_NAME);
+				String surname = resultSet.getString(USER_SURNAME);
+				String email = resultSet.getString(USER_EMAIL);
+				String phone = resultSet.getString(USER_PHONE);
+				String login = resultSet.getString(USER_LOGIN);
+				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
 				logger.log(Level.DEBUG, "user id:" + userId + " user name:" + name + " user surname:" + surname);
 				users.add(new User(userId, name, surname, email, phone, login, isBlocked));
 			}
@@ -63,13 +62,13 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, userName);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				int userId = resultSet.getInt(ColumnName.USER_ID);
-				String name = resultSet.getString(ColumnName.USER_NAME);
-				String surname = resultSet.getString(ColumnName.USER_SURNAME);
-				String email = resultSet.getString(ColumnName.USER_EMAIL);
-				String phone = resultSet.getString(ColumnName.USER_PHONE);
-				String login = resultSet.getString(ColumnName.USER_LOGIN);
-				boolean isBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
+				int userId = resultSet.getInt(USER_ID);
+				String name = resultSet.getString(USER_NAME);
+				String surname = resultSet.getString(USER_SURNAME);
+				String email = resultSet.getString(USER_EMAIL);
+				String phone = resultSet.getString(USER_PHONE);
+				String login = resultSet.getString(USER_LOGIN);
+				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
 				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
 				users.add(new User(userId, name, surname, email, phone, login, isBlocked));
 			}
@@ -92,7 +91,7 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, login);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				password = resultSet.getString(ColumnName.PASSWORD);
+				password = resultSet.getString(PASSWORD);
 				optionalPassword = Optional.of(password);
 				logger.log(Level.INFO, "password=" + password);
 			} else {
@@ -118,13 +117,13 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, login);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				int userId = resultSet.getInt(ColumnName.USER_ID);
-				String name = resultSet.getString(ColumnName.USER_NAME);
-				String surname = resultSet.getString(ColumnName.USER_SURNAME);
-				String email = resultSet.getString(ColumnName.USER_EMAIL);
-				String phone = resultSet.getString(ColumnName.USER_PHONE);
-				String loginFromDB = resultSet.getString(ColumnName.USER_LOGIN);
-				boolean isBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
+				int userId = resultSet.getInt(USER_ID);
+				String name = resultSet.getString(USER_NAME);
+				String surname = resultSet.getString(USER_SURNAME);
+				String email = resultSet.getString(USER_EMAIL);
+				String phone = resultSet.getString(USER_PHONE);
+				String loginFromDB = resultSet.getString(USER_LOGIN);
+				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
 				User user = new User(userId, name, surname, email, phone, loginFromDB, isBlocked);
 				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
 				optionalUser = Optional.of(user);
@@ -148,12 +147,12 @@ public class UserDaoImpl implements UserDao {
 		Connection connection = connectionPool.getConnection();
 		try {
 			PreparedStatement statement = connection.prepareStatement(SQL_ADD_USER);
-			statement.setString(1, userData.get(ColumnName.USER_NAME));
-			statement.setString(2, userData.get(ColumnName.USER_SURNAME));
-			statement.setString(3, userData.get(ColumnName.USER_LOGIN));
+			statement.setString(1, userData.get(USER_NAME));
+			statement.setString(2, userData.get(USER_SURNAME));
+			statement.setString(3, userData.get(USER_LOGIN));
 			statement.setString(4, password);
-			statement.setString(5, userData.get(ColumnName.USER_EMAIL));
-			statement.setString(6, userData.get(ColumnName.USER_PHONE));
+			statement.setString(5, userData.get(USER_EMAIL));
+			statement.setString(6, userData.get(USER_PHONE));
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
 				userAdded = true;

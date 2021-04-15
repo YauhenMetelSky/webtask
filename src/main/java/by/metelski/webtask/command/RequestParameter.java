@@ -8,8 +8,8 @@ public final class RequestParameter {
 	public static final String USER_EMAIL = "email";
 	public static final String USER_PHONE = "phone";
 	public static final String USER_PASSWORD = "password";
-	public static final String USER_CONFIRMED_PASSWORD = "confirmedpassword";
+	public static final String USER_CONFIRMED_PASSWORD = "confirmed_password";
 
 	private RequestParameter() {
-	};
+	}
 }

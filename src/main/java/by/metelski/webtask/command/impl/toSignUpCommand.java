@@ -17,5 +17,4 @@ public class toSignUpCommand implements Command {
 		logger.log(Level.INFO, "toSignUpCommand");
 		return PagePath.SIGN_UP;
 	}
-
 }

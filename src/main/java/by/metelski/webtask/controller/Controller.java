@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.CommandProvider;
+import by.metelski.webtask.command.SessionAttribute;
+import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.command.Command;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,6 +37,9 @@ public class Controller extends HttpServlet {
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//TODO remove
+		HttpSession session = request.getSession();
+		logger.log(Level.DEBUG, "previous page: " + session.getAttribute(SessionAttribute.CURRENT_PAGE));
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		String page;
@@ -47,6 +52,6 @@ public class Controller extends HttpServlet {
 	}
 
 	public void destroy() {
-		// TODO invoke ConnectionPool.destroyPool();
+		ConnectionPool.getInstance().destroyPool();
 	}
 }
