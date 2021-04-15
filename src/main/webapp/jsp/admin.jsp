@@ -14,6 +14,7 @@
 <title>Main page</title>
 </head>
 <body>
+<c:import url="header.jsp"/>
 <div class="container-sm bg-success text-white">
 	<h1><fmt:message key="label.hello" />, ${user.name}</h1>
 	</div>
@@ -37,5 +38,6 @@
 	<div class="container-sm bg-success text-white">
 	<a href="controller">Hello Servlet</a>	
 	</div>
+	<c:import url="footer.jsp"/>
 </body>
 </html>

@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="css/signup.css">
 </head>
 <body>
+<c:import url="header.jsp"/>
 	<section class="container-fluid bg">
 		<section class="row justify-content-center">
 			<section class="col-12 col-sm-9 col-md-6">
@@ -24,8 +25,7 @@
 						<input class="form-control" name="login" required
 							placeholder=<fmt:message key="label.login" />>
 					</div>
-					<!-- type="email" pattern="[A-Za-z0-9_]+@[A-Za-z]+\.[A-Za-z]{2,6}" -->
-					<div class="mb-3">
+						<div class="mb-3">
 						<input type="password" class="form-control" name="password"
 							required placeholder=<fmt:message key="label.password" />>
 					</div>
@@ -61,5 +61,6 @@
 			</section>
 		</section>
 	</section>
+	<c:import url="footer.jsp"/>
 </body>
 </html>

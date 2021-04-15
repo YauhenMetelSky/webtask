@@ -13,6 +13,7 @@
 <title>Result page</title>
 </head>
 <body>
+<c:import url="header.jsp"/>
 	<table class="table table-striped">
 		<tr>
 			<th><fmt:message key="label.number" /></th>
@@ -37,5 +38,6 @@
 			</tr>
 		</c:forEach>
 	</table>
+	<c:import url="footer.jsp"/>
 </body>
 </html>

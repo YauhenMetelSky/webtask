@@ -8,7 +8,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta name="viewport"
 	content="width=device-width, initial-scale=1,  shrink-to-fit=no charset=utf-8" />
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -25,6 +24,7 @@
 <link rel="stylesheet" href="css/signin.css">
 </head>
 <body>
+ <c:import url="header.jsp"/>
 	<section class="container-fluid bg">
 		<section class="row justify-content-center">
 			<section class="col-12 col-sm-6 col-md-3">
@@ -53,21 +53,9 @@
 							name="command" value="to_sign_up">
 					</form>
 				</div>
-				<form action="controller" method="post">
-					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle" type="button"	id="dropdownMenuButton" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false"><fmt:message key="label.language"/></button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<button class="dropdown-item" type="submit" name="language"
-								value="en_US">English</button>
-							<button class="dropdown-item" type="submit" name="language"
-								value="ru_RU">Russian</button>
-							<input type="hidden" name="command" value="set_locale">
-						</div>
-					</div>
-				</form>
 			</section>
 		</section>
 	</section>
+	<c:import url="footer.jsp"/>
 </body>
 </html>
