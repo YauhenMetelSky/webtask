@@ -1,0 +1,12 @@
+@charset "UTF-8";
+.cat{
+	width:300px;
+	height: 300px;
+}
+.bg{
+	background: url('../images/extra.jpg') no-repeat;
+	width: 100%;
+	height: 50vh;
+	background-size: 100%;
+	
+}

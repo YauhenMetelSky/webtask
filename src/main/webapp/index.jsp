@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-<jsp:forward page="/jsp/signin.jsp"></jsp:forward>
+<jsp:forward page="/jsp/main.jsp"></jsp:forward>
 </body>
 </html>
 

@@ -21,27 +21,20 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
 	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 	crossorigin="anonymous">
-<link rel="stylesheet" href="css/footer.css">
+<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups"> 
-Minsk, 2021
-<form action="controller" method="post">
-			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button"
-					id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false">
-					<fmt:message key="label.language" />
-				</button>
-				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					<button class="dropdown-item" type="submit" name="language"
-						value="en_US">English</button>
-					<button class="dropdown-item" type="submit" name="language"
-						value="ru_RU">Russian</button>
-					<input type="hidden" name="command" value="set_locale">
-				</div>
-			</div>
-		</form>
-	</div> 
+	<div class="container-fluid">
+		<c:import url="header.jsp" />
+	</div>
+	<div class="container-fluid bg">
+		<h1>system content</h1>
+		<h1>will be here</h1>
+		<h1>soon</h1>
+
+	</div>
+	<div class="container-fluid">
+		<c:import url="footer.jsp" />
+	</div>
 </body>
 </html>

@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.RequestAttribute;
+import by.metelski.webtask.command.Router;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.service.UserService;
@@ -18,17 +19,17 @@ public class FindAllUsersCommand implements Command {
 	private UserService userService = new UserServiceImpl();
 
 	@Override
-	public String execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request) {
 		List<User> users;
-		String page;
+		Router router = new Router();
 		try {
 			users = userService.findAllUsers();
-			page = PagePath.RESULT;
+			router.setPagePath(PagePath.RESULT);
 			request.setAttribute(RequestAttribute.LIST, users);
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");
-			page = PagePath.ERROR;
+			router.setPagePath(PagePath.ERROR);
 		}
-		return page;
+		return router;
 	}
 }

@@ -1,14 +1,15 @@
 .bg{
-	background: url('../images/back.jpg') no-repeat;
+	background: url('../images/extra.jpg') no-repeat;
 	width: 100%;
-	height: 160vh;
-	background-size: 100%;
+	height: 70vh;
+	background-size: 140%;
 	
 }
 
 .form-container {
 	position: absolute;
-	top: 15vh;
+	top: 10vh;
+	right:5vw;
 	background-color: #f5f5f5;
 	padding: 30px;
 	border-radius: 10px; 

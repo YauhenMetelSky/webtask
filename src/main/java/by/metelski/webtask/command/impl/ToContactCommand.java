@@ -8,13 +8,16 @@ import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
+import by.metelski.webtask.command.Router;
 
-public class toSignUpCommand implements Command {
+public class ToContactCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 
 	@Override
-	public String execute(HttpServletRequest request) {
-		logger.log(Level.INFO, "toSignUpCommand");
-		return PagePath.SIGN_UP;
+	public Router execute(HttpServletRequest request) {
+		logger.log(Level.INFO, "ToContactCommand");
+		Router router = new Router();
+		router.setPagePath(PagePath.CONTACT);
+		return router;
 	}
 }

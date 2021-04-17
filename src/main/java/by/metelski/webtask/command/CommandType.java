@@ -1,11 +1,16 @@
 package by.metelski.webtask.command;
 
 import by.metelski.webtask.command.impl.UnknownCommand;
-import by.metelski.webtask.command.impl.toSignUpCommand;
+import by.metelski.webtask.command.impl.ToSignUpCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
 import by.metelski.webtask.command.impl.LogInCommand;
 import by.metelski.webtask.command.impl.SetLocaleCommand;
 import by.metelski.webtask.command.impl.SignUpCommand;
+import by.metelski.webtask.command.impl.ToAboutCommand;
+import by.metelski.webtask.command.impl.ToContactCommand;
+import by.metelski.webtask.command.impl.ToMainCommand;
+import by.metelski.webtask.command.impl.ToServicesCommand;
+import by.metelski.webtask.command.impl.ToSignInCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
 
 public enum CommandType {
@@ -35,9 +40,34 @@ public enum CommandType {
 			this.command = new SignUpCommand();
 		}
 	},
+	TO_ABOUT {
+		{
+			this.command = new ToAboutCommand();
+		}
+	},
+	TO_CONTACT {
+		{
+			this.command = new ToContactCommand();
+		}
+	},
+	TO_MAIN {
+		{
+			this.command = new ToMainCommand();
+		}
+	},
+	TO_SERVICES {
+		{
+			this.command = new ToServicesCommand();
+		}
+	},
+	TO_SIGN_IN {
+		{
+			this.command = new ToSignInCommand();
+		}
+	},
 	TO_SIGN_UP {
 		{
-			this.command = new toSignUpCommand();
+			this.command = new ToSignUpCommand();
 		}
 	},
 	UNKNOWN_COMMAND {

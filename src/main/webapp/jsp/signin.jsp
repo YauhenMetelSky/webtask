@@ -26,8 +26,6 @@
 <body>
  <c:import url="header.jsp"/>
 	<section class="container-fluid bg">
-		<section class="row justify-content-center">
-			<section class="col-12 col-sm-6 col-md-3">
 				<div class="form-container">
 					<form action="controller" method="POST">
 						<div class="mb-3">
@@ -53,8 +51,6 @@
 							name="command" value="to_sign_up">
 					</form>
 				</div>
-			</section>
-		</section>
 	</section>
 	<c:import url="footer.jsp"/>
 </body>

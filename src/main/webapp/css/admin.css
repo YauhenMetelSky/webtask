@@ -1,0 +1,7 @@
+@charset "UTF-8";
+.bg{
+	background: url('../images/extra.jpg') no-repeat;
+	width: 100%;
+	height: 70vh;
+	background-size: 140%;	
+}

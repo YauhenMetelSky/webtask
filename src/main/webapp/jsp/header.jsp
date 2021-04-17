@@ -22,24 +22,44 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
 	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 	crossorigin="anonymous">
-<link rel="stylesheet" href="css/signin.css">
+	<link rel="stylesheet" href="css/header.css">
+
 <title>Doctor pro</title>
 </head>
 <body>
-<form action="controller" method="post">
-<div>
-					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle" type="button"	id="dropdownMenuButton" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false"><fmt:message key="label.language"/></button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<button class="dropdown-item" type="submit" name="language"
-								value="en_US">English</button>
-							<button class="dropdown-item" type="submit" name="language"
-								value="ru_RU">Russian</button>
-							<input type="hidden" name="command" value="set_locale">
-						</div>
-					</div>
-				</form>
+	<div class="container-fluid">
+	<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+	    <div class="btn-group" role="group" aria-label="First group">
+	    <form action="controller" method="post">
+			<input type="submit" value=<fmt:message key="label.home"/>
+				class="btn btn-light"> <input type="hidden" name="command"
+				value="to_main">
+		</form>
+		<form action="controller" method="post">
+			<input type="submit" value=<fmt:message key="label.about"/>
+				class="btn btn-light"> <input type="hidden" name="command"
+				value="to_about">
+		</form>
+		<form action="controller" method="post">
+			<input type="submit" value=<fmt:message key="label.services"/>
+				class="btn btn-light"> <input type="hidden" name="command"
+				value="to_services">
+		</form>
+		<form action="controller" method="post">
+			<input type="submit" value=<fmt:message key="label.contact"/>
+				class="btn btn-light"> <input type="hidden" name="command"
+				value="to_contact">
+		</form>
+		</div>
+		<div class="header_button">
+		<form action="controller" method="post">
+			<input type="submit" value=<fmt:message key="label.login"/>
+				class="btn btn-primary btn-sm btn-block"> <input type="hidden" name="command"
+				value="to_sign_in">
+		</form>
+		</div>
+	
 </div>
+	</div>
 </body>
 </html>

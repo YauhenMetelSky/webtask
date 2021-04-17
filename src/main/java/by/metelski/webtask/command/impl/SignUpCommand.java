@@ -13,6 +13,8 @@ import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.RequestAttribute;
 import by.metelski.webtask.command.RequestParameter;
+import by.metelski.webtask.command.Router;
+import by.metelski.webtask.command.Router.Type;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ColumnName;
 import by.metelski.webtask.model.service.UserService;
@@ -23,8 +25,8 @@ public class SignUpCommand implements Command {
 	private UserService userService = new UserServiceImpl();
 
 	@Override
-	public String execute(HttpServletRequest request) {
-		String page = null;
+	public Router execute(HttpServletRequest request) {
+		Router router = new Router();
 		Map<String, String> userData = new HashMap<>();
 		logger.log(Level.DEBUG, "execute method SignUp");
 		String login = request.getParameter(RequestParameter.USER_LOGIN);
@@ -43,25 +45,27 @@ public class SignUpCommand implements Command {
 			try {
 				if (userService.findUsersByLogin(login).isEmpty()) {
 					if (userService.addUser(userData, password)) {
-						page = PagePath.SIGN_IN;// TODO or it can be main page
+						router.setPagePath(PagePath.SIGN_IN);// TODO or it can be main page
+						router.setType(Type.REDIRECT);
 						request.setAttribute(RequestAttribute.MESSAGE, "User created");
 					} else {
-						page = PagePath.ERROR;// TODO need to do smth
+						router.setPagePath(PagePath.ERROR);// TODO need to do smth
 					}
 				} else {
-					page = PagePath.SIGN_UP;
+					router.setPagePath(PagePath.SIGN_UP);
+					//TODO redirect???
 					// TODO messages in separate file
 					request.setAttribute(RequestAttribute.MESSAGE, "user with that login already exists");
 				}
 			} catch (ServiceException e) {
 				logger.log(Level.ERROR, "UserServiceException in method execute SignUpCommand" + e);
-				page = PagePath.ERROR;
+				router.setPagePath(PagePath.ERROR);
 			}
 		} else {
-			page = PagePath.SIGN_UP;
+			router.setPagePath(PagePath.SIGN_UP);
 			// TODO messages in separate file
 			request.setAttribute(RequestAttribute.MESSAGE, "password and confirmed password do not match");
 		}
-		return page;
+		return router;
 	}
 }

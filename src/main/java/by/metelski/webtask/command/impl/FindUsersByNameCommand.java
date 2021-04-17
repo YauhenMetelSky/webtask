@@ -9,6 +9,7 @@ import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.RequestAttribute;
 import by.metelski.webtask.command.RequestParameter;
+import by.metelski.webtask.command.Router;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.service.UserService;
@@ -19,24 +20,24 @@ public class FindUsersByNameCommand implements Command {
 	private UserService userService = new UserServiceImpl();
 
 	@Override
-	public String execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request) {
 		List<User> users;
-		String page;
+		Router router = new Router();
 		String userName = request.getParameter(RequestParameter.USER_NAME);
 		logger.log(Level.INFO, "Find by name: " + userName);
 		try {
 			users = userService.findUsersByName(userName);
 			if (users.size() > 0) {
-				page = PagePath.RESULT;
+				router.setPagePath(PagePath.RESULT);
 				request.setAttribute(RequestAttribute.LIST, users);
 			} else {
-				page = PagePath.ADMIN;
+				router.setPagePath(PagePath.ADMIN);
 				request.setAttribute(RequestAttribute.MESSAGE, "Can't find such user");
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");
-			page = PagePath.ERROR;
+			router.setPagePath(PagePath.ERROR);
 		}
-		return page;
+		return router;
 	}
 }

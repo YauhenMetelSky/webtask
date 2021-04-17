@@ -9,6 +9,7 @@ import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.RequestAttribute;
 import by.metelski.webtask.command.RequestParameter;
+import by.metelski.webtask.command.Router;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.service.UserService;
@@ -19,8 +20,8 @@ public class LogInCommand implements Command {
 	private UserService userService = new UserServiceImpl();
 
 	@Override
-	public String execute(HttpServletRequest request) {
-		String page = null;
+	public Router execute(HttpServletRequest request) {
+	    Router router = new Router();
 		logger.log(Level.DEBUG, "execute method logIn");
 		User user;
 		String login = request.getParameter(RequestParameter.USER_LOGIN);
@@ -31,16 +32,16 @@ public class LogInCommand implements Command {
 			optionalUser = userService.findUsersByLoginPassword(login, password);
 			if (optionalUser.isPresent()) {
 				user = optionalUser.get();
-				page = PagePath.ADMIN;
-				request.setAttribute(RequestAttribute.USER, user);
+				router.setPagePath(PagePath.ADMIN);
+				request.setAttribute(RequestAttribute.USER, user);//TODO user can be stored in session
 			} else {
-				page = PagePath.SIGN_IN;
+				router.setPagePath(PagePath.SIGN_IN);
 				request.setAttribute(RequestAttribute.MESSAGE, "incorrect login or password");
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute" + e);
-			page = PagePath.ERROR;
+			router.setPagePath(PagePath.ERROR);
 		}
-		return page;
+		return router;
 	}
 }

@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.SessionAttribute;
 
 public class SetLocaleCommand implements Command {
@@ -16,12 +17,14 @@ public class SetLocaleCommand implements Command {
 	private static final String EN="en_US";
 
 	@Override
-	public String execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request) {
 		logger.log(Level.INFO, "SetLocaleCommand");
+		Router router = new Router();
 		HttpSession session = request.getSession();
-		String page = (String) session.getAttribute(SessionAttribute.CURRENT_PAGE);//TODO get page?
+		String page = (String) session.getAttribute(SessionAttribute.CURRENT_PAGE);
+		router.setPagePath(page);
 		logger.log(Level.DEBUG, "language from page=" + request.getParameter("language"));//TODO magic string
-		session.setAttribute(SessionAttribute.LOCALE, request.getParameter("language"));//TODO realization
-			return page;//TODO remove hardcode
+		session.setAttribute(SessionAttribute.LOCALE, request.getParameter("language"));
+			return router;
 	}
 }
