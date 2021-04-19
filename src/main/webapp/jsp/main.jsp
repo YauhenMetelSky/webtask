@@ -22,6 +22,7 @@
 	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/elements.css">
 </head>
 <body>
 	<div class="container-fluid">

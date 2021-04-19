@@ -22,7 +22,7 @@ public class LogInCommand implements Command {
 	@Override
 	public Router execute(HttpServletRequest request) {
 	    Router router = new Router();
-		logger.log(Level.DEBUG, "execute method logIn");
+	    logger.log(Level.DEBUG, "execute method logIn");
 		User user;
 		String login = request.getParameter(RequestParameter.USER_LOGIN);
 		String password = request.getParameter(RequestParameter.USER_PASSWORD);

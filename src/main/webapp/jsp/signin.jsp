@@ -22,36 +22,37 @@
 	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="css/signin.css">
+<link rel="stylesheet" href="css/elements.css">
 </head>
 <body>
- <c:import url="header.jsp"/>
+	<c:import url="header.jsp" />
 	<section class="container-fluid bg">
-				<div class="form-container">
-					<form action="controller" method="POST">
-						<div class="mb-3">
-							<label for="login" class="form-label"><fmt:message
-									key="label.login" /></label> <input class="form-control" name="login"
-								required placeholder=<fmt:message key="label.login"/>>
-						</div>
-						<div class="mb-3">
-							<label for="password" class="form-label"><fmt:message
-									key="label.password" /></label> <input type="password"
-								class="form-control" name="password" required
-								placeholder=<fmt:message key="label.password"/>>
-						</div>
-						<p>${message}</p>
-						<input type="hidden" name="command" value="log_in">
-						<button type="submit" class="btn btn-primary btn-block">
-							<fmt:message key="label.submit" />
-						</button>
-					</form>
-					<form action="controller" method="post">
-						<input type="submit" value=<fmt:message key="label.signup"/>
-							class="btn btn-light"> <input type="hidden"
-							name="command" value="to_sign_up">
-					</form>
+		<div class="form-container">
+			<form action="controller" method="POST">
+				<div class="mb-3">
+					<label for="login" class="form-label"><fmt:message
+							key="label.login" /></label> <input class="form-control" name="login"
+						required placeholder=<fmt:message key="label.login"/>>
 				</div>
+				<div class="mb-3">
+					<label for="password" class="form-label"><fmt:message
+							key="label.password" /></label> <input type="password"
+						class="form-control" name="password" required
+						placeholder=<fmt:message key="label.password"/>>
+				</div>
+				<p>${message}</p>
+				<input type="hidden" name="command" value="log_in">
+				<button type="submit" class="btn btn-primary btn-block">
+					<fmt:message key="label.submit" />
+				</button>
+			</form>
+			<form action="controller" method="post">
+				<input type="submit" value=<fmt:message key="label.signup"/>
+					class="btn btn-light"> <input type="hidden" name="command"
+					value="to_sign_up">
+			</form>
+		</div>
 	</section>
-	<c:import url="footer.jsp"/>
+	<c:import url="footer.jsp" />
 </body>
 </html>

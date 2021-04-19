@@ -22,6 +22,7 @@
 	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/elements.css">
 <title>Admin page</title>
 </head>
 <body>

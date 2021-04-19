@@ -21,10 +21,11 @@
 	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="css/signup.css">
+<link rel="stylesheet" href="css/elements.css">
 </head>
 <body>
 	<c:import url="header.jsp" />
-	<section class="container-fluid bg">
+	<section class="container-fluid bgspc">
 		<form action="controller" method="POST" class="form-container">
 			<h1>
 				<fmt:message key="label.registration" />

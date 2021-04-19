@@ -1,0 +1,15 @@
+@charset "UTF-8";
+.bg{
+	background: url('../images/extra.jpg') no-repeat;
+	width: 100%;
+	height: 500px;
+	background-size: 100%;
+	
+}
+.bgspc{
+	background: url('../images/extra.jpg') no-repeat;
+	width: 100%;
+	height: 700px;
+	background-size: 140%;
+	
+}
