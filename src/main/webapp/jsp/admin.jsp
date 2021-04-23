@@ -45,7 +45,7 @@
 			</form>
 				<p>${message}</p>
 		</div>
-		</br>
+		<br/>
 		<div>
 			<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">
@@ -55,8 +55,16 @@
 			</form>
 		</div>
 		<br />
+		<div class="form-inline">
+			<form action="controller" method="POST">
+			<input type="text" name="email_to" placeholder="email"/>
+				<button type="submit" class="btn btn-primary">
+					Send email
+				</button>
+				<input type="hidden" name="command" value="send_email">
+			</form>
+		</div>
 	</div>
-
 
 	<c:import url="footer.jsp" />
 </body>

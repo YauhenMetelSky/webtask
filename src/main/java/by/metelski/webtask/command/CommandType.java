@@ -1,6 +1,7 @@
 package by.metelski.webtask.command;
 
 import by.metelski.webtask.command.impl.UnknownCommand;
+import by.metelski.webtask.command.impl.sendEmailCommand;
 import by.metelski.webtask.command.impl.ToSignUpCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
 import by.metelski.webtask.command.impl.LogInCommand;
@@ -28,6 +29,11 @@ public enum CommandType {
 	LOG_IN {
 		{
 			this.command = new LogInCommand();
+		}
+	},
+	SEND_EMAIL {
+		{
+			this.command = new sendEmailCommand();
 		}
 	},
 	SET_LOCALE {
