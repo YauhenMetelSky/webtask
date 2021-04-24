@@ -15,6 +15,7 @@ import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
+
 public class FindUsersByNameCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserService userService = new UserServiceImpl();

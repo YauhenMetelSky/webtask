@@ -26,8 +26,6 @@ public class UploadServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		// TODO Auto-generated method stub
-		super.init();
 	}
 	
 	@Override
@@ -54,16 +52,10 @@ public class UploadServlet extends HttpServlet {
 		});
 		String page = (String) session.getAttribute(SessionAttribute.CURRENT_PAGE);
 		request.getRequestDispatcher(page).forward(request,response);
-		// TODO Auto-generated method stub
-		super.doPost(request, response);
 	}
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-		super.destroy();
+
 	}
-
-	
-
 }

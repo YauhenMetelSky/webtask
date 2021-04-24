@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.CommandProvider;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.SessionAttribute;
-import by.metelski.webtask.entity.User;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.command.Command;
 import javax.servlet.RequestDispatcher;
@@ -18,7 +17,7 @@ import javax.servlet.annotation.*;
 @WebServlet(name = "controller", urlPatterns = { "/controller" })
 public class Controller extends HttpServlet {
 	private static final Logger logger = LogManager.getLogger();
-//FIXME when we changed language, the user name from hello disappears
+
 	//FIXME when we changed language, we lost data from request find by name
 	public void init() {
 	}
@@ -40,9 +39,6 @@ public class Controller extends HttpServlet {
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO remove
-		HttpSession session = request.getSession();
-		logger.log(Level.DEBUG, "previous page: " + session.getAttribute(SessionAttribute.CURRENT_PAGE));
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		Command command = CommandProvider.defineCommand(request);
