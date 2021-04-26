@@ -10,6 +10,7 @@ import by.metelski.webtask.command.impl.SignUpCommand;
 import by.metelski.webtask.command.impl.ToAboutCommand;
 import by.metelski.webtask.command.impl.ToContactCommand;
 import by.metelski.webtask.command.impl.ToMainCommand;
+import by.metelski.webtask.command.impl.ToAdminPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
@@ -49,6 +50,11 @@ public enum CommandType {
 	TO_ABOUT {
 		{
 			this.command = new ToAboutCommand();
+		}
+	},
+	TO_ADMIN{
+		{
+			this.command = new ToAdminPageCommand();//TODO role admin
 		}
 	},
 	TO_CONTACT {

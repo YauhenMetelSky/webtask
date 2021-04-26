@@ -13,7 +13,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.entity.User;
-import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.model.dao.UserDao;
@@ -23,9 +22,9 @@ import static by.metelski.webtask.model.dao.ColumnName.*;
 public class UserDaoImpl implements UserDao {
 	private static final Logger logger = LogManager.getLogger();
 	private static final String SQL_FIND_ALL_USERS = "SELECT user_id,name,surname,login,email,phone,isBlocked FROM users";
-	private static final String SQL_FIND_USERS_BY_NAME = "SELECT user_id,name,surname,login,email,phone,isBlocked,role FROM users WHERE name=?";
+	private static final String SQL_FIND_USERS_BY_NAME = "SELECT user_id,name,surname,login,email,phone,isBlocked FROM users WHERE name=?";
 	private static final String SQL_FIND_PASSWORD_BY_LOGIN = "SELECT password FROM users WHERE login=?";
-	private static final String SQL_FIND_USER_BY_LOGIN = "SELECT user_id,name,surname,login,email,phone,isBlocked,role FROM users WHERE login=?";
+	private static final String SQL_FIND_USER_BY_LOGIN = "SELECT user_id,name,surname,login,email,phone,isBlocked FROM users WHERE login=?";
 	private static final String SQL_ADD_USER = "INSERT INTO users (name,surname,login,password,email,phone) values(?,?,?,?,?,?)";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
@@ -43,9 +42,8 @@ public class UserDaoImpl implements UserDao {
 				String phone = resultSet.getString(USER_PHONE);
 				String login = resultSet.getString(USER_LOGIN);
 				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
 				logger.log(Level.DEBUG, "user id:" + userId + " user name:" + name + " user surname:" + surname);
-				users.add(new User(userId, name, surname, email, phone, login, isBlocked,role));
+				users.add(new User(userId, name, surname, email, phone, login, isBlocked));
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
@@ -72,9 +70,8 @@ public class UserDaoImpl implements UserDao {
 				String phone = resultSet.getString(USER_PHONE);
 				String login = resultSet.getString(USER_LOGIN);
 				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
 				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
-				users.add(new User(userId, name, surname, email, phone, login, isBlocked, role));
+				users.add(new User(userId, name, surname, email, phone, login, isBlocked));
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Dao exception", e);
@@ -128,8 +125,7 @@ public class UserDaoImpl implements UserDao {
 				String phone = resultSet.getString(USER_PHONE);
 				String loginFromDB = resultSet.getString(USER_LOGIN);
 				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
-				User user = new User(userId, name, surname, email, phone, loginFromDB, isBlocked,role);
+				User user = new User(userId, name, surname, email, phone, loginFromDB, isBlocked);
 				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
 				optionalUser = Optional.of(user);
 			} else {
