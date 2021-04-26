@@ -45,7 +45,8 @@ public class SignUpCommand implements Command {
 			try {
 				if (userService.findUsersByLogin(login).isEmpty()) {
 					if (userService.addUser(userData, password)) {
-						router.setPagePath(PagePath.SIGN_IN);// TODO or it can be main page
+						String page = request.getContextPath();
+						router.setPagePath(page);
 						router.setType(Type.REDIRECT);
 						request.setAttribute(RequestAttribute.MESSAGE, "User created");
 					} else {
@@ -53,7 +54,6 @@ public class SignUpCommand implements Command {
 					}
 				} else {
 					router.setPagePath(PagePath.SIGN_UP);
-					//TODO redirect???
 					// TODO messages in separate file
 					request.setAttribute(RequestAttribute.MESSAGE, "user with that login already exists");
 				}

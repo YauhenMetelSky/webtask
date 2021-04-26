@@ -27,6 +27,8 @@ public class LogInCommand implements Command {
 	    Router router = new Router();
 	    HttpSession session = request.getSession();
 	    logger.log(Level.DEBUG, "execute method logIn");
+	    String page = request.getContextPath() + PagePath.SIGN_IN;
+	    logger.log(Level.DEBUG, "page path=" + page);
 		User user;
 		String login = request.getParameter(RequestParameter.USER_LOGIN);
 		String password = request.getParameter(RequestParameter.USER_PASSWORD);

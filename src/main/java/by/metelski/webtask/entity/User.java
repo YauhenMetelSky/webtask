@@ -8,11 +8,16 @@ public class User extends Entity {
 	private String phone;
 	private String login;
 	private boolean isBlocked;
+	private Role role;
+	
+	public enum Role{
+		ADMIN,GUEST,USER,DOCTOR
+	}
 
 	public User() {
 	}
 
-	public User(long userId, String name, String surname, String email, String phone, String login, boolean isBlocked) {
+	public User(long userId, String name, String surname, String email, String phone, String login, boolean isBlocked, Role role) {
 		this.userId = userId;
 		this.name = name;
 		this.surname = surname;
@@ -20,6 +25,7 @@ public class User extends Entity {
 		this.phone = phone;
 		this.login = login;
 		this.isBlocked = isBlocked;
+		this.role = role;
 	}
 
 	public String getName() {
@@ -74,6 +80,14 @@ public class User extends Entity {
 		return userId;
 	}
 
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -83,6 +97,7 @@ public class User extends Entity {
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
 		result = prime * result + (int) (userId ^ (userId >>> 32));
 		return result;
@@ -119,6 +134,8 @@ public class User extends Entity {
 				return false;
 		} else if (!phone.equals(other.phone))
 			return false;
+		if (role != other.role)
+			return false;
 		if (surname == null) {
 			if (other.surname != null)
 				return false;
@@ -146,6 +163,8 @@ public class User extends Entity {
 		builder.append(login);
 		builder.append(", isBlocked=");
 		builder.append(isBlocked);
+		builder.append(", role=");
+		builder.append(role);
 		builder.append("]");
 		return builder.toString();
 	}

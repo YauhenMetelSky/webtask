@@ -36,12 +36,12 @@
 					placeholder=<fmt:message key="label.login" />>
 			</div>
 			<div class="mb-3">
-				<input type="password" class="form-control" name="password" required
+				<input type="password" class="form-control" name="password" required maxlength="20"
 					placeholder=<fmt:message key="label.password" />>
 			</div>
 			<div class="mb-3">
 				<input type="password" class="form-control"
-					name="confirmed_password" required
+					name="confirmed_password" required 
 					placeholder=<fmt:message key="label.confirm_password" />>
 			</div>
 			<div class="mb-3">
@@ -49,15 +49,15 @@
 					placeholder=<fmt:message key="label.email" />>
 			</div>
 			<div class="mb-3">
-				<input type="text" class="form-control" name="name" required
+				<input type="text" class="form-control" name="name" pattern=".*[^<>]" required
 					placeholder=<fmt:message key="label.name" />>
 			</div>
 			<div class="mb-3">
-				<input type="text" class="form-control" name="surname"
+				<input type="text" class="form-control" name="surname" pattern=".*[^<>]"
 					placeholder=<fmt:message key="label.surname" />>
 			</div>
 			<div class="mb-3">
-				<input type="tel" class="form-control" name="phone" required
+				<input type="tel" class="form-control" name="phone" required pattern=".*[^<>]"
 					placeholder=<fmt:message key="label.phone" />>
 			</div>
 			<div class="mb-3">

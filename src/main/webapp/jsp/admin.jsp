@@ -37,15 +37,16 @@
 
 		<div class="form-inline">
 			<form action="controller" method="POST">
-				<input type="text" name="name" value=""	class="form-control" placeholder=<fmt:message key="label.name"/>>
-				<input type="hidden" name="command" value="find_by_name">
+				<input type="text" name="name" value="" class="form-control"
+					placeholder=<fmt:message key="label.name"/>> <input
+					type="hidden" name="command" value="find_by_name">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.find" />
 				</button>
 			</form>
-				<p>${message}</p>
 		</div>
-		<br/>
+			<p>${message}</p>
+		<br />
 		<div>
 			<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">
@@ -57,14 +58,40 @@
 		<br />
 		<div class="form-inline">
 			<form action="controller" method="POST">
-			<input type="text" name="email_to" placeholder="email"/>
-				<button type="submit" class="btn btn-primary">
-					Send email
-				</button>
+				<input type="text" class="form-control" name="email_to" placeholder="email" />
+				<button type="submit" class="btn btn-primary">Send email</button>
 				<input type="hidden" name="command" value="send_email">
 			</form>
 		</div>
 	</div>
+	<table class="table table-striped">	
+		<c:if test="${list ne null}">
+			<tr>
+				<th><fmt:message key="label.number" /></th>
+				<th><fmt:message key="label.id" /></th>
+				<th><fmt:message key="label.name" /></th>
+				<th><fmt:message key="label.surname" /></th>
+				<th><fmt:message key="label.email" /></th>
+				<th><fmt:message key="label.phone_column" /></th>
+				<th><fmt:message key="label.login" /></th>
+				<th><fmt:message key="label.blocked" /></th>
+			</tr>
+		</c:if>
+
+		<c:forEach var="elem" items="${list}" varStatus="status">
+			<tr>
+				<td><c:out value="${status.count }" /></td>
+				<td><c:out value="${elem.userId }" /></td>
+				<td><c:out value="${elem.name }" /></td>
+				<td><c:out value="${elem.surname }" /></td>
+				<td><c:out value="${elem.email }" /></td>
+				<td><c:out value="${elem.phone }" /></td>
+				<td><c:out value="${elem.login }" /></td>
+				<td><c:out value="${elem.blocked }" /></td>
+			</tr>
+		</c:forEach>
+
+	</table>
 
 	<c:import url="footer.jsp" />
 </body>

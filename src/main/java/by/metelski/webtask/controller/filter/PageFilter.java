@@ -16,7 +16,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.SessionAttribute;
 
-
 /**
  * Servlet Filter implementation class PageFilter
  */
@@ -29,14 +28,12 @@ public class PageFilter implements Filter {
     public PageFilter() {
 
     }
-
 	/**
 	 * @see Filter#destroy()
 	 */
 	public void destroy() {
 
 	}
-
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
@@ -49,7 +46,6 @@ public class PageFilter implements Filter {
 		session.setAttribute(SessionAttribute.CURRENT_PAGE, pagePath);		
 		chain.doFilter(request, response);
 	}
-
 	/**
 	 * @see Filter#init(FilterConfig)
 	 */

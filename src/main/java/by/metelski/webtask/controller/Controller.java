@@ -18,14 +18,12 @@ import javax.servlet.annotation.*;
 public class Controller extends HttpServlet {
 	private static final Logger logger = LogManager.getLogger();
 
-	//FIXME when we changed language, we lost data from request find by name
 	public void init() {
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		out.print("Hello from doGet");// TODO invoke processRequest
@@ -39,8 +37,6 @@ public class Controller extends HttpServlet {
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		response.setCharacterEncoding("utf-8");
 		Command command = CommandProvider.defineCommand(request);
 		Router router = command.execute(request);
 		logger.log(Level.DEBUG, "page from command " + router.getPagePath());

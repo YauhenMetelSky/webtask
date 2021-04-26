@@ -1,5 +1,9 @@
 package by.metelski.webtask.command.impl;
 
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,6 +12,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.RequestAttribute;
+import by.metelski.webtask.command.RequestParameter;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.SessionAttribute;
 
@@ -23,8 +29,18 @@ public class SetLocaleCommand implements Command {
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(SessionAttribute.CURRENT_PAGE);
 		router.setPagePath(page);
-		logger.log(Level.DEBUG, "language from page=" + request.getParameter("language"));//TODO magic string
-		session.setAttribute(SessionAttribute.LOCALE, request.getParameter("language"));
+//		Map<String,String[]>parameters=request.getParameterMap();
+//		Enumeration names=request.getAttributeNames();
+//		while(names.hasMoreElements()) {
+//			
+//		}
+//		for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
+//			logger.log(Level.DEBUG, "parameter " +entry.getKey() +", value " +Arrays.toString(entry.getValue()));           
+//	    }
+		logger.log(Level.DEBUG, "Parameter list=" + request.getParameter(RequestAttribute.LIST));
+		logger.log(Level.DEBUG, "Attribute list=" + request.getAttribute(RequestAttribute.LIST));
+		logger.log(Level.DEBUG, "language from page=" + request.getParameter(RequestParameter.LANGUAGE));
+		session.setAttribute(SessionAttribute.LOCALE, request.getParameter(RequestParameter.LANGUAGE));
 			return router;
 	}
 }
