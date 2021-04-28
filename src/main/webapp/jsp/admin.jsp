@@ -28,13 +28,6 @@
 <body>
 	<c:import url="header.jsp" />
 	<div class="container-fluid bg">
-		<div class="container-sm">
-			<h1>
-				<fmt:message key="label.hello" />
-				, ${user.name}
-			</h1>
-		</div>
-
 		<div class="form-inline">
 			<form action="controller" method="POST">
 				<input type="text" name="name" value="" class="form-control"

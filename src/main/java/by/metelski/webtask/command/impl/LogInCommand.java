@@ -38,7 +38,7 @@ public class LogInCommand implements Command {
 			optionalUser = userService.findUsersByLoginPassword(login, password);
 			if (optionalUser.isPresent()) {
 				user = optionalUser.get();
-				router.setPagePath(PagePath.ADMIN);
+				router.setPagePath(PagePath.MAIN);
 				session.setAttribute(SessionAttribute.USER, user);
 			} else {
 				router.setPagePath(PagePath.SIGN_IN);

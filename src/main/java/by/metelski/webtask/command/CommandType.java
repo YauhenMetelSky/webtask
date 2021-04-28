@@ -5,12 +5,13 @@ import by.metelski.webtask.command.impl.sendEmailCommand;
 import by.metelski.webtask.command.impl.ToSignUpCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
 import by.metelski.webtask.command.impl.LogInCommand;
+import by.metelski.webtask.command.impl.LogOutCommand;
 import by.metelski.webtask.command.impl.SetLocaleCommand;
 import by.metelski.webtask.command.impl.SignUpCommand;
 import by.metelski.webtask.command.impl.ToAboutCommand;
 import by.metelski.webtask.command.impl.ToContactCommand;
 import by.metelski.webtask.command.impl.ToMainCommand;
-import by.metelski.webtask.command.impl.ToAdminPageCommand;
+import by.metelski.webtask.command.impl.ToPersonalPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
@@ -30,6 +31,11 @@ public enum CommandType {
 	LOG_IN {
 		{
 			this.command = new LogInCommand();
+		}
+	},
+	LOG_OUT {
+		{
+			this.command = new LogOutCommand();
 		}
 	},
 	SEND_EMAIL {
@@ -52,9 +58,9 @@ public enum CommandType {
 			this.command = new ToAboutCommand();
 		}
 	},
-	TO_ADMIN{
+	TO_PERSONAL_PAGE{
 		{
-			this.command = new ToAdminPageCommand();//TODO role admin
+			this.command = new ToPersonalPageCommand();
 		}
 	},
 	TO_CONTACT {
