@@ -33,7 +33,7 @@
 			<p>${message}</p>
 			<div class="mb-3">
 				<input class="form-control" name="login" required
-					placeholder=<fmt:message key="label.login" />>
+					placeholder=<fmt:message key="label.user_name" />>
 			</div>
 			<div class="mb-3">
 				<input type="password" class="form-control" name="password" required maxlength="20"

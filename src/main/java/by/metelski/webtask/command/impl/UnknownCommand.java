@@ -14,7 +14,7 @@ public class UnknownCommand implements Command {
 	@Override
 	public Router execute(HttpServletRequest request) {
 		Router router = new Router();
-		router.setPagePath(PagePath.ADMIN);
+		router.setPagePath(PagePath.MAIN);
 		logger.log(Level.INFO, "unknown command ");
 		return router;
 	}

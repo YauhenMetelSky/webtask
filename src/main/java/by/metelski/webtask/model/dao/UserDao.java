@@ -1,7 +1,6 @@
 package by.metelski.webtask.model.dao;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import by.metelski.webtask.entity.User;
@@ -15,6 +14,10 @@ public interface UserDao {
 	Optional<String> findPasswordByLogin(String login) throws DaoException;
 
 	Optional<User> findUserByLogin(String login) throws DaoException;
+	
+	Optional<User> findUserByEmail(String email) throws DaoException;
 
-	boolean addUser(Map<String, String> userData, String password) throws DaoException;
+	boolean addUser(User user, String password) throws DaoException;
+	
+	boolean activateAccount(String email) throws DaoException;
 }

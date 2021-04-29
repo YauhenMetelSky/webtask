@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.exception.DaoException;
@@ -22,11 +22,13 @@ import static by.metelski.webtask.model.dao.ColumnName.*;
 
 public class UserDaoImpl implements UserDao {
 	private static final Logger logger = LogManager.getLogger();
-	private static final String SQL_FIND_ALL_USERS = "SELECT user_id,name,surname,login,email,phone,isBlocked,role FROM users";
-	private static final String SQL_FIND_USERS_BY_NAME = "SELECT user_id,name,surname,login,email,phone,isBlocked,role FROM users WHERE name=?";
+	private static final String SQL_FIND_ALL_USERS = "SELECT user_id,name,surname,login,email,phone,is_blocked,role FROM users";
+	private static final String SQL_FIND_USERS_BY_NAME = "SELECT user_id,name,surname,login,email,phone,is_blocked,role FROM users WHERE name=?";
 	private static final String SQL_FIND_PASSWORD_BY_LOGIN = "SELECT password FROM users WHERE login=?";
-	private static final String SQL_FIND_USER_BY_LOGIN = "SELECT user_id,name,surname,login,email,phone,isBlocked,role FROM users WHERE login=?";
+	private static final String SQL_FIND_USER_BY_EMAIL = "SELECT user_id,name,surname,login,email,phone,is_blocked,role FROM users WHERE email=?";
+	private static final String SQL_FIND_USER_BY_LOGIN = "SELECT user_id,name,surname,login,email,phone,is_blocked,role FROM users WHERE login=?";
 	private static final String SQL_ADD_USER = "INSERT INTO users (name,surname,login,password,email,phone) values(?,?,?,?,?,?)";
+	private static final String SQL_ACTIVATE_ACCOUNT = "UPDATE users SET is_active=true WHERE email=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
@@ -144,24 +146,59 @@ public class UserDaoImpl implements UserDao {
 		}
 		return optionalUser;
 	}
+	
+	@Override
+	public Optional<User> findUserByEmail(String email) throws DaoException {
+		logger.log(Level.INFO, "Find user by email, email=  " + email);
+		Optional<User> optionalUser;
+		Connection connection = connectionPool.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement(SQL_FIND_USER_BY_EMAIL);
+			logger.log(Level.DEBUG, "in try block, login");
+			statement.setString(1, email);
+			ResultSet resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				int userId = resultSet.getInt(USER_ID);
+				String name = resultSet.getString(USER_NAME);
+				String surname = resultSet.getString(USER_SURNAME);
+				String userEmail = resultSet.getString(USER_EMAIL);
+				String phone = resultSet.getString(USER_PHONE);
+				String loginFromDB = resultSet.getString(USER_LOGIN);
+				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
+				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
+				User user = new User(userId, name, surname, userEmail, phone, loginFromDB, isBlocked,role);
+				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
+				optionalUser = Optional.of(user);
+			} else {
+				logger.log(Level.INFO, "didn't find user with login:" + email);
+				optionalUser = Optional.empty();
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException("Dao exception in method findUserByLogin", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+		}
+		return optionalUser;
+	}
 
 	@Override
-	public boolean addUser(Map<String, String> userData, String password) throws DaoException {
-		logger.log(Level.INFO, "Try to add user in db" + userData);
+	public boolean addUser(User user, String password) throws DaoException {
+		logger.log(Level.INFO, "Try to add user in db" + user);
 		boolean userAdded = false;
 		Connection connection = connectionPool.getConnection();
 		try {
 			PreparedStatement statement = connection.prepareStatement(SQL_ADD_USER);
-			statement.setString(1, userData.get(USER_NAME));
-			statement.setString(2, userData.get(USER_SURNAME));
-			statement.setString(3, userData.get(USER_LOGIN));
+			statement.setString(1, user.getName());
+			statement.setString(2, user.getSurname());
+			statement.setString(3, user.getLogin());
 			statement.setString(4, password);
-			statement.setString(5, userData.get(USER_EMAIL));
-			statement.setString(6, userData.get(USER_PHONE));
+			statement.setString(5, user.getEmail());
+			statement.setString(6, user.getPhone());
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
 				userAdded = true;
-				logger.log(Level.INFO, "user added");
+				logger.log(Level.INFO, "user added" + user);
 			} else {
 				logger.log(Level.ERROR, "user was not added");
 			}
@@ -171,4 +208,26 @@ public class UserDaoImpl implements UserDao {
 		}
 		return userAdded;
 	}
+
+	@Override
+	public boolean activateAccount(String email) throws DaoException {
+		logger.log(Level.INFO, "Try to activate user account, email:" + email);
+		boolean isActive = false;
+		Connection connection = connectionPool.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement(SQL_ACTIVATE_ACCOUNT);
+			statement.setString(1, email);
+			int rowCount = statement.executeUpdate();
+			if (rowCount != 0) {
+				isActive = true;
+				logger.log(Level.INFO, "account "+email+" is active.");
+			} else {
+				logger.log(Level.ERROR, "account "+email+" was't activated");
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException("Dao exception in method activateAccount", e);
+		}
+		return isActive;
+	}	
 }

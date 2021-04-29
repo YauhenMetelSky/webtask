@@ -26,7 +26,7 @@ public class sendEmailCommand implements Command{
 		request.setAttribute(RequestAttribute.MESSAGE, "Message sent");
 		String emailTo = request.getParameter(RequestParameter.EMAIL_TO);
 		logger.log(Level.DEBUG, "Sending email to: " +emailTo);
-		MailSender.sendEmail(emailTo);
+		MailSender.sendEmail(emailTo,"TestEmail","Hello from DoctorPro");//FIXME magic string
 		  return router;
 	}
 }

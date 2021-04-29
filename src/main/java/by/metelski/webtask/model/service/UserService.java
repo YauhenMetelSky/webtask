@@ -13,8 +13,12 @@ public interface UserService {
 	List<User> findUsersByName(String userName) throws ServiceException;
 
 	Optional<User> findUsersByLogin(String login) throws ServiceException;
+	
+	Optional<User> findUserByEmail(String email) throws ServiceException;
 
 	Optional<User> findUsersByLoginPassword(String login, String password) throws ServiceException;
 
-	boolean addUser(Map<String, String> userData, String password) throws ServiceException;
+	boolean addUser(Map<String, String> userData) throws ServiceException;
+	
+	boolean activateAccount(String token,String email) throws ServiceException;
 }

@@ -16,7 +16,6 @@ import by.metelski.webtask.command.RequestParameter;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.Router.Type;
 import by.metelski.webtask.exception.ServiceException;
-import by.metelski.webtask.model.dao.ColumnName;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
@@ -36,15 +35,17 @@ public class SignUpCommand implements Command {
 		String phone = request.getParameter(RequestParameter.USER_PHONE);
 		String password = request.getParameter(RequestParameter.USER_PASSWORD);
 		String confirmedPassword = request.getParameter(RequestParameter.USER_CONFIRMED_PASSWORD);
-		userData.put(ColumnName.USER_LOGIN, login);
-		userData.put(ColumnName.USER_NAME, name);
-		userData.put(ColumnName.USER_SURNAME, surname);
-		userData.put(ColumnName.USER_EMAIL, email);
-		userData.put(ColumnName.USER_PHONE, phone);
+		userData.put(RequestParameter.USER_LOGIN, login);
+		userData.put(RequestParameter.USER_NAME, name);
+		userData.put(RequestParameter.USER_SURNAME, surname);
+		userData.put(RequestParameter.USER_EMAIL, email);
+		userData.put(RequestParameter.USER_PHONE, phone);
+		userData.put(RequestParameter.USER_PASSWORD, password);
+		userData.put(RequestParameter.URL, request.getRequestURL().toString());
 		if (password.equals(confirmedPassword)) {
 			try {
 				if (userService.findUsersByLogin(login).isEmpty()) {
-					if (userService.addUser(userData, password)) {
+					if (userService.addUser(userData)) {
 						String page = request.getContextPath();
 						router.setPagePath(page);
 						router.setType(Type.REDIRECT);

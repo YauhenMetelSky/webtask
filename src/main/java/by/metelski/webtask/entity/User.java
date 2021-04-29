@@ -1,6 +1,5 @@
 package by.metelski.webtask.entity;
 
-import org.apache.logging.log4j.core.jmx.AppenderAdmin;
 
 public class User extends Entity {
 	private long userId;
@@ -20,7 +19,7 @@ public class User extends Entity {
 	
 	}
 
-	public User(long userId, String name, String surname, String email, String phone, String login, boolean isBlocked, Role role) {
+	public User(long userId, String name, String surname, String email, String phone, String login, boolean isBlocked,Role role) {
 		this.userId = userId;
 		this.name = name;
 		this.surname = surname;
@@ -76,7 +75,7 @@ public class User extends Entity {
 	}
 
 	public void setBlocked(boolean isBlocked) {
-		this.isBlocked = isBlocked;
+		this.isBlocked = isBlocked; //TODO remove setBlocked?
 	}
 
 	public long getUserId() {
@@ -87,7 +86,7 @@ public class User extends Entity {
 	}
 
 	public void setRole(Role role) {
-		this.role = role;
+		this.role = role;//TODO remove setRole?
 	}
 	@Override
 	public int hashCode() {

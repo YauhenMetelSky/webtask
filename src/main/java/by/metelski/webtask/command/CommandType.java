@@ -14,10 +14,17 @@ import by.metelski.webtask.command.impl.ToMainCommand;
 import by.metelski.webtask.command.impl.ToPersonalPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
+import by.metelski.webtask.command.impl.ActivateAccountCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
+import by.metelski.webtask.command.impl.FindUserByEmailCommand;
 
 public enum CommandType {
 	// TODO Sort commands
+	ACTIVATE {
+		{
+			this.command = new ActivateAccountCommand();
+		}
+	},
 	FIND_ALL_USERS {
 		{
 			this.command = new FindAllUsersCommand();
@@ -26,6 +33,11 @@ public enum CommandType {
 	FIND_BY_NAME {
 		{
 			this.command = new FindUsersByNameCommand();
+		}
+	},
+	FIND_BY_EMAIL {
+		{
+			this.command = new FindUserByEmailCommand();
 		}
 	},
 	LOG_IN {
