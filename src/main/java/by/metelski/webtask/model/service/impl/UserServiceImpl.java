@@ -1,14 +1,11 @@
 package by.metelski.webtask.model.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import by.metelski.webtask.command.RequestParameter;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.entity.UserBuilder;
 import by.metelski.webtask.exception.DaoException;
@@ -18,129 +15,111 @@ import by.metelski.webtask.model.dao.UserDao;
 import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.util.Encoder;
-import by.metelski.webtask.util.MailSender;
 import by.metelski.webtask.validator.UserValidator;
 
 public class UserServiceImpl implements UserService {
 	private static final Logger logger = LogManager.getLogger();
-	private UserDao userDao = new UserDaoImpl();
-	private final String COMMAND_CONFIRM="?command=activate";
-	private final String TOKEN="&token=";
-	private final String EMAIL="&email=";
-	
-	
+	private final UserDao userDao = new UserDaoImpl();
 
+	//Move validate credentials to level up (@LoginCommand)
+	//Do not create god method and god class))) service must be a service
 	@Override
-	public Optional<User> findUsersByLoginPassword(String login, String password) throws ServiceException {
-		Optional<User> optionalUser = null;
+	public Optional<User> findUsersByLoginPassword(final String login, final String password) throws ServiceException {
 		if (UserValidator.isValidLogin(login)) {
-			String encodedPassword = Encoder.encodePassword(password);
+			final String encodedPassword = Encoder.encodePassword(password);
 			logger.log(Level.DEBUG, "Encoded password: " + encodedPassword);
 			try {
-				Optional<String> passwordFromDBOptional = userDao.findPasswordByLogin(login);
+				final Optional<String> passwordFromDBOptional = userDao.findPasswordByLogin(login);
 				if (passwordFromDBOptional.isPresent()) {
-					String passwordFromDB = passwordFromDBOptional.get();
+					final String passwordFromDB = passwordFromDBOptional.get();
 					logger.log(Level.DEBUG, "passwordFromDB: " + passwordFromDB);
 					if (passwordFromDB.equals(encodedPassword)) {
 						logger.log(Level.INFO, "passwords equals, authorization is successful for user: " + login);
-						User user = userDao.findUserByLogin(login).get();
-						optionalUser = Optional.of(user);
+						return userDao.findUserByLogin(login);
 					} else {
-						optionalUser = Optional.empty();
+						return Optional.empty();
 					}
 				} else {
-					optionalUser = Optional.empty();
+					return Optional.empty();
 				}
-			} catch (DaoException e) {
+			} catch (final DaoException e) {
 				logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword" + e);
 				throw new ServiceException(e);
 			}
-		} else {
-			optionalUser = Optional.empty();
 		}
-		return optionalUser;
+		return Optional.empty();
 	}
 
 	@Override
 	public List<User> findAllUsers() throws ServiceException {
-		List<User> users = new ArrayList<>();
 		try {
-			users = userDao.findAll();
-		} catch (DaoException e) {
+			return userDao.findAll();
+		} catch (final DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method FindAllUsers");
 			throw new ServiceException(e);
 		}
-		return users;
 	}
 
 	@Override
-	public List<User> findUsersByName(String userName) throws ServiceException {
-		List<User> users = new ArrayList<>();
-		if (UserValidator.isValidName(userName)) {
-			try {
-				users = userDao.findUsersByName(userName);
-			} catch (DaoException e) {
-				logger.log(Level.ERROR, "dao exception in method FindUsersByName" + e);
-				throw new ServiceException(e);
-			}
-		}
-		return users;
-	}
-
-	@Override
-	public Optional<User> findUsersByLogin(String login) throws ServiceException {
-		Optional<User> user = null;
-		if (UserValidator.isValidLogin(login)) {
-			try {
-				user = userDao.findUserByLogin(login);
-			} catch (DaoException e) {
-				logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword" + e);
-				throw new ServiceException(e);
-			}
-		}
-		return user;
-	}
-	
-	@Override
-	public Optional<User> findUserByEmail(String email) throws ServiceException {
-		Optional<User> user;
-			try {
-				user = userDao.findUserByEmail(email);
-			} catch (DaoException e) {
-				logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword" + e);
-				throw new ServiceException(e);
-			}
-		return user;
-	}
-
-	@Override
-	public boolean addUser(Map<String, String> userData) throws ServiceException {
-		String encodedPassword = Encoder.encodePassword(userData.get(ColumnName.PASSWORD));//TODO Delete password, use only map, create user
-		User user= UserBuilder.getInstance().build(userData);
-		String uniqToken =Encoder.encodePassword(userData.get(ColumnName.USER_LOGIN)) ; 
-		String url = userData.get(RequestParameter.URL) +COMMAND_CONFIRM+TOKEN+uniqToken + EMAIL + userData.get(RequestParameter.USER_EMAIL);//TODO url for check
-		String message = "Welcome and thanks... " + url;//TODO Magic string		
-		boolean userAdded = false;
+	public List<User> findUsersByName(final String userName) throws ServiceException {
 		try {
-			userAdded = userDao.addUser(user, encodedPassword);
-			MailSender.sendEmail(user.getEmail(),"Account confirmation",message);
-		} catch (DaoException e) {
+			if (UserValidator.isValidName(userName)) {
+				return userDao.findUsersByName(userName);
+			}
+			return Collections.emptyList();
+		} catch (final DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method FindUsersByName" + e);
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public Optional<User> findUsersByLogin(final String login) throws ServiceException {
+		try {
+			if (UserValidator.isValidLogin(login)) {
+				return userDao.findUserByLogin(login);
+			}
+			return Optional.empty();
+		} catch (final DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword" + e);
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public Optional<User> findUserByEmail(final String email) throws ServiceException {
+		try {
+			return userDao.findUserByEmail(email);
+		} catch (final DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword" + e);
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public boolean addUser(final Map<String, String> userData) throws ServiceException {
+		// Also move to level up. Just save user. rename method like as saveUser.
+		final String encodedPassword = Encoder.encodePassword(userData.get(ColumnName.PASSWORD));//TODO Delete password, use only map, create user
+		final User user= UserBuilder.getInstance().build(userData);
+		try {
+			return userDao.addUser(user, encodedPassword);
+			//FIXME
+			//remove to level up  - SERVICE MUST NOT KNOW ABOUT MAIL SENDER
+			// MailSender.sendEmail(user.getEmail(),"Account confirmation",message);
+		} catch (final DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method addUser" + e);
 			throw new ServiceException(e);
 		}
-		return userAdded;
 	}
 
 	@Override
-	public boolean activateAccount(String token,String email) throws ServiceException {	  
+	public boolean activateAccount(String token,String email) throws ServiceException {
 		//TODO compare token
-		boolean isActive= false;
 		try {
-			isActive=userDao.activateAccount(email);
+			return userDao.activateAccount(email);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method activateAccount" + e);
 			throw new ServiceException(e);
-		}		
-		return isActive;
+		}
 	}
 }
