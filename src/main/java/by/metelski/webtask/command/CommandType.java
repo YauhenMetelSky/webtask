@@ -15,6 +15,7 @@ import by.metelski.webtask.command.impl.ToPersonalPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
 import by.metelski.webtask.command.impl.ActivateAccountCommand;
+import by.metelski.webtask.command.impl.BlockUserCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
 import by.metelski.webtask.command.impl.FindUserByEmailCommand;
 
@@ -23,6 +24,11 @@ public enum CommandType {
 	ACTIVATE {
 		{
 			this.command = new ActivateAccountCommand();
+		}
+	},
+	BLOCK_USER {
+		{
+			this.command = new BlockUserCommand();
 		}
 	},
 	FIND_ALL_USERS {

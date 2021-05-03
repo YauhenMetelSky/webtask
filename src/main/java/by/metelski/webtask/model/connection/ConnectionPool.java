@@ -83,16 +83,19 @@ public class ConnectionPool {
 
 	public void destroyPool() {
 		for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-			try {
-				logger.log(Level.DEBUG, "destroyPool");
-				freeConnection.take().reallyClose();
-			} catch (InterruptedException e) {
-				logger.log(Level.ERROR, "InterruptedException in method destroyPool " + e.getMessage());
-			} catch (SQLException e) {
-				logger.log(Level.ERROR, "SQLException in method destroyPool " + e.getMessage());
-			}
+				closeAnyConnection();
 		}
 		deregisterDrivers();
+	}
+	
+	private void closeAnyConnection() {
+		try {
+			freeConnection.take().reallyClose();
+		} catch (InterruptedException e) {
+			logger.log(Level.ERROR, "InterruptedException in method destroyPool " + e.getMessage());
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQLException in method destroyPool " + e.getMessage());
+		}
 	}
 
 	private void deregisterDrivers() {

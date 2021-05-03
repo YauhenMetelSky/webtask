@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
-import by.metelski.webtask.command.RequestParameter;
+import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.Router.Type;
 import by.metelski.webtask.exception.ServiceException;
@@ -23,9 +23,9 @@ public class ActivateAccountCommand implements Command {
 	public Router execute(HttpServletRequest request) {
 	    Router router = new Router();
 	    boolean isActive = false;
-	    logger.log(Level.DEBUG, "execute method logIn");
-		String email = request.getParameter(RequestParameter.USER_EMAIL);
-		String token = request.getParameter(RequestParameter.TOKEN);
+	    logger.log(Level.DEBUG, "execute method ActivateAccountCommand");
+		String email = request.getParameter(ParameterAndAttribute.USER_EMAIL);
+		String token = request.getParameter(ParameterAndAttribute.TOKEN);
 		logger.log(Level.DEBUG, "email: " + email + " token: " + token);
 		try {
 			isActive = userService.activateAccount(token,email);

@@ -14,7 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import by.metelski.webtask.command.SessionAttribute;
+
+import by.metelski.webtask.command.ParameterAndAttribute;
 
 /**
  * Servlet Filter implementation class PageFilter
@@ -43,7 +44,7 @@ public class PageFilter implements Filter {
 		HttpSession session = req.getSession();
 		String pagePath =req.getServletPath();
 		logger.log(Level.DEBUG, "Current page from filter: " +pagePath);
-		session.setAttribute(SessionAttribute.CURRENT_PAGE, pagePath);		
+		session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, pagePath);		
 		chain.doFilter(request, response);
 	}
 	/**

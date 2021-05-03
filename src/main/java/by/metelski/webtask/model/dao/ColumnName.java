@@ -8,7 +8,7 @@ public final class ColumnName {
 	public static final String PASSWORD = "password";
 	public static final String USER_EMAIL = "email";
 	public static final String USER_PHONE = "phone";
-	public static final String IS_BLOCKED = "isBlocked";
+	public static final String IS_BLOCKED = "is_blocked";
 	public static final String ROLE = "role";
 
 	private ColumnName() {

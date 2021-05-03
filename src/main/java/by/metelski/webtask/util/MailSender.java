@@ -17,18 +17,23 @@ import org.apache.logging.log4j.Logger;
 
 public class MailSender {
 	private static final Logger logger = LogManager.getLogger();
+	private static final Properties properties = new Properties();
 	private static final String MAIL_PROPERTIES="mail.properties";
 	private static final String MAIL_USER_NAME="mail.user.name";
 	private static final String MAIL_USER_PASSWORD="mail.user.password";
 	private static final String MAIL_FROM="mail.from";
 	
-	public static void sendEmail(String emailTo,String subject,String messageText) {
-		Properties properties = new Properties();
+	
+	static {
 		try(InputStream inputStream = MailSender.class.getClassLoader().getResourceAsStream(MAIL_PROPERTIES)){
 			properties.load(inputStream);
 		}catch(Exception e) {
 			logger.log(Level.ERROR, "Properties exception: " + e.getMessage());//TODO catch and right exception
 		}
+		
+	}
+	
+	public static void sendEmail(String emailTo,String subject,String messageText) {
 		  Session session = Session.getInstance(properties,
 			         new javax.mail.Authenticator() {
 			            protected PasswordAuthentication getPasswordAuthentication() {

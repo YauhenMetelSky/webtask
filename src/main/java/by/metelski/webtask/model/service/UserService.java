@@ -21,4 +21,7 @@ public interface UserService {
 	boolean addUser(Map<String, String> userData) throws ServiceException;
 	
 	boolean activateAccount(String token,String email) throws ServiceException;
+	
+	boolean blockUser(long id) throws ServiceException;
+
 }

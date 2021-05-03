@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.CommandProvider;
 import by.metelski.webtask.command.Router;
-import by.metelski.webtask.command.SessionAttribute;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.command.Command;
 import javax.servlet.RequestDispatcher;

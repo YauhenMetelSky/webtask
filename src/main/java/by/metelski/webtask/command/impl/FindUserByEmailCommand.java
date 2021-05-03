@@ -11,10 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
-import by.metelski.webtask.command.RequestAttribute;
-import by.metelski.webtask.command.RequestParameter;
+import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
-import by.metelski.webtask.command.SessionAttribute;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.service.UserService;
@@ -29,17 +27,17 @@ public class FindUserByEmailCommand implements Command {
 		Optional<User> user;
 		Router router = new Router();
 		HttpSession session = request.getSession();
-		String page = (String) session.getAttribute(SessionAttribute.CURRENT_PAGE);
-		String email = request.getParameter(RequestParameter.USER_EMAIL);
+		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
+		String email = request.getParameter(ParameterAndAttribute.USER_EMAIL);
 		logger.log(Level.INFO, "Find by email: " + email);
 		try {
 			user = userService.findUserByEmail(email);
 			if (user.isPresent()) {
 				router.setPagePath(page);
-				request.setAttribute(RequestAttribute.FINDED_USER, user);
+				request.setAttribute(ParameterAndAttribute.FINDED_USER, user);
 			} else {
 				router.setPagePath(page);
-				request.setAttribute(RequestAttribute.MESSAGE, "Can't find such user");
+				request.setAttribute(ParameterAndAttribute.MESSAGE, "Can't find such user");
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");

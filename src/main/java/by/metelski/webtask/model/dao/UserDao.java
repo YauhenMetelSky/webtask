@@ -20,4 +20,7 @@ public interface UserDao {
 	boolean addUser(User user, String password) throws DaoException;
 	
 	boolean activateAccount(String email) throws DaoException;
+	
+	boolean blockUser(long id) throws DaoException;
+
 }

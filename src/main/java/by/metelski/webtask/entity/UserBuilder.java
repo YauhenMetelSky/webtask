@@ -2,7 +2,7 @@ package by.metelski.webtask.entity;
 
 import java.util.Map;
 
-import by.metelski.webtask.command.RequestParameter;
+import by.metelski.webtask.command.ParameterAndAttribute;
 
 public class UserBuilder {
 	private final static UserBuilder instance = new UserBuilder();
@@ -16,11 +16,11 @@ public class UserBuilder {
   
   public User build(Map<String,String> userData) {
 	  User user = new User();
-	  user.setName(userData.get(RequestParameter.USER_NAME));
-	  user.setSurname(userData.get(RequestParameter.USER_SURNAME));
-	  user.setLogin(userData.get(RequestParameter.USER_LOGIN));
-	  user.setEmail(userData.get(RequestParameter.USER_EMAIL));
-	  user.setPhone(userData.get(RequestParameter.USER_PHONE));
+	  user.setName(userData.get(ParameterAndAttribute.USER_NAME));
+	  user.setSurname(userData.get(ParameterAndAttribute.USER_SURNAME));
+	  user.setLogin(userData.get(ParameterAndAttribute.USER_LOGIN));
+	  user.setEmail(userData.get(ParameterAndAttribute.USER_EMAIL));
+	  user.setPhone(userData.get(ParameterAndAttribute.USER_PHONE));
 	  return user;
   }
   

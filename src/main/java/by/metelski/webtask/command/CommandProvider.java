@@ -12,7 +12,7 @@ public class CommandProvider {
 
 	public static Command defineCommand(HttpServletRequest request) {
 		Command current = null;
-		String action = request.getParameter(RequestParameter.COMMAND);
+		String action = request.getParameter(ParameterAndAttribute.COMMAND);
 		logger.log(Level.INFO, "definded command: " + action);
 		if (action == null || action.isEmpty()) {
 			logger.log(Level.INFO, "empty command ");

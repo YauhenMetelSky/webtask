@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
+import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
-import by.metelski.webtask.command.SessionAttribute;
 import by.metelski.webtask.entity.User;
 
 public class ToPersonalPageCommand implements Command {
@@ -21,8 +21,8 @@ public class ToPersonalPageCommand implements Command {
 		logger.log(Level.INFO, "ToPersonalPageCommand");
 		Router router = new Router();
 		HttpSession session = request.getSession();
-		User user = (User)session.getAttribute(SessionAttribute.USER);
-		String page = (String) session.getAttribute(SessionAttribute.CURRENT_PAGE);
+		User user = (User)session.getAttribute(ParameterAndAttribute.USER);
+		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
 		if(user!= null) {
 			//TODO switch role blocked confirmed
 			switch(user.getRole()) {
