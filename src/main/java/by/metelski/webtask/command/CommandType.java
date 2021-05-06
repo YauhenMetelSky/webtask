@@ -15,7 +15,9 @@ import by.metelski.webtask.command.impl.ToPersonalPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
 import by.metelski.webtask.command.impl.ActivateAccountCommand;
+import by.metelski.webtask.command.impl.AddProcedureCommand;
 import by.metelski.webtask.command.impl.BlockUserCommand;
+import by.metelski.webtask.command.impl.FindAllProceduresCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
 import by.metelski.webtask.command.impl.FindUserByEmailCommand;
 
@@ -26,6 +28,16 @@ public enum CommandType {
 			this.command = new ActivateAccountCommand();
 		}
 	},
+	ADD_APPOINTMENT {
+		{
+			this.command = new AddProcedureCommand();//FIXME
+		}
+	},
+	ADD_PROCEDURE {
+		{
+			this.command = new AddProcedureCommand();
+		}
+	},
 	BLOCK_USER {
 		{
 			this.command = new BlockUserCommand();
@@ -34,6 +46,11 @@ public enum CommandType {
 	FIND_ALL_USERS {
 		{
 			this.command = new FindAllUsersCommand();
+		}
+	},
+	FIND_ALL_PROCEDURES {
+		{
+			this.command = new FindAllProceduresCommand();
 		}
 	},
 	FIND_BY_NAME {

@@ -22,6 +22,5 @@ public class UserBuilder {
 	  user.setEmail(userData.get(ParameterAndAttribute.USER_EMAIL));
 	  user.setPhone(userData.get(ParameterAndAttribute.USER_PHONE));
 	  return user;
-  }
-  
+  }  
 }

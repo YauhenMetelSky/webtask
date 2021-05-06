@@ -12,6 +12,8 @@ public final class PagePath {
 	public static final String SIGN_IN = "/jsp/signin.jsp";
 	public static final String SIGN_UP = "/jsp/signup.jsp";
 	public static final String USER = "/jsp/user.jsp";
+	
+	public static final String TO_PERSONAL_PAGE="/controller?command=to_personal_page";
 
 	private PagePath() {
 	}

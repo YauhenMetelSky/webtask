@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 	private final String COMMAND_CONFIRM = "?command=activate";
 	private final String TOKEN = "&token=";
 	private final String EMAIL = "&email=";
-
+	
 	@Override
 	public Optional<User> findUsersByLoginPassword(String login, String password) throws ServiceException {
 		Optional<User> optionalUser = null;

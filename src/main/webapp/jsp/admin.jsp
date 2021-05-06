@@ -40,6 +40,26 @@
 		</div>
 			<p>${message}</p>
 		<br />
+		<div class="form-inline">
+			<form action="controller" method="POST">
+				<input type="text" name="procedure_name" value="" pattern=".*[^<>]" class="form-control"
+					placeholder=<fmt:message key="label.name"/>> 
+					<input type="text" name="procedure_image" value="" pattern=".*[^<>]" class="form-control"
+					placeholder=<fmt:message key="label.image"/>>
+					<input type="text" name="procedure_price" value="" required pattern="\d+[.]\d+" class="form-control"
+					placeholder=<fmt:message key="label.price"/>>
+					<input type="text" name="duration" value="" required pattern="\d+" class="form-control"
+					placeholder=<fmt:message key="label.duration"/>>
+					<input type="text" name="description" value="" required pattern=".*[^<>]" class="form-control"
+					placeholder=<fmt:message key="label.description"/>>
+					<input type="hidden" name="command" value="add_procedure">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.add" />
+				</button>
+			</form>
+		</div>
+			<p>${message}</p>
+		<br />
 		<div>
 			<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">

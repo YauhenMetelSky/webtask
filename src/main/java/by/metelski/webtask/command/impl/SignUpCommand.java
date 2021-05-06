@@ -48,7 +48,7 @@ public class SignUpCommand implements Command {
 						String page = request.getContextPath();
 						router.setPagePath(page);
 						router.setType(Type.REDIRECT);
-						request.setAttribute(ParameterAndAttribute.MESSAGE, "User created");
+						request.setAttribute(ParameterAndAttribute.MESSAGE, "User created");//TODO magic string will be created new request
 					} else {
 						router.setPagePath(PagePath.ERROR);// TODO need to do smth
 					}
