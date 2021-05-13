@@ -10,17 +10,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.entity.Procedure;
-import by.metelski.webtask.entity.User;
-import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.model.dao.ProcedureDao;
@@ -102,6 +97,12 @@ public class ProcedureDaoImpl implements ProcedureDao {
 	public Optional<Procedure> findById() throws DaoException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int findDuration(int procedureId) throws DaoException {
+		// TODO Auto-generated method stub//FIXME had query
+		return 0;
 	}
 
 }

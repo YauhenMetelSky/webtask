@@ -31,8 +31,8 @@
 		<div class="form-inline">
 			<form action="controller" method="POST">
 				<input type="text" name="name" value="" class="form-control"
-					placeholder=<fmt:message key="label.name"/>> <input
-					type="hidden" name="command" value="find_by_name">
+					placeholder=<fmt:message key="label.name"/>> 
+					<input type="hidden" name="command" value="find_by_name">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.find" />
 				</button>
@@ -86,7 +86,6 @@
 				<th><fmt:message key="label.surname" /></th>
 				<th><fmt:message key="label.email" /></th>
 				<th><fmt:message key="label.phone_column" /></th>
-				<th><fmt:message key="label.login" /></th>
 				<th><fmt:message key="label.blocked" /></th>
 			</tr>
 		</c:if>
@@ -99,7 +98,6 @@
 				<td><c:out value="${elem.surname }" /></td>
 				<td><c:out value="${elem.email }" /></td>
 				<td><c:out value="${elem.phone }" /></td>
-				<td><c:out value="${elem.login }" /></td>
 				<td><c:out value="${elem.blocked }" /></td>
 			</tr>
 		</c:forEach>

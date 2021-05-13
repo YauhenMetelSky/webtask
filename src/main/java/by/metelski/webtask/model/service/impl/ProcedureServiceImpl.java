@@ -9,7 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.entity.Procedure;
-import by.metelski.webtask.entity.ProcedureBuilder;
+import by.metelski.webtask.entity.ProcedureFactory;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ProcedureDao;
@@ -23,7 +23,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 	@Override
 	public boolean add(Map<String, String> procedureData) throws ServiceException {
 		//TODO validate data
-		Procedure procedure = ProcedureBuilder.getInstance().build(procedureData);
+		Procedure procedure = ProcedureFactory.getInstance().build(procedureData);
 		boolean isAdded = false;
 		try {
 			isAdded = procedureDao.add(procedure);

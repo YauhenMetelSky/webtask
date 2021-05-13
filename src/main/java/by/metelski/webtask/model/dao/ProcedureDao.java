@@ -13,6 +13,8 @@ public interface ProcedureDao {
 	boolean activate(long id) throws DaoException;
 
 	boolean deActivate(long id) throws DaoException;
+	
+	int findDuration(int procedureId) throws DaoException;
 
 	List<Procedure> findAll() throws DaoException;
 

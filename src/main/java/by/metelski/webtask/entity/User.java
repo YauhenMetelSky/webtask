@@ -7,7 +7,6 @@ public class User extends Entity {
 	private String surname;
 	private String email;
 	private String phone;
-	private String login;
 	private boolean isBlocked;
 	private Role role;
 
@@ -19,13 +18,12 @@ public class User extends Entity {
 	
 	}
 
-	public User(long userId, String name, String surname, String email, String phone, String login, boolean isBlocked,Role role) {
+	public User(long userId, String name, String surname, String email, String phone, boolean isBlocked,Role role) {
 		this.userId = userId;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
 		this.phone = phone;
-		this.login = login;
 		this.isBlocked = isBlocked;
 		this.role = role;
 	}
@@ -62,14 +60,6 @@ public class User extends Entity {
 		this.phone = phone;
 	}
 
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
 	public boolean isBlocked() {
 		return isBlocked;
 	}
@@ -88,13 +78,13 @@ public class User extends Entity {
 	public void setRole(Role role) {
 		this.role = role;//TODO remove setRole?
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + (isBlocked ? 1231 : 1237);
-		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
@@ -118,11 +108,6 @@ public class User extends Entity {
 		} else if (!email.equals(other.email))
 			return false;
 		if (isBlocked != other.isBlocked)
-			return false;
-		if (login == null) {
-			if (other.login != null)
-				return false;
-		} else if (!login.equals(other.login))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -159,8 +144,6 @@ public class User extends Entity {
 		builder.append(email);
 		builder.append(", phone=");
 		builder.append(phone);
-		builder.append(", login=");
-		builder.append(login);
 		builder.append(", isBlocked=");
 		builder.append(isBlocked);
 		builder.append(", role=");
@@ -168,4 +151,5 @@ public class User extends Entity {
 		builder.append("]");
 		return builder.toString();
 	}
+
 }

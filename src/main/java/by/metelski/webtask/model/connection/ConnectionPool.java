@@ -23,7 +23,7 @@ public class ConnectionPool {
 	private Queue<ProxyConnection> givenAwayConnections;
 	// TODO default pool size from connection or properties
 	private static final int DEFAULT_POOL_SIZE = 8;
-
+//TODO 2 blocking queues
 	private ConnectionPool() {
 		freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
 		givenAwayConnections = new ArrayDeque<>();

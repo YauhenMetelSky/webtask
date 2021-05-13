@@ -4,13 +4,13 @@ import java.util.Map;
 
 import by.metelski.webtask.command.ParameterAndAttribute;
 
-public class UserBuilder {
-	private final static UserBuilder instance = new UserBuilder();
+public class UserFactory {
+	private final static UserFactory instance = new UserFactory();
 	
-  private UserBuilder() {
+  private UserFactory() {
 	  
   }
-  public static UserBuilder getInstance() {
+  public static UserFactory getInstance() {
 	  return instance;
   }
   
@@ -18,7 +18,6 @@ public class UserBuilder {
 	  User user = new User();
 	  user.setName(userData.get(ParameterAndAttribute.USER_NAME));
 	  user.setSurname(userData.get(ParameterAndAttribute.USER_SURNAME));
-	  user.setLogin(userData.get(ParameterAndAttribute.USER_LOGIN));
 	  user.setEmail(userData.get(ParameterAndAttribute.USER_EMAIL));
 	  user.setPhone(userData.get(ParameterAndAttribute.USER_PHONE));
 	  return user;

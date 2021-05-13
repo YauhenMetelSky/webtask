@@ -30,9 +30,9 @@
 		<div class="form-container">
 			<form action="controller" method="POST">
 				<div class="mb-3">
-					<label for="login" class="form-label"><fmt:message
-							key="label.login" /></label> 
-							<input class="form-control" name="login" required pattern=".*[^<>]" placeholder=<fmt:message key="label.login"/>>
+					<label for="email" class="form-label"><fmt:message
+							key="label.email" /></label> 
+							<input class="form-control" name="email" required pattern=".*[^<>]" placeholder=<fmt:message key="label.email"/>>
 				</div>
 				<div class="mb-3">
 					<label for="password" class="form-label"><fmt:message

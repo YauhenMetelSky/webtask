@@ -27,14 +27,12 @@ public class SignUpCommand implements Command {
 		Router router = new Router();
 		Map<String, String> userData = new HashMap<>();
 		logger.log(Level.DEBUG, "execute method SignUp");
-		String login = request.getParameter(ParameterAndAttribute.USER_LOGIN);
 		String name = request.getParameter(ParameterAndAttribute.USER_NAME);
 		String surname = request.getParameter(ParameterAndAttribute.USER_SURNAME);
 		String email = request.getParameter(ParameterAndAttribute.USER_EMAIL);
 		String phone = request.getParameter(ParameterAndAttribute.USER_PHONE);
 		String password = request.getParameter(ParameterAndAttribute.USER_PASSWORD);
 		String confirmedPassword = request.getParameter(ParameterAndAttribute.USER_CONFIRMED_PASSWORD);
-		userData.put(ParameterAndAttribute.USER_LOGIN, login);
 		userData.put(ParameterAndAttribute.USER_NAME, name);
 		userData.put(ParameterAndAttribute.USER_SURNAME, surname);
 		userData.put(ParameterAndAttribute.USER_EMAIL, email);
@@ -43,7 +41,7 @@ public class SignUpCommand implements Command {
 		userData.put(ParameterAndAttribute.URL, request.getRequestURL().toString());
 		if (password.equals(confirmedPassword)) {
 			try {
-				if (userService.findUsersByLogin(login).isEmpty()) {
+				if (userService.findUserByEmail(email).isEmpty()) {
 					if (userService.addUser(userData)) {
 						String page = request.getContextPath();
 						router.setPagePath(page);

@@ -2,24 +2,23 @@ package by.metelski.webtask.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class UserValidator {
-	private final static String EMAIL_REGEX = "\\w+@\\p{Alpha}+\\.\\p{Alpha}{2,6}";
-
+	public static final Logger logger = LogManager.getLogger();
+	private final static String EMAIL_REGEX = "\\w+@\\p{Alpha}+\\.\\p{Alpha}{2,}";//TODO any symbol. Include cyrillic.
+    private final static String NAME_REGEX ="[\\p{Alpha}А-Яа-я\\s-]{1,15}";
+	 
 	public static boolean isValidName(String name) {
-		boolean isValid = true;
-		if (name.isBlank()) {
-			isValid = false;
-		}
-		return isValid;
-	}
+		logger.log(Level.DEBUG, "name: " + name);
 
-	public static boolean isValidLogin(String login) {
-		boolean isValid = true;
-		if (login.isBlank()) {
-			isValid = false;
+		if(name==null||name.isBlank()) {
+			return false;
 		}
-		return isValid;
+		return name.matches(NAME_REGEX);
 	}
 
 	public static boolean isValidEmail(String email) {

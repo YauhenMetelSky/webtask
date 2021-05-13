@@ -32,9 +32,10 @@
 			</h1>
 			<p>${message}</p>
 			<div class="mb-3">
-				<input class="form-control" name="login" required
-					placeholder=<fmt:message key="label.user_name" />>
+				<input type="email" class="form-control" name="email" required
+					placeholder=<fmt:message key="label.email" />>
 			</div>
+
 			<div class="mb-3">
 				<input type="password" class="form-control" name="password" required maxlength="20"
 					placeholder=<fmt:message key="label.password" />>
@@ -43,10 +44,6 @@
 				<input type="password" class="form-control"
 					name="confirmed_password" required 
 					placeholder=<fmt:message key="label.confirm_password" />>
-			</div>
-			<div class="mb-3">
-				<input type="email" class="form-control" name="email" required
-					placeholder=<fmt:message key="label.email" />>
 			</div>
 			<div class="mb-3">
 				<input type="text" class="form-control" name="name" pattern=".*[^<>]" required

@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.User;
-import by.metelski.webtask.entity.UserBuilder;
+import by.metelski.webtask.entity.UserFactory;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ColumnName;
@@ -29,19 +29,19 @@ public class UserServiceImpl implements UserService {
 	private final String EMAIL = "&email=";
 	
 	@Override
-	public Optional<User> findUsersByLoginPassword(String login, String password) throws ServiceException {
+	public Optional<User> findUserByEmailPassword(String email, String password) throws ServiceException {
 		Optional<User> optionalUser = null;
-		if (UserValidator.isValidLogin(login)) {
+		if (UserValidator.isValidEmail(email)) {
 			String encodedPassword = Encoder.encodePassword(password);
 			logger.log(Level.DEBUG, "Encoded password: " + encodedPassword);
 			try {
-				Optional<String> passwordFromDBOptional = userDao.findPasswordByLogin(login);
+				Optional<String> passwordFromDBOptional = userDao.findPasswordByEmail(email);
 				if (passwordFromDBOptional.isPresent()) {
 					String passwordFromDB = passwordFromDBOptional.get();
 					logger.log(Level.DEBUG, "passwordFromDB: " + passwordFromDB);
 					if (passwordFromDB.equals(encodedPassword)) {
-						logger.log(Level.INFO, "passwords equals, authorization is successful for user: " + login);
-						User user = userDao.findUserByLogin(login).get();
+						logger.log(Level.INFO, "passwords equals, authorization is successful for user: " + email);
+						User user = userDao.findUserByEmail(email).get();
 						optionalUser = Optional.of(user);
 					} else {
 						optionalUser = Optional.empty();
@@ -86,11 +86,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> findUsersByLogin(String login) throws ServiceException {
+	public Optional<User> findUserByEmail(String email) throws ServiceException {
 		Optional<User> user;
 		try {
-			if (UserValidator.isValidLogin(login)) {
-				user=userDao.findUserByLogin(login);
+			if (UserValidator.isValidEmail(email)) {
+				user=userDao.findUserByEmail(email);
 			} else {
 				user= Optional.empty();
 			}
@@ -102,23 +102,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> findUserByEmail(String email) throws ServiceException {
-		Optional<User> user;
-		try {
-			user = userDao.findUserByEmail(email);
-		} catch (DaoException e) {
-			logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword" + e);
-			throw new ServiceException(e);
-		}
-		return user;
-	}
-
-	@Override
 	public boolean addUser(Map<String, String> userData) throws ServiceException {
 		String encodedPassword = Encoder.encodePassword(userData.get(ColumnName.PASSWORD));
 		//TODO check user email. Must be unique.																				
-		User user = UserBuilder.getInstance().build(userData);
-		String uniqToken = Encoder.encodePassword(userData.get(ColumnName.USER_LOGIN));
+		User user = UserFactory.getInstance().build(userData);
+		String uniqToken = Encoder.encodePassword(userData.get(ColumnName.USER_EMAIL));
 		String url = userData.get(ParameterAndAttribute.URL) + COMMAND_CONFIRM + TOKEN + uniqToken + EMAIL
 				+ userData.get(ParameterAndAttribute.USER_EMAIL);// TODO url for check
 		String message = "Welcome and thanks... " + url;// TODO Magic string

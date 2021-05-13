@@ -28,19 +28,19 @@ public class LogInCommand implements Command {
 	    String page = request.getContextPath() + PagePath.SIGN_IN;
 	    logger.log(Level.DEBUG, "page path=" + page);
 		User user;
-		String login = request.getParameter(ParameterAndAttribute.USER_LOGIN);
+		String email = request.getParameter(ParameterAndAttribute.USER_EMAIL);
 		String password = request.getParameter(ParameterAndAttribute.USER_PASSWORD);
-		logger.log(Level.DEBUG, "login: " + login + " password: " + password);
+		logger.log(Level.DEBUG, "email: " + email + " password: " + password);
 		Optional<User> optionalUser;
 		try {
-			optionalUser = userService.findUsersByLoginPassword(login, password);
+			optionalUser = userService.findUserByEmailPassword(email, password);
 			if (optionalUser.isPresent()) {
 				user = optionalUser.get();
 				router.setPagePath(PagePath.MAIN);
 				session.setAttribute(ParameterAndAttribute.USER, user);
 			} else {
 				router.setPagePath(PagePath.SIGN_IN);
-				request.setAttribute(ParameterAndAttribute.MESSAGE, "incorrect login or password");
+				request.setAttribute(ParameterAndAttribute.MESSAGE, "incorrect email or password");//FIXME magic string
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute" + e);

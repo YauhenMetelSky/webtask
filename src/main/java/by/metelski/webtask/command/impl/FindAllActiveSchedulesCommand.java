@@ -1,0 +1,43 @@
+package by.metelski.webtask.command.impl;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.PagePath;
+import by.metelski.webtask.command.ParameterAndAttribute;
+import by.metelski.webtask.command.Router;
+import by.metelski.webtask.entity.Schedule;
+import by.metelski.webtask.exception.ServiceException;
+import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
+import by.metelski.webtask.model.service.ScheduleService;
+import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
+
+
+public class FindAllActiveSchedulesCommand implements Command {
+	private static final Logger logger = LogManager.getLogger();
+	private ScheduleService service = new ScheduleServiceImpl(new ScheduleDaoImpl());
+
+	@Override
+	public Router execute(HttpServletRequest request) {
+		List<Schedule> schedules;
+		Router router = new Router();
+		HttpSession session = request.getSession();
+		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
+		try {
+			schedules = service.findAllActiveSchedules();
+			router.setPagePath(page);
+			request.setAttribute(ParameterAndAttribute.SCHEDULE_LIST, schedules);
+		} catch (ServiceException e) {
+			logger.log(Level.ERROR, "ScheduleServiceException in method execute");
+			router.setPagePath(PagePath.ERROR);
+		}
+		return router;
+	}
+}

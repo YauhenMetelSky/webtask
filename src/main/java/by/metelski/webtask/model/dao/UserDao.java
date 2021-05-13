@@ -11,9 +11,7 @@ public interface UserDao {
 
 	List<User> findUsersByName(String userName) throws DaoException;
 
-	Optional<String> findPasswordByLogin(String login) throws DaoException;
-
-	Optional<User> findUserByLogin(String login) throws DaoException;
+	Optional<String> findPasswordByEmail(String email) throws DaoException;
 	
 	Optional<User> findUserByEmail(String email) throws DaoException;
 

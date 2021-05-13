@@ -1,9 +1,7 @@
 package by.metelski.webtask.command.impl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,7 +15,6 @@ import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.Router.Type;
-import by.metelski.webtask.entity.Appointment;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.service.AppointmentService;
@@ -27,8 +24,6 @@ import by.metelski.webtask.model.service.impl.AppointmentServiceImpl;
 public class AddAppointmentCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	AppointmentService service = new AppointmentServiceImpl();
-
-	//TODO AppointmentSrvice
 	
 	@Override
 	public Router execute(HttpServletRequest request) {

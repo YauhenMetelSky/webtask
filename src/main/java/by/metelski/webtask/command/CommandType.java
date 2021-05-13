@@ -15,10 +15,13 @@ import by.metelski.webtask.command.impl.ToPersonalPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
 import by.metelski.webtask.command.impl.ActivateAccountCommand;
+import by.metelski.webtask.command.impl.AddAppointmentCommand;
 import by.metelski.webtask.command.impl.AddProcedureCommand;
+import by.metelski.webtask.command.impl.AddDoctorScheduleCommand;
 import by.metelski.webtask.command.impl.BlockUserCommand;
 import by.metelski.webtask.command.impl.FindAllProceduresCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
+import by.metelski.webtask.command.impl.FindAllActiveSchedulesCommand;
 import by.metelski.webtask.command.impl.FindUserByEmailCommand;
 
 public enum CommandType {
@@ -30,7 +33,12 @@ public enum CommandType {
 	},
 	ADD_APPOINTMENT {
 		{
-			this.command = new AddProcedureCommand();//FIXME
+			this.command = new AddAppointmentCommand();
+		}
+	},
+	ADD_SCHEDULE {
+		{
+			this.command = new AddDoctorScheduleCommand();
 		}
 	},
 	ADD_PROCEDURE {
@@ -61,6 +69,11 @@ public enum CommandType {
 	FIND_BY_EMAIL {
 		{
 			this.command = new FindUserByEmailCommand();
+		}
+	},
+	FIND_All_ACTIVE_SCHEDULES {
+		{
+			this.command = new FindAllActiveSchedulesCommand();
 		}
 	},
 	LOG_IN {
