@@ -35,7 +35,7 @@ public class Controller extends HttpServlet {
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Command command = CommandProvider.defineCommand(request);
-		Router router = command.execute(request);
+		Router router = command.execute(request, null);
 		logger.log(Level.DEBUG, "page from command " + router.getPagePath());
 		logger.log(Level.DEBUG, "is wrong: " + request.getAttribute("wrong"));
 		switch (router.getType()) {

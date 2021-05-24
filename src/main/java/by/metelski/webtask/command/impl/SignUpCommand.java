@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +24,7 @@ public class SignUpCommand implements Command {
 	private UserService userService = new UserServiceImpl();
 
 	@Override
-	public Router execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		Router router = new Router();
 		Map<String, String> userData = new HashMap<>();
 		logger.log(Level.DEBUG, "execute method SignUp");

@@ -22,7 +22,8 @@ public class ProcedureServiceImpl implements ProcedureService {
 
 	@Override
 	public boolean add(Map<String, String> procedureData) throws ServiceException {
-		//TODO validate data
+		logger.log(Level.DEBUG, "add(), procedureData:" + procedureData);
+		// TODO validate data
 		Procedure procedure = ProcedureFactory.getInstance().build(procedureData);
 		boolean isAdded = false;
 		try {
@@ -50,6 +51,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 
 	@Override
 	public List<Procedure> findAll() throws ServiceException {
+		logger.log(Level.DEBUG, "findAll()");
 		List<Procedure> procedures;
 		try {
 			procedures = procedureDao.findAll();
@@ -57,7 +59,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 			logger.log(Level.ERROR, "dao exception in method FindAll" + e);
 			throw new ServiceException(e);
 		}
-		
+
 		return procedures;
 	}
 

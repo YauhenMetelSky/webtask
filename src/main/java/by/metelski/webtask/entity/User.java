@@ -17,6 +17,10 @@ public class User extends Entity {
 	public User() {
 	
 	}
+	public User(long userId) {
+		this.userId = userId;
+		
+	}
 
 	public User(long userId, String name, String surname, String email, String phone, boolean isBlocked,Role role) {
 		this.userId = userId;

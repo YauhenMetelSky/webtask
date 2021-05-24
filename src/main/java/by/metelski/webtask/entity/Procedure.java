@@ -15,6 +15,9 @@ public class Procedure {
 	public Procedure() {
 	
 	}
+	public Procedure(long procedureId) {
+		this.procedureId=procedureId;
+	}
 	public Procedure(long procedureId, String procedureName, String imageName, BigDecimal price,boolean isActive,String description,Duration duration) {
 		this.procedureId = procedureId;
 		this.name = procedureName;

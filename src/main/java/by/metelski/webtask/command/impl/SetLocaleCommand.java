@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.Level;
@@ -22,7 +23,7 @@ public class SetLocaleCommand implements Command {
 	private static final String EN="en_US";
 
 	@Override
-	public Router execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.INFO, "SetLocaleCommand");
 		Router router = new Router();
 		HttpSession session = request.getSession();

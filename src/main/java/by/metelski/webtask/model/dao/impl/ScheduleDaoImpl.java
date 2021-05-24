@@ -1,55 +1,57 @@
 package by.metelski.webtask.model.dao.impl;
 
 import static by.metelski.webtask.model.dao.ColumnName.DATE;
+import static by.metelski.webtask.model.dao.ColumnName.DOCTOR_ID;
+import static by.metelski.webtask.model.dao.ColumnName.END_TIME;
+import static by.metelski.webtask.model.dao.ColumnName.ID_DOCTOR_SCHEDULE;
 import static by.metelski.webtask.model.dao.ColumnName.IS_ACTIVE;
+import static by.metelski.webtask.model.dao.ColumnName.IS_BLOCKED;
+import static by.metelski.webtask.model.dao.ColumnName.ROLE;
+import static by.metelski.webtask.model.dao.ColumnName.START_TIME;
 import static by.metelski.webtask.model.dao.ColumnName.SCHEDULE_ID;
+import static by.metelski.webtask.model.dao.ColumnName.USER_EMAIL;
+import static by.metelski.webtask.model.dao.ColumnName.USER_ID;
+import static by.metelski.webtask.model.dao.ColumnName.USER_NAME;
+import static by.metelski.webtask.model.dao.ColumnName.USER_PHONE;
+import static by.metelski.webtask.model.dao.ColumnName.USER_SURNAME;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.SortedMap;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.entity.DoctorSchedule;
-import by.metelski.webtask.entity.DoctorSchedule.Intervals;
-import by.metelski.webtask.entity.Schedule;
+import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.connection.ConnectionPool;
+import by.metelski.webtask.model.dao.ColumnName;
 import by.metelski.webtask.model.dao.ScheduleDao;
 
 public class ScheduleDaoImpl implements ScheduleDao {
 	private static final Logger logger = LogManager.getLogger();
-	private static final String SQL_ADD_SCHEDULE="INSERT INTO doctor_schedule(doctor_id,schedule_id,9_00,9_30,10_00,10_30,11_00,11_30,12_00,12_30,13_00,13_30,14_00,14_30,15_00,15_30,16_00,16_30,17_00,17_30,18_00,18_30,19_00,19_30,20_00,20_30) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";//TODO 26 columns is it norm?
-	private static final String SQL_CHANGE_INTERVAL_STATUS="UPDATE doctor_schedule SET ?=? WHERE id_doctor_schedule=?";
-	private static final String SQL_FIND_ALL="SELECT id_doctor_schedule,doctor_id,schedule_id,9_00,9_30,10_00,10_30,11_00,11_30,12_00,12_30,13_00,13_30,14_00,14_30,15_00,15_30,16_00,16_30,17_00,17_30,18_00,18_30,19_00,19_30,20_00,20_30 FROM doctore_schedule";
-	private static final String SQL_FIND_BY_DATE = "SELECT date,id_doctor_schedule,doctor_id,schedule_id,9_00,9_30,10_00,10_30,11_00,11_30,12_00,12_30,13_00,13_30,14_00,14_30,15_00,15_30,16_00,16_30,17_00,17_30,18_00,18_30,19_00,19_30,20_00,20_30 FROM schedule JOIN doctor_schedule ON idschedule=schedule_id WHERE date=?";
-	private static final String SQL_FIND_BY_DATE_AND_DOCTOR="SELECT date,id_doctor_schedule,doctor_id,schedule_id,9_00,9_30,10_00,10_30,11_00,11_30,12_00,12_30,13_00,13_30,14_00,14_30,15_00,15_30,16_00,16_30,17_00,17_30,18_00,18_30,19_00,19_30,20_00,20_30 FROM schedule JOIN doctor_schedule ON idschedule=schedule_id WHERE date=? AND WHERE doctor_id=?";
-	private static final String SQL_ALL_ACTIVE_SCHEDULES="SELECT schedule_id,date,is_active FROM schedule WHERE is_active=true";
-	
+	private static final String SQL_ADD_DOCTOR_SCHEDULE = "INSERT INTO doctor_schedules(doctor_id,start_time,end_time,date) values(?,?,?,?)";
+	private static final String SQL_FIND_SCHEDULES_BY_DOCTOR_ID = "SELECT id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,start_time,end_time,date FROM doctor_schedules JOIN users d ON doctor_id=user_id WHERE doctor_id=?";
+	private static final String SQL_FIND_SCHEDULE_BY_ID = "SELECT id_doctor_schedule,user_id,name,surname,email,phone,is_blocked,role, start_time,end_time,date FROM doctor_schedules JOIN users ON doctor_id=user_id WHERE id_doctor_schedule=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
-	public boolean addSchedule(DoctorSchedule schedule) throws DaoException {
+	public boolean addDoctorSchedule(DoctorSchedule schedule) throws DaoException {
 		logger.log(Level.INFO, "Try to add doctor shedule in db" + schedule);
 		boolean scheduleAdded = false;
 		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_ADD_SCHEDULE);
-			statement.setInt(1, schedule.getDoctorId());
-			statement.setInt(2, schedule.getScheduleId());
-            SortedMap<Intervals,Boolean> intervals = schedule.getIntervals();
-            int counter = 3;//TODO Magic string
-            for(Intervals key : intervals.keySet()) {
-            	logger.log(Level.DEBUG, "key:" +key+" counter:" +counter);
-            	statement.setBoolean(counter, intervals.get(key));
-            	counter++;
-            } 
+			PreparedStatement statement = connection.prepareStatement(SQL_ADD_DOCTOR_SCHEDULE);
+			statement.setLong(1, schedule.getDoctor().getUserId());
+			statement.setTime(2, schedule.getStartTime());
+			statement.setTime(3, schedule.getEndTime());
+			statement.setDate(4, schedule.getDate());
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
 				scheduleAdded = true;
@@ -64,48 +66,39 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		return scheduleAdded;
 	}
 
-	@Override
-	public boolean changeSchedule(String interval, boolean status) throws DaoException {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
-	public List<Schedule> findAllActiveSchedules() throws DaoException {
-		List<Schedule> schedules = new ArrayList<>();
-		try (Connection connection = connectionPool.getConnection();
-				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery(SQL_ALL_ACTIVE_SCHEDULES)) {
+	public List<DoctorSchedule> findAllSchedulesByDoctor(User user) throws DaoException {
+		List<DoctorSchedule> schedules = new ArrayList<>();
+		logger.log(Level.INFO, "Find schedules by doctor, doctorID: " + user.getUserId());
+		try (Connection connection = connectionPool.getConnection();) {
+			PreparedStatement statement = connection.prepareStatement(SQL_FIND_SCHEDULES_BY_DOCTOR_ID);
+			statement.setLong(1, user.getUserId());
+			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				long scheduleId = resultSet.getLong(SCHEDULE_ID);
+				long doctorScheduleId = resultSet.getLong(ID_DOCTOR_SCHEDULE);
+				long doctorId = resultSet.getLong(ColumnName.USER_ID);
+				String doctorName=resultSet.getString(ColumnName.USER_NAME);
+				String doctorSurname=resultSet.getString(ColumnName.USER_SURNAME);
+				String doctorEmail=resultSet.getString(ColumnName.USER_EMAIL);
+				String doctorPhone=resultSet.getString(ColumnName.USER_PHONE);
+				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
+				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
+				User doctor= new User(doctorId,doctorName,doctorSurname,doctorEmail,doctorPhone,doctorIsBlocked,doctorRole);
+				Time startTime = resultSet.getTime(START_TIME);
+				Time endTime = resultSet.getTime(END_TIME);
 				Date date = resultSet.getDate(DATE);
-				boolean isActive = resultSet.getBoolean(IS_ACTIVE);
-				logger.log(Level.DEBUG,"scheduleId:"+scheduleId+ " date:" + date+" isActive:" + isActive );		
-				schedules.add(new Schedule(scheduleId, date, isActive));
+				DoctorSchedule doctorSchedule = new DoctorSchedule(doctorScheduleId, doctor, startTime, endTime,
+						date);
+				logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
+				schedules.add(doctorSchedule);
 			}
 		} catch (SQLException e) {
-			logger.log(Level.ERROR, "findAllActiveSchedules: " + e.getMessage() + " : " + e.getErrorCode());
-			throw new DaoException("Dao exception", e);
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException("Dao exception in method findByDoctor, doctorId:" + user.getUserId() + " " + e.getErrorCode(),
+					e);
 		}
 		return schedules;
-	}
-
-	@Override
-	public List<Schedule> findByDate(Date date) throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Schedule> findByDoctor(User user) throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Optional<Schedule> findById(int id) throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -115,8 +108,39 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 
 	@Override
-	public List<Schedule> findAll() throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<DoctorSchedule> FindScheduleById(long id) throws DaoException {
+		Optional<DoctorSchedule> schedule;
+		logger.log(Level.INFO, "Find schedule by id, ID: " + id);
+		try (Connection connection = connectionPool.getConnection();) {
+			PreparedStatement statement = connection.prepareStatement(SQL_FIND_SCHEDULE_BY_ID);
+			statement.setLong(1, id);
+			ResultSet resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				long doctorScheduleId = resultSet.getLong(ID_DOCTOR_SCHEDULE);
+				long userId =resultSet.getLong(USER_ID);
+				String name = resultSet.getString(USER_NAME);
+				String surname = resultSet.getString(USER_SURNAME);
+				String email = resultSet.getString(USER_EMAIL);
+				String phone = resultSet.getString(USER_PHONE);
+				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
+				Role role = Role.valueOf(resultSet.getString(ROLE));
+				Time startTime = resultSet.getTime(START_TIME);
+				Time endTime = resultSet.getTime(END_TIME);
+				Date date = resultSet.getDate(DATE);
+				User doctor = new User(userId,name,surname,email,phone,isBlocked,role);
+				DoctorSchedule doctorSchedule = new DoctorSchedule(doctorScheduleId, doctor, startTime, endTime,
+						date);
+				logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
+				schedule = Optional.of(doctorSchedule);
+			} else {
+				logger.log(Level.INFO, "didn't find schedule by id:" + id);
+				schedule = Optional.empty();
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException(
+					"Dao exception in method FindScheduleById, id:" + id + " error code: " + e.getErrorCode(), e);
+		}
+		return schedule;
 	}
 }

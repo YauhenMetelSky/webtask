@@ -11,12 +11,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1,  shrink-to-fit=no charset=utf-8" />
 
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
@@ -86,77 +81,10 @@
 			<br>
 			<p> We are waiting for you </p>
 		</div>
-
 		<div class="col">
-			<form action="controller" method="POST" class="form-container">
-				<h1>
-					<fmt:message key="label.appointment" />
-				</h1>
-				<div class="row">
-					<div class="col">
-					<div class="form-group">
-						<input type="text" class="form-control" name="name"
-							pattern=".*[^<>]" required
-							placeholder=<fmt:message key="label.name" />>
-					</div>
-					</div>
-					<div class="col">
-					<div class="form-group">
-						<input type="email" class="form-control" name="email" required
-							placeholder=<fmt:message key="label.email" />>
-					</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col">
-					<div class="form-group">
-						<select class="form-control" required>
-							<option disabled="" selected="" value=""><fmt:message key="label.procedure"/></option>
-							<option>Speciality 1</option>
-							<option>Speciality 2</option>
-							<option>Speciality 3</option>
-							<option>Speciality 4</option>
-							<option>Speciality 5</option>
-						</select>
-						</div>
-					</div>
-					<div class="col">
-					<div class="form-group">
-						<select class="form-control" required="required">
-							<option disabled="" selected="" value=""><fmt:message key="label.doctor"/></option>
-							<option>Doctor 1</option>
-							<option>Doctor 2</option>
-							<option>Doctor 3</option>
-							<option>Doctor 4</option>
-							<option>Doctor 5</option>
-						</select>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row">
-				<div class="col">
-				<div class="form-group">
-				<input type="tel" class="form-control" name="phone" required
-						pattern=".*[^<>]" placeholder=<fmt:message key="label.phone" />>
-				</div>
-				</div>
-				<div class="col">
-				<div class="form-group">
-				<input type="text" id="datepicker1" class="form-control" name="app_date" required
-						placeholder=<fmt:message key="label.date" />>	
-					</div>			
-				</div>
-				</div>
-
-				<div class="form-group">
-					<input type="hidden" name="command" value="add_appointment">
-					<button type="submit" class="btn btn-primary btn-block">
-						<fmt:message key="label.appointment" />
-					</button>
-				</div>
-			</form>
+			<h1>Content for all</h1>
+			<br>
+			<p> We are waiting for you </p>
 		</div>
 
 	</div>
@@ -205,12 +133,5 @@
 		<c:import url="footer.jsp" />
 	</div>
 
-	<!-- date time picker-->
-	
-	<script type="text/javascript">
-		$(function() {
-			$('#datetimepicker1').datetimepicker();
-		});
-	</script>
 </body>
 </html>

@@ -14,14 +14,20 @@ import by.metelski.webtask.command.impl.ToMainCommand;
 import by.metelski.webtask.command.impl.ToPersonalPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
+import by.metelski.webtask.command.async.FindAllSchedulesByUserIdAsyncCommand;
+import by.metelski.webtask.command.async.FindScheduleByIdAsyncCommand;
+import by.metelski.webtask.command.async.FindTimeIntervalsByScheduleIdAsyncCommand;
 import by.metelski.webtask.command.impl.ActivateAccountCommand;
 import by.metelski.webtask.command.impl.AddAppointmentCommand;
 import by.metelski.webtask.command.impl.AddProcedureCommand;
 import by.metelski.webtask.command.impl.AddDoctorScheduleCommand;
 import by.metelski.webtask.command.impl.BlockUserCommand;
 import by.metelski.webtask.command.impl.FindAllProceduresCommand;
+import by.metelski.webtask.command.impl.FindAllSchedulesByDoctorCommand;
+import by.metelski.webtask.command.impl.FindAllSchedulesByIdCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
-import by.metelski.webtask.command.impl.FindAllActiveSchedulesCommand;
+import by.metelski.webtask.command.impl.FindAllNewAppointmentsCommand;
+import by.metelski.webtask.command.impl.FindAllAppointmentsByUserIdCommand;
 import by.metelski.webtask.command.impl.FindUserByEmailCommand;
 
 public enum CommandType {
@@ -36,7 +42,7 @@ public enum CommandType {
 			this.command = new AddAppointmentCommand();
 		}
 	},
-	ADD_SCHEDULE {
+	ADD_DOCTOR_SCHEDULE {
 		{
 			this.command = new AddDoctorScheduleCommand();
 		}
@@ -51,6 +57,11 @@ public enum CommandType {
 			this.command = new BlockUserCommand();
 		}
 	},
+	FIND_ALL_NEW_APPOINTMENTS {
+		{
+			this.command = new FindAllNewAppointmentsCommand();
+		}
+	},
 	FIND_ALL_USERS {
 		{
 			this.command = new FindAllUsersCommand();
@@ -61,6 +72,27 @@ public enum CommandType {
 			this.command = new FindAllProceduresCommand();
 		}
 	},
+	FIND_ALL_APPOINTMENTS_BY_USER_ID{
+		{
+			this.command = new FindAllAppointmentsByUserIdCommand();
+		}
+	},
+	FIND_ALL_SCHEDULES_BY_DOCTOR {
+		{
+			this.command = new FindAllSchedulesByDoctorCommand();
+		}//FIXME can be one command findByID
+	},
+	FIND_ALL_SCHEDULES_BY_ID {
+		{
+			this.command = new FindAllSchedulesByIdCommand();
+		}
+	},
+	FIND_ALL_SCHEDULES_BY_USER_ID_ASYNC {
+		{
+			this.command = new FindAllSchedulesByUserIdAsyncCommand();
+		}
+	},
+
 	FIND_BY_NAME {
 		{
 			this.command = new FindUsersByNameCommand();
@@ -71,9 +103,14 @@ public enum CommandType {
 			this.command = new FindUserByEmailCommand();
 		}
 	},
-	FIND_All_ACTIVE_SCHEDULES {
+	FIND_SCHEDULE_BY_ID_ASYNC {
 		{
-			this.command = new FindAllActiveSchedulesCommand();
+			this.command = new FindScheduleByIdAsyncCommand();
+		}
+	},
+	FIND_TIME_INTERVALS_BY_SCHEDULE_ID_ASYNC {
+		{
+			this.command = new FindTimeIntervalsByScheduleIdAsyncCommand();
 		}
 	},
 	LOG_IN {

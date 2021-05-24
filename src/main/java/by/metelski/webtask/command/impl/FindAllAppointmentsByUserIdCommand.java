@@ -4,7 +4,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,27 +11,31 @@ import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
+import by.metelski.webtask.entity.Appointment;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
-import by.metelski.webtask.model.service.UserService;
-import by.metelski.webtask.model.service.impl.UserServiceImpl;
+import by.metelski.webtask.model.service.AppointmentService;
+import by.metelski.webtask.model.service.impl.AppointmentServiceImpl;
 
-public class FindAllUsersCommand implements Command {
+public class FindAllAppointmentsByUserIdCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	private UserService userService = new UserServiceImpl();
+	private AppointmentService service = new AppointmentServiceImpl();
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-		List<User> users;
+		logger.log(Level.DEBUG, "FindAllSchedulesByIdCommand");
+		List<Appointment> appointments;
 		Router router = new Router();
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
+		User user = (User) session.getAttribute(ParameterAndAttribute.USER);
+		Long userId = user.getUserId();
 		try {
-			users = userService.findAllUsers();
+			appointments = service.findAllByUserId(userId);
 			router.setPagePath(page);
-			request.setAttribute(ParameterAndAttribute.LIST, users);
+			request.setAttribute(ParameterAndAttribute.APPOINTMENTS_LIST, appointments);
 		} catch (ServiceException e) {
-			logger.log(Level.ERROR, "UserServiceException in method execute");
+			logger.log(Level.ERROR, "ScheduleServiceException in method execute");
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

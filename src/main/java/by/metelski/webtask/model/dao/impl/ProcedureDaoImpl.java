@@ -1,7 +1,6 @@
 package by.metelski.webtask.model.dao.impl;
 
 import static by.metelski.webtask.model.dao.ColumnName.*;
-
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -93,16 +92,16 @@ public class ProcedureDaoImpl implements ProcedureDao {
 		return null;
 	}
 
+
 	@Override
-	public Optional<Procedure> findById() throws DaoException {
+	public int findDuration(long procedureId) throws DaoException {
+		// TODO Auto-generated method stub//FIXME had query
+		return 30;//FIXME
+	}
+
+	@Override
+	public Optional<Procedure> findById(long id) throws DaoException {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public int findDuration(int procedureId) throws DaoException {
-		// TODO Auto-generated method stub//FIXME had query
-		return 0;
-	}
-
 }

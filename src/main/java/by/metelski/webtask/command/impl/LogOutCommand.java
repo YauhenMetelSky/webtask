@@ -1,6 +1,7 @@
 package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +14,7 @@ public class LogOutCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 
 	@Override
-	public Router execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.INFO, "LogoutCommand");
 		Router router = new Router();
 		HttpSession session = request.getSession();

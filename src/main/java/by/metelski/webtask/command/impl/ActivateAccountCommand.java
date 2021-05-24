@@ -1,11 +1,10 @@
 package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
-
+import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
@@ -20,7 +19,7 @@ public class ActivateAccountCommand implements Command {
 	private UserService userService = new UserServiceImpl();
 
 	@Override
-	public Router execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 	    Router router = new Router();
 	    boolean isActive = false;
 	    logger.log(Level.DEBUG, "execute method ActivateAccountCommand");

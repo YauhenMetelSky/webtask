@@ -1,6 +1,7 @@
 package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.Level;
@@ -20,7 +21,7 @@ public class ToMainCommand implements Command{
 	ProcedureService procedureService = new ProcedureServiceImpl();
 
 	@Override
-	public Router execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.INFO, "ToMainCommand");
 		Router router = new Router();
 		router.setPagePath(PagePath.MAIN);	

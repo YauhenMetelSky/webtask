@@ -1,15 +1,17 @@
 package by.metelski.webtask.entity;
 
-import java.time.LocalDate;
+import java.sql.Date;
+import java.sql.Time;
 
 public class Appointment {
-	long id;
-	int userId;
-	int doctorId;
-	int procedureId;
-	String startTime;
-	LocalDate date;
-	Status status;
+	private long id;
+	private User user;
+	private User doctor;
+	private Procedure procedure;
+	private Time startTime;
+	private Time endTime;
+	private Date date;
+	private Status status;
 	
 	public enum Status{
 		CLAIMED,CONFIRMED,ENDED
@@ -18,85 +20,112 @@ public class Appointment {
 	public Appointment() {
 		
 	}
+	public Appointment(User user, User doctor, Procedure procedure,Date date) {
+		this.user = user;
+		this.doctor = doctor;
+		this.procedure = procedure;
+		this.date = date;
+		status = Status.CLAIMED;
+	}
+	public Appointment(User user, User doctor, Procedure procedure,Time startTime,Date date) {
+		this.user = user;
+		this.doctor = doctor;
+		this.procedure = procedure;
+		this.date = date;
+		this.startTime=startTime;
+		status = Status.CLAIMED;
+	}
+	
+	public Appointment(User user, User doctor, Procedure procedure,Time startTime, Time endTime,Date date) {
+		this.user = user;
+		this.doctor = doctor;
+		this.procedure = procedure;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.date = date;
+		status = Status.CLAIMED;
+	}
 
-	public Appointment(long id, int userId, int doctorId, int procedureId, String startTime, LocalDate date,
+	public Appointment(long id, User user, User doctor, Procedure procedure, Time startTime, Date date,
 			Status status) {
-		super();
 		this.id = id;
-		this.userId = userId;
-		this.doctorId = doctorId;
-		this.procedureId = procedureId;
+		this.user = user;
+		this.doctor = doctor;
+		this.procedure = procedure;
 		this.startTime = startTime;
 		this.date = date;
 		this.status = status;
 	}
-
-	public int getUserId() {
-		return userId;
+	public Appointment(long id, User user, User doctor, Procedure procedure, Time startTime,Time endTime, Date date,
+			Status status) {
+		this.id = id;
+		this.user = user;
+		this.doctor = doctor;
+		this.procedure = procedure;
+		this.startTime = startTime;
+		this.endTime=endTime;
+		this.date = date;
+		this.status = status;
 	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public User getUser() {
+		return user;
 	}
-
-	public int getDoctorId() {
-		return doctorId;
+	public void setUser(User user) {
+		this.user = user;
 	}
-
-	public void setDoctorId(int doctorId) {
-		this.doctorId = doctorId;
+	public User getDoctor() {
+		return doctor;
 	}
-
-	public int getProcedureId() {
-		return procedureId;
+	public void setDoctor(User doctor) {
+		this.doctor = doctor;
 	}
-
-	public void setProcedureId(int procedureId) {
-		this.procedureId = procedureId;
+	public Procedure getProcedure() {
+		return procedure;
 	}
-
-	public String getStartTime() {
+	public void setProcedure(Procedure procedure) {
+		this.procedure = procedure;
+	}
+	public Time getStartTime() {
 		return startTime;
 	}
-
-	public void setStartTime(String startTime) {
+	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
-
-	public LocalDate getDate() {
+	public Time getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(Time endTime) {
+		this.endTime = endTime;
+	}
+	public Date getDate() {
 		return date;
 	}
-
-	public void setDate(LocalDate date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
-
 	public Status getStatus() {
 		return status;
 	}
-
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-
 	public long getId() {
 		return id;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		result = prime * result + doctorId;
+		result = prime * result + ((doctor == null) ? 0 : doctor.hashCode());
+		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + procedureId;
+		result = prime * result + ((procedure == null) ? 0 : procedure.hashCode());
 		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + userId;
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -111,11 +140,22 @@ public class Appointment {
 				return false;
 		} else if (!date.equals(other.date))
 			return false;
-		if (doctorId != other.doctorId)
+		if (doctor == null) {
+			if (other.doctor != null)
+				return false;
+		} else if (!doctor.equals(other.doctor))
+			return false;
+		if (endTime == null) {
+			if (other.endTime != null)
+				return false;
+		} else if (!endTime.equals(other.endTime))
 			return false;
 		if (id != other.id)
 			return false;
-		if (procedureId != other.procedureId)
+		if (procedure == null) {
+			if (other.procedure != null)
+				return false;
+		} else if (!procedure.equals(other.procedure))
 			return false;
 		if (startTime == null) {
 			if (other.startTime != null)
@@ -124,29 +164,33 @@ public class Appointment {
 			return false;
 		if (status != other.status)
 			return false;
-		if (userId != other.userId)
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
 			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Appointment [id=");
 		builder.append(id);
-		builder.append(", userId=");
-		builder.append(userId);
-		builder.append(", doctorId=");
-		builder.append(doctorId);
-		builder.append(", procedureId=");
-		builder.append(procedureId);
+		builder.append(", user=");
+		builder.append(user);
+		builder.append(", doctor=");
+		builder.append(doctor);
+		builder.append(", procedure=");
+		builder.append(procedure);
 		builder.append(", startTime=");
 		builder.append(startTime);
+		builder.append(", endTime=");
+		builder.append(endTime);
 		builder.append(", date=");
 		builder.append(date);
 		builder.append(", status=");
 		builder.append(status);
 		builder.append("]");
 		return builder.toString();
-	}
+	}	
 }

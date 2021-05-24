@@ -2,14 +2,11 @@ package by.metelski.webtask.command.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
@@ -24,7 +21,7 @@ public class AddProcedureCommand implements Command {
 	ProcedureService procedureService = new ProcedureServiceImpl();
 	
 	@Override
-	public Router execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.DEBUG, "execute method AddProcedureCommand");
 		Router router = new Router();
 		Map<String, String> procedureData = new HashMap<>();

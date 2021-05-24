@@ -6,12 +6,12 @@ import java.util.Map;
 
 import by.metelski.webtask.command.ParameterAndAttribute;
 
-public class ProcedureBuilder {
-	private final static ProcedureBuilder instance = new ProcedureBuilder();
-	private ProcedureBuilder() {
+public class ProcedureFactory {
+	private final static ProcedureFactory instance = new ProcedureFactory();
+	private ProcedureFactory() {
 		
 	}
-	 public static ProcedureBuilder getInstance() {
+	 public static ProcedureFactory getInstance() {
 		 return instance;
 	 }
 	 

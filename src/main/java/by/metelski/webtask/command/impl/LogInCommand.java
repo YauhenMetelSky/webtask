@@ -2,6 +2,7 @@ package by.metelski.webtask.command.impl;
 
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.Level;
@@ -21,7 +22,7 @@ public class LogInCommand implements Command {
 	private UserService userService = new UserServiceImpl();
 
 	@Override
-	public Router execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 	    Router router = new Router();
 	    HttpSession session = request.getSession();
 	    logger.log(Level.DEBUG, "execute method logIn");

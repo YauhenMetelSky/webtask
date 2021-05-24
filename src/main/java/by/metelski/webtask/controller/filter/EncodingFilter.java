@@ -32,8 +32,13 @@ public class EncodingFilter implements Filter {
     	logger.log(Level.DEBUG, "Encodingfilter works!");
         String codeRequest = request.getCharacterEncoding();
         if (codeRequest == null || !codeRequest.equalsIgnoreCase(code)) {
+        	logger.log(Level.DEBUG, "set request encoding");
             request.setCharacterEncoding(code);
-            response.setCharacterEncoding(code);
+        }
+        String codeResponse = response.getCharacterEncoding();
+        if (codeResponse == null || !codeResponse.equalsIgnoreCase(code)) {
+        	logger.log(Level.DEBUG, "set response encoding");
+                 response.setCharacterEncoding(code);
         }
         chain.doFilter(request, response);
     }

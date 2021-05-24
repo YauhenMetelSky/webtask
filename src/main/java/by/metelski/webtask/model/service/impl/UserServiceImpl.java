@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.User;
+import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.entity.UserFactory;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Optional<User> findUserByEmailPassword(String email, String password) throws ServiceException {
+		logger.log(Level.DEBUG, "findUserByEmailPassword()");
 		Optional<User> optionalUser = null;
 		if (UserValidator.isValidEmail(email)) {
 			String encodedPassword = Encoder.encodePassword(password);
@@ -61,6 +63,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> findAllUsers() throws ServiceException {
+		logger.log(Level.DEBUG, "findAllUsers()");
 		List<User> users = new ArrayList<>();
 		try {
 			users = userDao.findAll();
@@ -73,6 +76,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> findUsersByName(String userName) throws ServiceException {
+		logger.log(Level.DEBUG, "findUsersByName(), userName:" + userName);
 		List<User> users = new ArrayList<>();
 		if (UserValidator.isValidName(userName)) {
 			try {
@@ -84,9 +88,24 @@ public class UserServiceImpl implements UserService {
 		}
 		return users;
 	}
+	
+	@Override
+	public List<User> findUsersByRole(Role role) throws ServiceException {
+		logger.log(Level.DEBUG, "findUsersByRole(), role:" + role);
+		List<User> users = new ArrayList<>();
+			try {
+				users = userDao.findUsersByRole(role);
+			} catch (DaoException e) {
+				logger.log(Level.ERROR, "dao exception in method FindUsersByRole" + e);
+				throw new ServiceException(e);
+			}
+
+		return users;
+	}
 
 	@Override
 	public Optional<User> findUserByEmail(String email) throws ServiceException {
+		logger.log(Level.DEBUG, "findUsersByEmail(), email:" + email);
 		Optional<User> user;
 		try {
 			if (UserValidator.isValidEmail(email)) {
@@ -100,9 +119,11 @@ public class UserServiceImpl implements UserService {
 		}
 		return user;
 	}
+	
 
 	@Override
 	public boolean addUser(Map<String, String> userData) throws ServiceException {
+		logger.log(Level.DEBUG, "addUser(), userData:" + userData);
 		String encodedPassword = Encoder.encodePassword(userData.get(ColumnName.PASSWORD));
 		//TODO check user email. Must be unique.																				
 		User user = UserFactory.getInstance().build(userData);
@@ -123,6 +144,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean activateAccount(String token, String email) throws ServiceException {
+		logger.log(Level.DEBUG, "activateAccount(), email:" + email);
 		// TODO compare token
 		boolean isActive = false;
 		try {
@@ -136,6 +158,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean blockUser(long id) throws ServiceException {
+		logger.log(Level.DEBUG, "blockUser(), id:" + id);
 		boolean isBlocked =false;
 		try {
 			isBlocked = userDao.blockUser(id);
@@ -145,4 +168,5 @@ public class UserServiceImpl implements UserService {
 		}	
 		return isBlocked;
 	}
+
 }

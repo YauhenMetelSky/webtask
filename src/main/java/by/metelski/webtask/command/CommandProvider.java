@@ -19,7 +19,7 @@ public class CommandProvider {
 			return new UnknownCommand();
 		}
 		try {
-			CommandType currentType = CommandType.valueOf(action.toUpperCase());
+			CommandType currentType = CommandType.valueOf(action.toUpperCase());		
 			current = currentType.getCurrentCommand();
 		} catch (IllegalArgumentException e) {
 			logger.log(Level.ERROR, "empty command from catch ");

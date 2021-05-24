@@ -1,6 +1,7 @@
 package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +21,7 @@ public class BlockUserCommand implements Command {
 	private UserService userService = new UserServiceImpl();
 
 	@Override
-	public Router execute(HttpServletRequest request) {
+	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 	    Router router = new Router();
 	    boolean isBlocked = false;
 	    logger.log(Level.DEBUG, "execute method BlockUserCommand");
