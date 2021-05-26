@@ -111,7 +111,8 @@
 				<th><fmt:message key="label.client"/></th>
 				<th><fmt:message key="label.phone"/></th>
 				<th><fmt:message key="label.confirm"/></th>
-				<th><fmt:message key="label.change"/></th>			
+				<th><fmt:message key="label.change"/></th>	
+				<th><fmt:message key="label.decline"/></th>		
 			</tr>
 		</c:if>
 		
@@ -138,6 +139,14 @@
 		<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.change"/>
+				</button>
+				<input type="hidden" name="command" value="#">
+			</form>		
+		</td>
+		<td>	
+		<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.decline"/>
 				</button>
 				<input type="hidden" name="command" value="#">
 			</form>		

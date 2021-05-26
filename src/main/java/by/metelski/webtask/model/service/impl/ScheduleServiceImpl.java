@@ -1,5 +1,6 @@
 package by.metelski.webtask.model.service.impl;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public List<DoctorSchedule> findAllSchedulesByDoctor(long userId) throws ServiceException {
+	public List<DoctorSchedule> findAllSchedulesByDoctorId(long userId) throws ServiceException {
 		logger.log(Level.DEBUG, "findAllSchedulesByDoctor. Id:" + userId);
 		List<DoctorSchedule> schedules = new ArrayList<>();
 		User user = new User(userId);
@@ -61,6 +62,20 @@ public class ScheduleServiceImpl implements ScheduleService {
 			logger.log(Level.DEBUG, "finded schedule:" + schedule);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method FindScheduleById, id: " + id);
+			throw new ServiceException(e);
+		}
+		return schedule;
+	}
+
+	@Override
+	public Optional<DoctorSchedule> findScheduleByDateAndDoctor(Date date, long doctorId) throws ServiceException {
+		logger.log(Level.DEBUG, "findScheduleByDateAndDoctor. date:" + date+", id:"+doctorId);
+		Optional<DoctorSchedule> schedule;
+		try {
+			schedule = dao.findScheduleByDateAndDoctor(date, doctorId);
+			logger.log(Level.DEBUG, "finded schedule:" + schedule);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findScheduleByDateAndDoctor, date: " + date+", id:"+doctorId);
 			throw new ServiceException(e);
 		}
 		return schedule;

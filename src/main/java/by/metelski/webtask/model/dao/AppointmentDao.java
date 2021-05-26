@@ -14,5 +14,5 @@ public interface AppointmentDao {
 	List<Appointment> findAll() throws DaoException;
 	List<Appointment> findAllByUserId(long userId) throws DaoException;
 	List<Appointment> findAllByStatus(Status status) throws DaoException;
-	Optional<Appointment> findById() throws DaoException;
+	Optional<Appointment> findById(long id) throws DaoException;
 }

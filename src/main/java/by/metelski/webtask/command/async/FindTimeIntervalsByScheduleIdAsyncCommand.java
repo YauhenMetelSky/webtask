@@ -20,9 +20,11 @@ import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
 import by.metelski.webtask.model.service.ScheduleService;
 import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
+import by.metelski.webtask.util.IntervalCalculator;
 
 public class FindTimeIntervalsByScheduleIdAsyncCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
+	private final int intervalIncrement = 15;
 	private ScheduleService service = new ScheduleServiceImpl(new ScheduleDaoImpl());
 
 	@Override
@@ -35,15 +37,7 @@ public class FindTimeIntervalsByScheduleIdAsyncCommand implements Command {
 		Long scheduleId = Long.parseLong(request.getParameter(ParameterAndAttribute.SCHEDULE_ID));
 		try {// FIXME empty optional
 			schedule = service.FindScheduleById(scheduleId).get();
-			LocalTime startInterval = LocalTime.parse(schedule.getStartTime().toString());
-			logger.log(Level.DEBUG, "start interval: " + startInterval);
-			LocalTime endInterval = LocalTime.parse(schedule.getEndTime().toString());
-			logger.log(Level.DEBUG, "end interval: " + endInterval);
-			while (startInterval.isBefore(endInterval)) {
-				intervals.add(startInterval.format(DateTimeFormatter.ISO_TIME));
-				startInterval = startInterval.plusMinutes(15);
-				logger.log(Level.DEBUG, "start interval: " + startInterval);
-			}
+			intervals = IntervalCalculator.calculateIntervals(schedule,intervalIncrement);
 			String intervalsGson = new Gson().toJson(intervals);
 			logger.log(Level.DEBUG, "string gson: " + intervalsGson);
 			response.getWriter().write(intervalsGson);

@@ -52,8 +52,8 @@ public class ToPersonalPageCommand implements Command {
 			case USER:
 				LocalDate date = LocalDate.now();
 				LocalDate max = date.plusDays(14);//FIXME Magic String
-				request.setAttribute(ParameterAndAttribute.TODAY, date);
-				request.setAttribute(ParameterAndAttribute.MAX_DATE, max);
+				request.setAttribute(ParameterAndAttribute.TODAY, date);//FIXME unused
+				request.setAttribute(ParameterAndAttribute.MAX_DATE, max);//FIXME unused
 				try {
 					List<User> doctors = userService.findUsersByRole(Role.DOCTOR);
 					request.setAttribute(ParameterAndAttribute.DOCTORS_LIST, doctors);

@@ -2,12 +2,15 @@ package by.metelski.webtask.command.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
@@ -21,34 +24,35 @@ import by.metelski.webtask.model.service.ScheduleService;
 import by.metelski.webtask.model.service.impl.AppointmentServiceImpl;
 import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 
-public class AddAppointmentCommand implements Command {
+public class UpdateAppointmentCommand implements Command{
 	private static final Logger logger = LogManager.getLogger();
 	AppointmentService service = new AppointmentServiceImpl();
 	ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());
-
+	
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-		logger.log(Level.DEBUG, "execute method AddProcedureCommand");
+		logger.log(Level.DEBUG, "execute method UpdateProcedureCommand");
 		Router router = new Router();
 		HttpSession session = request.getSession();
 		Map<String, String> appointmentData = new HashMap<>();
 		User user = (User) session.getAttribute(ParameterAndAttribute.USER);
 		String userId = Long.toString(user.getUserId());
-		String doctorId =request.getParameter(ParameterAndAttribute.DOCTOR_ID);
+		String appointmentId =request.getParameter(ParameterAndAttribute.APPOINTMENT_ID);
 		String procedureId =request.getParameter(ParameterAndAttribute.PROCEDURE_ID);
+		String doctorId =request.getParameter(ParameterAndAttribute.DOCTOR_ID);
 		String scheduleId = request.getParameter(ParameterAndAttribute.SCHEDULE_ID);
 		String time = request.getParameter(ParameterAndAttribute.START_TIME);
+		appointmentData.put(ParameterAndAttribute.APPOINTMENT_ID, appointmentId);
 		appointmentData.put(ParameterAndAttribute.USER_ID, userId);
 		appointmentData.put(ParameterAndAttribute.DOCTOR_ID, doctorId);
 		appointmentData.put(ParameterAndAttribute.PROCEDURE_ID, procedureId);
-//		appointmentData.put(ParameterAndAttribute.SCHEDULE_ID, scheduleId);
 		appointmentData.put(ParameterAndAttribute.START_TIME, time);
 		logger.log(Level.DEBUG, "data in map from request: " + appointmentData.toString());
 		try {
 			String date = scheduleService.FindScheduleById(Long.parseLong(scheduleId)).get().getDate().toString();
 			appointmentData.put(ParameterAndAttribute.APPOINTMENT_DATE, date);
-			if (service.add(appointmentData)) {
-				// TODO Show message Appointment added, we recall you, send email
+			if(service.change(appointmentData)) {
+				//TODO message successful!!!
 				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
@@ -58,4 +62,5 @@ public class AddAppointmentCommand implements Command {
 		}
 		return router;
 	}
+
 }

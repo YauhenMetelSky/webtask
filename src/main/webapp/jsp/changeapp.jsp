@@ -28,17 +28,7 @@
 <body>
 	<c:import url="header.jsp" />
 	<div class="container-fluid bg">
-		<h1>User page content</h1>
-		<h1>will be here</h1>
-		<h1>soon</h1>
-		<div class="row">
-			<div class="col">
-				<h1>Our clinic is the best of the best</h1>
-				<br>
-				<p>We are waiting for you</p>
-			</div>
-
-			<div class="col">
+			<div>
 				<h1>
 					<fmt:message key="label.appointment" />
 				</h1>
@@ -47,7 +37,7 @@
 						<div class="col">
 							<div class="form-group">
 								<select class="form-control" name="procedure_id" required>
-								<option value="">select procedure</option>
+								<option value="${appointment.procedure.procedureId}"><c:out value="${appointment.procedure.name }" /></option>
 									<c:forEach var="elem" items="${procedures_list}"
 										varStatus="status">
 										<option value="${elem.procedureId}"><c:out
@@ -60,7 +50,9 @@
 						<div class="col">
 								<select class="form-control" name="doctor_id" id="doctor_id"
 									required="required">
-									<option value="">select doctor</option>
+									<option value="${appointment.doctor.userId }"><c:out
+												value="${appointment.doctor.surname}" /><c:out value=" " /><c:out
+												value="${appointment.doctor.name}" /></option>
 									<c:forEach var="elem" items="${doctors_list}"
 										varStatus="status">
 										<option value="${elem.userId}"><c:out
@@ -77,72 +69,41 @@
 						<div class="col">
 							<div class="form-group">
 								<select class="form-control" name="schedule_id" id="date" required="required">
-								<option value="">select date</option>
+								<option value="${appointment.id }"><c:out value="${appointment.date}"/></option>
+								<c:forEach var="elem" items="${doctor_schedules_list}"
+										varStatus="status">
+										<option value="${elem.id}"><c:out
+												value="${elem.date}" />
+										</option>
+									</c:forEach>
 								</select>
 							</div>
 						</div>
 						<div class="col">
 							<div class="form-group">
 							<select class="form-control" name="start_time" id="time" required="required">
-								<option value="">select time</option>
+								<option value="${appointment.startTime}"><c:out value="${appointment.startTime}"/></option>
+										<c:forEach var="elem" items="${intervals_list}"
+										varStatus="status">
+										<option value="${elem}"><c:out
+												value="${elem}" />
+										</option>
+									</c:forEach>
 								</select>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<input type="hidden" name="command" value="add_appointment">
+						<input type="hidden" name="command" value="update_appointment">
+						<input type="hidden" name="app_id" value="${appointment.id}">
 						<button type="submit" class="btn btn-primary btn-block">
-							<fmt:message key="label.appointment" />
+							<fmt:message key="label.change_appointment" />
 						</button>
 					</div>
 				</form>
-			</div>
-		</div>
+			</div>	
 	</div>
-	
-		<h1>Show all my appointments</h1>
-		<div>
-			<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.find_all" />
-				</button>
-				<input type="hidden" name="command" value="find_all_appointments_by_user_id">
-			</form>
-		</div>
 		
-		<table class="table table-striped">
-		<c:if test="${appointments_list ne null}">
-			<tr>
-				<th><fmt:message key="label.date"/></th>
-				<th><fmt:message key="label.start_time"/></th>
-				<th><fmt:message key="label.end_time"/></th>
-				<th><fmt:message key="label.doctor"/></th>
-				<th><fmt:message key="label.procedure"/></th>
-				<th><fmt:message key="label.change"/></th>			
-			</tr>
-		</c:if>
-		
-		<c:forEach var="elem" items="${appointments_list}" varStatus="status">
-		<tr>
-		<td><c:out value="${elem.date }" /></td>
-		<td><c:out value="${elem.startTime }" /></td>
-		<td><c:out value="${elem.endTime }" /></td>
-		<td><c:out value="${elem.doctor.name }" /><c:out value=" " /><c:out value="${elem.doctor.surname} " /></td>				
-		<td><c:out value="${elem.procedure.name }" /></td>
-		<td>	
-		<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.change"/>
-				</button>
-				<input type="hidden" name="app_id" value="${elem.id }">
-				<input type="hidden" name="command" value="to_change_appointment">
-			</form>		
-		</td>
-		</tr>
-		</c:forEach>
-		</table>
-	
-	
 	<c:import url="footer.jsp" />
 	
 	<script type="text/javascript">
@@ -183,7 +144,8 @@
 						command: 'find_time_intervals_by_schedule_id_async'
 					},
 					url : 'ajaxcontroller',
-					success : function(result) {						
+					success : function(result) {
+						
 						 console.log(result); 
 						console.log(result.length);
 							$("#time").empty();

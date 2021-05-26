@@ -1,6 +1,7 @@
 package by.metelski.webtask.command;
 
 public final class ParameterAndAttribute {
+	public static final String APPOINTMENT = "appointment";
 	public static final String APPOINTMENT_DATE = "app_date";
 	public static final String APPOINTMENT_ID = "app_id";
 	public static final String APPOINTMENTS_LIST = "appointments_list";
@@ -17,6 +18,7 @@ public final class ParameterAndAttribute {
 	public static final String DOCTOR_SCHEDULES_LIST = "doctor_schedules_list";
 	public static final String DURATION = "duration";
 	public static final String FINDED_USER = "finded_user";
+	public static final String INTERVALS_LIST = "intervals_list";
 	public static final String LANGUAGE = "language";
 	public static final String LIST = "list";
 	public static final String LOCALE = "locale";

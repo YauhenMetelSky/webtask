@@ -1,6 +1,7 @@
 package by.metelski.webtask.command;
 
 import by.metelski.webtask.command.impl.UnknownCommand;
+import by.metelski.webtask.command.impl.UpdateAppointmentCommand;
 import by.metelski.webtask.command.impl.sendEmailCommand;
 import by.metelski.webtask.command.impl.ToSignUpCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
@@ -22,6 +23,7 @@ import by.metelski.webtask.command.impl.AddAppointmentCommand;
 import by.metelski.webtask.command.impl.AddProcedureCommand;
 import by.metelski.webtask.command.impl.AddDoctorScheduleCommand;
 import by.metelski.webtask.command.impl.BlockUserCommand;
+import by.metelski.webtask.command.impl.ToChangeAppointmentCommand;
 import by.metelski.webtask.command.impl.FindAllProceduresCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByDoctorCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByIdCommand;
@@ -57,6 +59,11 @@ public enum CommandType {
 			this.command = new BlockUserCommand();
 		}
 	},
+	TO_CHANGE_APPOINTMENT {
+		{
+			this.command = new ToChangeAppointmentCommand();
+		}
+	},
 	FIND_ALL_NEW_APPOINTMENTS {
 		{
 			this.command = new FindAllNewAppointmentsCommand();
@@ -72,7 +79,7 @@ public enum CommandType {
 			this.command = new FindAllProceduresCommand();
 		}
 	},
-	FIND_ALL_APPOINTMENTS_BY_USER_ID{
+	FIND_ALL_APPOINTMENTS_BY_USER_ID {
 		{
 			this.command = new FindAllAppointmentsByUserIdCommand();
 		}
@@ -80,7 +87,7 @@ public enum CommandType {
 	FIND_ALL_SCHEDULES_BY_DOCTOR {
 		{
 			this.command = new FindAllSchedulesByDoctorCommand();
-		}//FIXME can be one command findByID
+		}// FIXME can be one command findByID
 	},
 	FIND_ALL_SCHEDULES_BY_ID {
 		{
@@ -143,7 +150,7 @@ public enum CommandType {
 			this.command = new ToAboutCommand();
 		}
 	},
-	TO_PERSONAL_PAGE{
+	TO_PERSONAL_PAGE {
 		{
 			this.command = new ToPersonalPageCommand();
 		}
@@ -171,6 +178,11 @@ public enum CommandType {
 	TO_SIGN_UP {
 		{
 			this.command = new ToSignUpCommand();
+		}
+	},
+	UPDATE_APPOINTMENT{
+		{
+		this.command = new UpdateAppointmentCommand();
 		}
 	},
 	UNKNOWN_COMMAND {

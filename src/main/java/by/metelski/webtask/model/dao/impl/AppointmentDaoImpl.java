@@ -35,10 +35,11 @@ import by.metelski.webtask.model.dao.ColumnName;
 public class AppointmentDaoImpl implements AppointmentDao {
 	private static final Logger logger = LogManager.getLogger();
 	private static final String SQL_ADD_APPOINTMENT = "INSERT INTO appointments (id_client,id_doctor,date,start,id_procedure,status,end) values(?,?,?,?,?,?,?)";
+	private static final String SQL_CHANGE_APPOINTMENT = "UPDATE appointments SET id_client=?,id_doctor=?,date=?,start=?,id_procedure=?,status=?,end=? WHERE id_appointment=?";
 	private static final String SQL_ACTIVATE_APPOINTMENT = "UPDATE appointments set status=CONFIRMED WHERE id_apointment=?";
 	private static final String SQL_FIND_ALL_APPOINTMENTS_BY_USER_ID = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_client=?";
 	private static final String SQL_FIND_APPOINTMENT_BY_STATUS = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE status=?";
-
+	private static final String SQL_FIND_APPOINTMENT_BY_ID="SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_appointment=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
@@ -92,8 +93,31 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
 	@Override
 	public boolean changeAppointment(Appointment appointment) throws DaoException {
-		// TODO Auto-generated method stub
-		return false;
+		logger.log(Level.INFO, "Try to change appointment in db" + appointment);
+		boolean isChanged = false;
+		try (Connection connection = connectionPool.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_APPOINTMENT);
+			statement.setLong(1, appointment.getUser().getUserId());
+			statement.setLong(2, appointment.getDoctor().getUserId());
+			statement.setDate(3, appointment.getDate());
+			statement.setTime(4, appointment.getStartTime());
+			statement.setLong(5, appointment.getProcedure().getProcedureId());
+			statement.setString(6, appointment.getStatus().name());
+			statement.setTime(7, appointment.getEndTime());
+			statement.setLong(8, appointment.getId());
+			int rowCount = statement.executeUpdate();
+			if (rowCount != 0) {
+				isChanged = true;
+				logger.log(Level.INFO, "appointment changed:" + appointment);
+			} else {
+				logger.log(Level.ERROR, "appointment was not changed");
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException(
+					"Dao exception in method changeAppointment, when we try to change appointment:" + appointment, e);
+		}
+		return isChanged;
 	}
 
 	@Override
@@ -109,14 +133,57 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	}
 
 	@Override
-	public Optional<Appointment> findById() throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Appointment> findById(long id) throws DaoException {
+		logger.log(Level.INFO, "Find all appointments by id, id=  " + id);
+		Optional<Appointment> appointment;
+		try (Connection connection = connectionPool.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(SQL_FIND_APPOINTMENT_BY_ID);
+			statement.setLong(1, id);
+			ResultSet resultSet = statement.executeQuery();
+				if (resultSet.next()) {
+				long appointmentId = resultSet.getLong(ColumnName.APPOINTMENT_ID);
+				long clientId = resultSet.getLong(ColumnName.CLIENT_ID);
+				String clientName=resultSet.getString(ColumnName.CLIENT_NAME);
+				String clientSurname=resultSet.getString(ColumnName.CLIENT_SURNAME);
+				String clientEmail=resultSet.getString(ColumnName.CLIENT_EMAIL);
+				String clientPhone=resultSet.getString(ColumnName.CLIENT_PHONE);
+				boolean clientIsBlocked = resultSet.getBoolean(ColumnName.CLIENT_IS_BLOCKED);
+				Role clientRole = Role.valueOf(resultSet.getString(ColumnName.CLIENT_ROLE));
+				User client = new User(clientId,clientName,clientSurname,clientEmail,clientPhone,clientIsBlocked,clientRole);
+				long doctorId = resultSet.getLong(ColumnName.USER_ID);
+				String doctorName=resultSet.getString(ColumnName.USER_NAME);
+				String doctorSurname=resultSet.getString(ColumnName.USER_SURNAME);
+				String doctorEmail=resultSet.getString(ColumnName.USER_EMAIL);
+				String doctorPhone=resultSet.getString(ColumnName.USER_PHONE);
+				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
+				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
+				User doctor= new User(doctorId,doctorName,doctorSurname,doctorEmail,doctorPhone,doctorIsBlocked,doctorRole);
+				long procedureId = resultSet.getLong(ColumnName.PROCEDURE_ID);
+				String name = resultSet.getString(ColumnName.PROCEDURE_NAME);
+				String imageName=resultSet.getString(ColumnName.IMAGE_NAME);
+				BigDecimal price =resultSet.getBigDecimal(ColumnName.PRICE);
+				boolean procedureIsActive=resultSet.getBoolean(ColumnName.IS_ACTIVE);
+				String description = resultSet.getString(ColumnName.DESCRIPTION);
+				Duration duration = Duration.ofMinutes(resultSet.getInt(ColumnName.DURATION));
+				Procedure procedure= new Procedure(procedureId,name,imageName,price,procedureIsActive,description,duration);
+				Time start = resultSet.getTime(ColumnName.START);
+				Time end = resultSet.getTime(ColumnName.END);
+				Date date = resultSet.getDate(ColumnName.DATE);
+				Status procedureStatus = Status.valueOf(resultSet.getString(ColumnName.STATUS));
+				appointment = Optional.of(new Appointment(appointmentId, client, doctor, procedure, start, end, date,
+						procedureStatus));
+			} else {
+				appointment = Optional.empty();
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Dao exception", e);
+		}
+		return appointment;
 	}
 
 	@Override
 	public List<Appointment> findAllByStatus(Status status) throws DaoException {
-		logger.log(Level.INFO, "Find all appointments by status, sattus=  " + status);
+		logger.log(Level.INFO, "Find all appointments by status, status=  " + status);
 		List<Appointment> appointments = new ArrayList<>();
 		try (Connection connection = connectionPool.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(SQL_FIND_APPOINTMENT_BY_STATUS);

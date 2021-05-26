@@ -31,19 +31,21 @@ public class AppointmentFactory {
 //		return appointment;
 //	}
 	public Appointment buildAppointment(Map<String,String> data) {
-		logger.log(Level.DEBUG, "Add appointment; data" + data);
+		logger.log(Level.DEBUG, "build appointment; data" + data);
+		long appointmentId = Long.parseLong(data.get(ParameterAndAttribute.APPOINTMENT_ID));
 		long userId = Long.parseLong(data.get(ParameterAndAttribute.USER_ID));
 		long doctorId = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID));
 		long procedureId = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
 		Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
-		logger.log(Level.DEBUG, "Add appointment; start time:" + startTime);
+		logger.log(Level.DEBUG, "add start time to data, startTime:" + startTime);
 		Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));
-		logger.log(Level.DEBUG, "Add appointment; end time:" + endTime);
+		logger.log(Level.DEBUG, "add end time to data, endTime:" + endTime);
 		Date date = Date.valueOf(data.get(ParameterAndAttribute.APPOINTMENT_DATE));//FIXME format date
+		logger.log(Level.DEBUG, "add date to data, date:" + date);
 		User client = new User(userId);
 		User doctor = new User(doctorId);
 		Procedure procedure= new Procedure(procedureId);
-		Appointment appointment = new Appointment(client,doctor,procedure,startTime,endTime,date);
+		Appointment appointment = new Appointment(appointmentId,client,doctor,procedure,startTime,endTime,date);
 		return appointment;
 	}
 }

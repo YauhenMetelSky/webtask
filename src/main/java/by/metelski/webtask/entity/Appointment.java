@@ -56,6 +56,16 @@ public class Appointment {
 		this.date = date;
 		this.status = status;
 	}
+	public Appointment(long id, User user, User doctor, Procedure procedure, Time startTime,Time endTime, Date date) {
+		this.id = id;
+		this.user = user;
+		this.doctor = doctor;
+		this.procedure = procedure;
+		this.startTime = startTime;
+		this.endTime=endTime;
+		this.date = date;
+		this.status = Status.CLAIMED;
+	}
 	public Appointment(long id, User user, User doctor, Procedure procedure, Time startTime,Time endTime, Date date,
 			Status status) {
 		this.id = id;

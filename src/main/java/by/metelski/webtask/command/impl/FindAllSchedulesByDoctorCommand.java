@@ -35,7 +35,7 @@ public class FindAllSchedulesByDoctorCommand implements Command {
 		User user = (User) session.getAttribute(ParameterAndAttribute.USER);
 		Long userId = user.getUserId();
 		try {
-			schedules = service.findAllSchedulesByDoctor(userId);
+			schedules = service.findAllSchedulesByDoctorId(userId);
 			router.setPagePath(page);
 			request.setAttribute(ParameterAndAttribute.DOCTOR_SCHEDULES_LIST, schedules);
 		} catch (ServiceException e) {

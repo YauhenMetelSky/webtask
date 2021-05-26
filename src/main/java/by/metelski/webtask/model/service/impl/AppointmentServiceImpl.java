@@ -42,10 +42,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 			logger.log(Level.DEBUG, "procedure duration" + duration);
 			String startTime = data.get(ParameterAndAttribute.START_TIME);
 			logger.log(Level.DEBUG, "startTime:" + startTime);
-			LocalTime tmpTime = LocalTime.parse(startTime);
-			logger.log(Level.DEBUG, "tmpTime:" + tmpTime);
-			Time endTime = Time.valueOf(tmpTime.plusMinutes(duration));
-			logger.log(Level.DEBUG, "tmpTime:" + tmpTime + " End time: " + endTime);
+			Time endTime = calculateEndTime(startTime, duration);
 			data.put(ParameterAndAttribute.END_TIME, endTime.toString());
 			appointment = AppointmentFactory.getInstance().buildAppointment(data);
 			isAdded = appointmentDao.add(appointment);
@@ -58,15 +55,33 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public boolean changeAppointment(Appointment appointment) throws ServiceException {
+	public boolean changeAppointment(long id) throws ServiceException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean change(Map<String, String> data) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
+		logger.log(Level.DEBUG, "Change appointment; data" + data);
+		// TODO validate data
+		boolean isChanged = false;
+		Appointment appointment = null;
+		try {
+			long id = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
+			int duration = procedureDao.findDuration(id);
+			logger.log(Level.DEBUG, "procedure duration" + duration);
+			String startTime = data.get(ParameterAndAttribute.START_TIME);
+			logger.log(Level.DEBUG, "startTime:" + startTime);
+			Time endTime = calculateEndTime(startTime, duration);
+			data.put(ParameterAndAttribute.END_TIME, endTime.toString());
+			appointment = AppointmentFactory.getInstance().buildAppointment(data);
+			isChanged = appointmentDao.changeAppointment(appointment);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR,
+					"dao exception in method add, when we try to add appointment:" + appointment + ". " + e);
+			throw new ServiceException(e);
+		}
+		return isChanged;
 	}
 
 	@Override
@@ -77,8 +92,14 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public Optional<Appointment> findById(long id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Appointment> appointment = null;
+		try {
+			appointment = appointmentDao.findById(id);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findById()" + e);
+			throw new ServiceException(e);
+		}
+		return appointment;
 	}
 
 	@Override
@@ -106,5 +127,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 			throw new ServiceException(e);
 		}
 		return appointments;
+	}
+
+	private Time calculateEndTime(String startTime, int duration) {
+		LocalTime tmpTime = LocalTime.parse(startTime);
+		logger.log(Level.DEBUG, "tmpTime:" + tmpTime);
+		Time endTime = Time.valueOf(tmpTime.plusMinutes(duration));
+		logger.log(Level.DEBUG, "tmpTime:" + tmpTime + " End time: " + endTime);
+		return endTime;
 	}
 }
