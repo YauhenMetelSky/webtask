@@ -95,6 +95,7 @@
 					</div>
 					<div class="form-group">
 						<input type="hidden" name="command" value="update_appointment">
+						<input type="hidden" name="id" value="${appointment.user.userId}">
 						<input type="hidden" name="app_id" value="${appointment.id}">
 						<button type="submit" class="btn btn-primary btn-block">
 							<fmt:message key="label.change_appointment" />

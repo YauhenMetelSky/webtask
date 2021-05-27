@@ -3,7 +3,6 @@ package by.metelski.webtask.model.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.exception.ServiceException;
@@ -16,5 +15,5 @@ public interface UserService {
 	Optional<User> findUserByEmailPassword(String login, String password) throws ServiceException;
 	boolean addUser(Map<String, String> userData) throws ServiceException;	
 	boolean activateAccount(String token,String email) throws ServiceException;	
-	boolean blockUser(long id) throws ServiceException;
+	boolean changeUserIsBlocked(long id,boolean isBlocked) throws ServiceException;
 }

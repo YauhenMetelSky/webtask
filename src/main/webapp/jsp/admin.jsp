@@ -26,6 +26,8 @@
 <body>
 	<c:import url="header.jsp" />
 	<div class="container-fluid bg">
+	<div class="row">
+		<div class="col">
 	<h1>Find by name</h1>
 		<div class="form-inline">
 			<form action="controller" method="POST">
@@ -89,7 +91,7 @@
 				<input type="hidden" name="command" value="send_email">
 			</form>
 		</div>
-	</div>
+		
 	<h1>Show all new appointments</h1>
 		<div>
 			<form action="controller" method="POST">
@@ -99,6 +101,9 @@
 				<input type="hidden" name="command" value="find_all_new_appointments">
 			</form>
 		</div>
+		</div>
+	
+		<div class="col">		
 		<table class="table table-striped">
 		<c:if test="${appointments_list ne null}">
 			<tr>
@@ -132,7 +137,8 @@
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.confirm"/>
 				</button>
-				<input type="hidden" name="command" value="#">
+				<input type="hidden" name="app_id" value="${elem.id}">
+				<input type="hidden" name="command" value="confirm_appointment">
 			</form>	
 			</td>
 			<td>	
@@ -140,7 +146,9 @@
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.change"/>
 				</button>
-				<input type="hidden" name="command" value="#">
+				<input type="hidden" name="id" value="${elem.user.userId}">
+				<input type="hidden" name="app_id" value="${elem.id}">
+				<input type="hidden" name="command" value="to_change_appointment">
 			</form>		
 		</td>
 		<td>	
@@ -148,7 +156,8 @@
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.decline"/>
 				</button>
-				<input type="hidden" name="command" value="#">
+				<input type="hidden" name="app_id" value="${elem.id}">
+				<input type="hidden" name="command" value="cancel_appointment">
 			</form>		
 		</td>
 		</tr>
@@ -181,6 +190,9 @@
 		</c:forEach>
 
 	</table>
+	</div>
+	</div>
+	</div>
 
 	<c:import url="footer.jsp" />
 </body>

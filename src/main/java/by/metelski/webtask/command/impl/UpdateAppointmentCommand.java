@@ -33,10 +33,9 @@ public class UpdateAppointmentCommand implements Command{
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.DEBUG, "execute method UpdateProcedureCommand");
 		Router router = new Router();
-		HttpSession session = request.getSession();
 		Map<String, String> appointmentData = new HashMap<>();
-		User user = (User) session.getAttribute(ParameterAndAttribute.USER);
-		String userId = Long.toString(user.getUserId());
+		String userId = request.getParameter(ParameterAndAttribute.USER_ID);
+		logger.log(Level.DEBUG, "userId:"+userId);
 		String appointmentId =request.getParameter(ParameterAndAttribute.APPOINTMENT_ID);
 		String procedureId =request.getParameter(ParameterAndAttribute.PROCEDURE_ID);
 		String doctorId =request.getParameter(ParameterAndAttribute.DOCTOR_ID);

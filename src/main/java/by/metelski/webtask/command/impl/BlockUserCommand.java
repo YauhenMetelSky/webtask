@@ -27,7 +27,7 @@ public class BlockUserCommand implements Command {
 	    logger.log(Level.DEBUG, "execute method BlockUserCommand");
 		long id = Long.parseLong(request.getParameter(ParameterAndAttribute.USER_ID));		
 		try {
-			isBlocked = userService.blockUser(id);
+			isBlocked = userService.changeUserIsBlocked(id, true);
 			if (isBlocked) {
 				router.setPagePath(PagePath.MAIN);
 				router.setType(Type.REDIRECT);

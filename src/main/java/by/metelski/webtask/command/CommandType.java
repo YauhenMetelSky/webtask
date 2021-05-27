@@ -23,6 +23,8 @@ import by.metelski.webtask.command.impl.AddAppointmentCommand;
 import by.metelski.webtask.command.impl.AddProcedureCommand;
 import by.metelski.webtask.command.impl.AddDoctorScheduleCommand;
 import by.metelski.webtask.command.impl.BlockUserCommand;
+import by.metelski.webtask.command.impl.CancelAppointmentCommand;
+import by.metelski.webtask.command.impl.ConfirmAppointmentCommand;
 import by.metelski.webtask.command.impl.ToChangeAppointmentCommand;
 import by.metelski.webtask.command.impl.FindAllProceduresCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByDoctorCommand;
@@ -57,6 +59,16 @@ public enum CommandType {
 	BLOCK_USER {
 		{
 			this.command = new BlockUserCommand();
+		}
+	},
+	CANCEL_APPOINTMENT{
+		{
+		this.command = new CancelAppointmentCommand();	
+		}
+	},
+	CONFIRM_APPOINTMENT{
+		{
+			this.command = new ConfirmAppointmentCommand();
 		}
 	},
 	TO_CHANGE_APPOINTMENT {

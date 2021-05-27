@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao {
 	private static final String SQL_FIND_USER_BY_EMAIL = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE email=?";
 	private static final String SQL_ADD_USER = "INSERT INTO users (name,surname,password,email,phone) values(?,?,?,?,?,?)";
 	private static final String SQL_ACTIVATE_ACCOUNT = "UPDATE users SET is_active=true WHERE email=?";
-	private static final String SQL_BLOCK_USER = "UPDATE users SET is_blocked=true WHERE id=?";
+	private static final String SQL_CHANGE_USER_IS_BLOCKED = "UPDATE users SET is_blocked=? WHERE id=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
@@ -208,23 +208,24 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean blockUser(long id) throws DaoException {
+	public boolean changeIsBlockedStatus(long id,boolean isBlocked) throws DaoException {
 		logger.log(Level.INFO, "Try to block user account :" + id);
-		boolean isBlocked = false;
+		boolean resultShangeStatus = false;
 		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_BLOCK_USER);
-			statement.setLong(1, id);
+			PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_USER_IS_BLOCKED);
+			statement.setBoolean(1, isBlocked);
+			statement.setLong(2, id);
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
-				isBlocked = true;
-				logger.log(Level.INFO, "account " + id + " is blocked.");
+				resultShangeStatus = true;
+				logger.log(Level.INFO, "account " + id + " change status, isBlocked: " + isBlocked);
 			} else {
-				logger.log(Level.ERROR, "account " + id + " was't blocked");
+				logger.log(Level.ERROR, "account " + id + "status was't changed");
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
 			throw new DaoException("Dao exception in method activateAccount", e);
 		}
-		return isBlocked;
+		return resultShangeStatus;
 	}
 }

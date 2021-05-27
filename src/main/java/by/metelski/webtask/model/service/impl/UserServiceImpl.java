@@ -157,16 +157,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean blockUser(long id) throws ServiceException {
+	public boolean changeUserIsBlocked(long id, boolean isBlocked) throws ServiceException {
 		logger.log(Level.DEBUG, "blockUser(), id:" + id);
-		boolean isBlocked =false;
+		boolean changeStatusResult =false;
 		try {
-			isBlocked = userDao.blockUser(id);
+			changeStatusResult = userDao.changeIsBlockedStatus(id,isBlocked);
 		}catch(DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method blockUser" + e);
 			throw new ServiceException(e);
 		}	
-		return isBlocked;
+		return changeStatusResult;
 	}
 
 }

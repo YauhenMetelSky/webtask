@@ -11,6 +11,7 @@ import by.metelski.webtask.exception.ServiceException;
 public interface AppointmentService {
 	boolean add(Map<String,String> data) throws ServiceException;
 	boolean changeAppointment(long id) throws ServiceException;//TODO maybe not need
+	boolean changeStatus(long id,Status status) throws ServiceException;
 	boolean change(Map<String,String> data) throws ServiceException;
 	List<Appointment> findAll() throws ServiceException;
 	List<Appointment> findAllByStatus(Status status) throws ServiceException;

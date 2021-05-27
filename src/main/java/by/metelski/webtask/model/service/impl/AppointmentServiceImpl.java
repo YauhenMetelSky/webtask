@@ -136,4 +136,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 		logger.log(Level.DEBUG, "tmpTime:" + tmpTime + " End time: " + endTime);
 		return endTime;
 	}
+
+	@Override
+	public boolean changeStatus(long id, Status status) throws ServiceException {
+		logger.log(Level.DEBUG, "changeStatus(), id:" + id+ ", status:" + status);
+		boolean changeStatusResult =false;
+		try {
+			changeStatusResult=appointmentDao.changeStatus(id, status);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method changeStatus(), " + e);
+			throw new ServiceException(e);
+		}		
+		return changeStatusResult;
+	}
 }

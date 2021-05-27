@@ -15,5 +15,5 @@ public interface UserDao {
 	Optional<User> findUserByEmail(String email) throws DaoException;
 	boolean addUser(User user, String password) throws DaoException;	
 	boolean activateAccount(String email) throws DaoException;	
-	boolean blockUser(long id) throws DaoException;
+	boolean changeIsBlockedStatus(long id,boolean isBlocked) throws DaoException;
 }

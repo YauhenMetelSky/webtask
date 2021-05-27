@@ -36,7 +36,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	private static final Logger logger = LogManager.getLogger();
 	private static final String SQL_ADD_APPOINTMENT = "INSERT INTO appointments (id_client,id_doctor,date,start,id_procedure,status,end) values(?,?,?,?,?,?,?)";
 	private static final String SQL_CHANGE_APPOINTMENT = "UPDATE appointments SET id_client=?,id_doctor=?,date=?,start=?,id_procedure=?,status=?,end=? WHERE id_appointment=?";
-	private static final String SQL_ACTIVATE_APPOINTMENT = "UPDATE appointments set status=CONFIRMED WHERE id_apointment=?";
+	private static final String SQL_CHANGE_APPOINTMENT_STATUS = "UPDATE appointments set status=? WHERE id_appointment=?";
 	private static final String SQL_FIND_ALL_APPOINTMENTS_BY_USER_ID = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_client=?";
 	private static final String SQL_FIND_APPOINTMENT_BY_STATUS = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE status=?";
 	private static final String SQL_FIND_APPOINTMENT_BY_ID="SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_appointment=?";
@@ -71,24 +71,25 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	}
 
 	@Override
-	public boolean activate(long id) throws DaoException {
-		logger.log(Level.INFO, "Try to activate appointment, appointmentId:" + id);
-		boolean isActive = false;
+	public boolean changeStatus(long id,Status status) throws DaoException {
+		logger.log(Level.INFO, "change appointment status, appointmentId:" + id +", status:"+ status);
+		boolean isChanged = false;
 		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_ACTIVATE_APPOINTMENT);
-			statement.setLong(1, id);
+			PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_APPOINTMENT_STATUS);
+			statement.setString(1, status.name());
+			statement.setLong(2, id);
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
-				isActive = true;
-				logger.log(Level.INFO, "appointment " + id + " is active.");
+				isChanged = true;
+				logger.log(Level.INFO, "appointment: " + id + ", status is:"+ status);
 			} else {
-				logger.log(Level.ERROR, "appointment " + id + " was't activated");
+				logger.log(Level.ERROR, "appointment: " + id + " status was't changed");
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
-			throw new DaoException("Dao exception in method activateAppointment", e);
+			throw new DaoException("Dao exception in method changeStatus", e);
 		}
-		return isActive;
+		return isChanged;
 	}
 
 	@Override
