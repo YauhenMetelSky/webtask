@@ -1,15 +1,15 @@
 package by.metelski.webtask.model.service.impl;
 
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.Procedure;
-import by.metelski.webtask.entity.ProcedureFactory;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ProcedureDao;
@@ -24,7 +24,14 @@ public class ProcedureServiceImpl implements ProcedureService {
 	public boolean add(Map<String, String> procedureData) throws ServiceException {
 		logger.log(Level.DEBUG, "add(), procedureData:" + procedureData);
 		// TODO validate data
-		Procedure procedure = ProcedureFactory.getInstance().build(procedureData);
+		Duration duration = Duration.ofMinutes(Long.parseLong(procedureData.get(ParameterAndAttribute.DURATION)));
+		 Procedure procedure = new Procedure.Builder()
+					.setName(procedureData.get(ParameterAndAttribute.PROCEDURE_NAME))
+				    .setImageName(procedureData.get(ParameterAndAttribute.PROCEDURE_IMAGE))
+				    .setPrice(new BigDecimal(procedureData.get(ParameterAndAttribute.PROCEDURE_PRICE)))
+				    .setDescription(procedureData.get(ParameterAndAttribute.DESCRIPTION))
+				    .setDuration(duration)
+				    .build();
 		boolean isAdded = false;
 		try {
 			isAdded = procedureDao.add(procedure);

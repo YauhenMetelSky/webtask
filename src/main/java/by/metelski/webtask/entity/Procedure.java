@@ -12,20 +12,8 @@ public class Procedure {
 	private String description; 
 	private Duration duration;
 	
-	public Procedure() {
-	
-	}
-	public Procedure(long procedureId) {
-		this.procedureId=procedureId;
-	}
-	public Procedure(long procedureId, String procedureName, String imageName, BigDecimal price,boolean isActive,String description,Duration duration) {
-		this.procedureId = procedureId;
-		this.name = procedureName;
-		this.imageName = imageName;
-		this.price = price;
-		this.isActive= isActive;
-		this.description=description;
-		this.duration=duration;
+	private Procedure() {
+		
 	}
 	public String getName() {
 		return name;
@@ -137,4 +125,44 @@ public class Procedure {
 		builder.append("]");
 		return builder.toString();
 	}
+	
+	public static class Builder {
+		private Procedure newProcedure;
+		
+		public Builder() {
+			newProcedure = new Procedure();
+		}
+		public Builder setProcedureId(long procedureId) {
+			newProcedure.procedureId=procedureId;
+			return this;
+		}
+		public Builder setName(String name) {
+			newProcedure.name = name;
+			return this;
+		}
+		public Builder setImageName(String imageName) {
+			newProcedure.imageName=imageName;
+			return this;
+		}
+		public Builder setPrice(BigDecimal price) {
+			newProcedure.price=price;
+			return this;
+		}
+		public Builder setIsActive(boolean isActive) {
+			newProcedure.isActive=isActive;
+			return this;
+		}
+		public Builder setDescription(String description) {
+			newProcedure.description=description;
+			return this;
+		}
+		public Builder setDuration(Duration duration) {
+			newProcedure.duration=duration;
+			return this;
+		}
+		public Procedure build() {
+			return newProcedure;
+		}
+	}
 }
+

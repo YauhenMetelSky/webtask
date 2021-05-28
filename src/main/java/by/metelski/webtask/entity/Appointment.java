@@ -17,66 +17,10 @@ public class Appointment {
 		CLAIMED,CONFIRMED,CANCELED,ENDED
 	}
 	
-	public Appointment() {
+	private Appointment() {
 		
 	}
-	public Appointment(User user, User doctor, Procedure procedure,Date date) {
-		this.user = user;
-		this.doctor = doctor;
-		this.procedure = procedure;
-		this.date = date;
-		status = Status.CLAIMED;
-	}
-	public Appointment(User user, User doctor, Procedure procedure,Time startTime,Date date) {
-		this.user = user;
-		this.doctor = doctor;
-		this.procedure = procedure;
-		this.date = date;
-		this.startTime=startTime;
-		status = Status.CLAIMED;
-	}
-	
-	public Appointment(User user, User doctor, Procedure procedure,Time startTime, Time endTime,Date date) {
-		this.user = user;
-		this.doctor = doctor;
-		this.procedure = procedure;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.date = date;
-		status = Status.CLAIMED;
-	}
 
-	public Appointment(long id, User user, User doctor, Procedure procedure, Time startTime, Date date,
-			Status status) {
-		this.id = id;
-		this.user = user;
-		this.doctor = doctor;
-		this.procedure = procedure;
-		this.startTime = startTime;
-		this.date = date;
-		this.status = status;
-	}
-	public Appointment(long id, User user, User doctor, Procedure procedure, Time startTime,Time endTime, Date date) {
-		this.id = id;
-		this.user = user;
-		this.doctor = doctor;
-		this.procedure = procedure;
-		this.startTime = startTime;
-		this.endTime=endTime;
-		this.date = date;
-		this.status = Status.CLAIMED;
-	}
-	public Appointment(long id, User user, User doctor, Procedure procedure, Time startTime,Time endTime, Date date,
-			Status status) {
-		this.id = id;
-		this.user = user;
-		this.doctor = doctor;
-		this.procedure = procedure;
-		this.startTime = startTime;
-		this.endTime=endTime;
-		this.date = date;
-		this.status = status;
-	}
 	public User getUser() {
 		return user;
 	}
@@ -203,4 +147,46 @@ public class Appointment {
 		builder.append("]");
 		return builder.toString();
 	}	
+	public static class Builder{
+		private Appointment newAppointment;
+		
+		public Builder() {
+			newAppointment= new Appointment();
+		}
+		public Builder setId(long id) {
+			newAppointment.id=id;
+			return this;
+		}
+		public Builder setUser(User user) {
+			newAppointment.user=user;
+			return this;
+		}
+		public Builder setDoctor(User doctor) {
+			newAppointment.doctor=doctor;
+			return this;
+		}
+		public Builder setProcedure(Procedure procedure) {
+			newAppointment.procedure=procedure;
+			return this;
+		}
+		public Builder setStartTime(Time startTime) {
+			newAppointment.startTime=startTime;
+			return this;
+		}
+		public Builder setEndTime(Time enTime) {
+			newAppointment.endTime=enTime;
+			return this;
+		}
+		public Builder setDate(Date date) {
+			newAppointment.date=date;
+			return this;
+		}
+		public Builder setStatus(Status status) {
+			newAppointment.status=status;
+			return this;
+		}
+		public Appointment build() {
+			return newAppointment;
+		}
+	}
 }

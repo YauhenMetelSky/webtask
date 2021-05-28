@@ -47,7 +47,16 @@ public class UserDaoImpl implements UserDao {
 				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
 				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
 				logger.log(Level.DEBUG, "user id:" + userId + " user name:" + name + " user surname:" + surname);
-				users.add(new User(userId, name, surname, email, phone, isBlocked, role));// TODO Use builder???
+				User user = new User.Builder()
+						.setUserID(userId)
+						.setName(name)
+						.setSurname(surname)
+						.setEmail(email)
+						.setPhone(phone)
+						.setIsBlocked(isBlocked)
+						.serRole(role)
+						.build();
+				users.add(user);
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
@@ -73,7 +82,16 @@ public class UserDaoImpl implements UserDao {
 				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
 				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
 				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
-				users.add(new User(userId, name, surname, email, phone, isBlocked, role));
+				User user = new User.Builder()
+						.setUserID(userId)
+						.setName(name)
+						.setSurname(surname)
+						.setEmail(email)
+						.setPhone(phone)
+						.setIsBlocked(isBlocked)
+						.serRole(role)
+						.build();
+				users.add(user);
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Dao exception", e);
@@ -98,7 +116,16 @@ public class UserDaoImpl implements UserDao {
 				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
 				Role userRole = Role.valueOf(resultSet.getString(ROLE));
 				logger.log(Level.INFO, "finded user id:" + userId + ", FIO: " + name + " " + surname);
-				users.add(new User(userId, name, surname, email, phone, isBlocked, userRole));
+				User user = new User.Builder()
+						.setUserID(userId)
+						.setName(surname)
+						.setSurname(surname)
+						.setEmail(email)
+						.setPhone(phone)
+						.setIsBlocked(isBlocked)
+						.serRole(userRole)
+						.build();
+				users.add(user);
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Dao exception", e);
@@ -147,7 +174,15 @@ public class UserDaoImpl implements UserDao {
 				String phone = resultSet.getString(USER_PHONE);
 				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
 				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());// FIXME delete toUpperCase
-				User user = new User(userId, name, surname, userEmail, phone, isBlocked, role);
+				User user =  new User.Builder()
+						.setUserID(userId)
+						.setName(surname)
+						.setSurname(surname)
+						.setEmail(userEmail)
+						.setPhone(phone)
+						.setIsBlocked(isBlocked)
+						.serRole(role)
+						.build();
 				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
 				optionalUser = Optional.of(user);
 			} else {

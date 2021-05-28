@@ -7,11 +7,9 @@ import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.entity.User.Role;
-import by.metelski.webtask.entity.UserFactory;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ColumnName;
@@ -126,7 +124,12 @@ public class UserServiceImpl implements UserService {
 		logger.log(Level.DEBUG, "addUser(), userData:" + userData);
 		String encodedPassword = Encoder.encodePassword(userData.get(ColumnName.PASSWORD));
 		//TODO check user email. Must be unique.																				
-		User user = UserFactory.getInstance().build(userData);
+		 User user = new User.Builder()
+				  .setName(userData.get(ParameterAndAttribute.USER_NAME))
+				  .setSurname(userData.get(ParameterAndAttribute.USER_SURNAME))
+				  .setEmail(userData.get(ParameterAndAttribute.USER_EMAIL))
+				  .setPhone(userData.get(ParameterAndAttribute.USER_PHONE))
+				  .build();
 		String uniqToken = Encoder.encodePassword(userData.get(ColumnName.USER_EMAIL));
 		String url = userData.get(ParameterAndAttribute.URL) + COMMAND_CONFIRM + TOKEN + uniqToken + EMAIL
 				+ userData.get(ParameterAndAttribute.USER_EMAIL);// TODO url for check

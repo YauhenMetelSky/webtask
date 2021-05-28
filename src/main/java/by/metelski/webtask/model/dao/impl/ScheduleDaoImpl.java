@@ -85,12 +85,25 @@ public class ScheduleDaoImpl implements ScheduleDao {
 				String doctorPhone=resultSet.getString(ColumnName.USER_PHONE);
 				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
 				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
-				User doctor= new User(doctorId,doctorName,doctorSurname,doctorEmail,doctorPhone,doctorIsBlocked,doctorRole);
+				User doctor = new User.Builder()
+						.setUserID(doctorId)
+						.setName(doctorName)
+						.setSurname(doctorSurname)
+						.setEmail(doctorEmail)
+						.setPhone(doctorPhone)
+						.setIsBlocked(doctorIsBlocked)
+						.serRole(doctorRole)
+						.build();
 				Time startTime = resultSet.getTime(START_TIME);
 				Time endTime = resultSet.getTime(END_TIME);
 				Date date = resultSet.getDate(DATE);
-				DoctorSchedule doctorSchedule = new DoctorSchedule(doctorScheduleId, doctor, startTime, endTime,
-						date);
+				DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
+						.setId(doctorScheduleId)
+						.setDoctor(doctor)
+						.setStartTime(startTime)
+						.setEndTime(endTime)
+						.setDate(date)
+						.build();
 				logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
 				schedules.add(doctorSchedule);
 			}
@@ -123,9 +136,22 @@ public class ScheduleDaoImpl implements ScheduleDao {
 				Time startTime = resultSet.getTime(START_TIME);
 				Time endTime = resultSet.getTime(END_TIME);
 				Date scheduleDate = resultSet.getDate(DATE);
-				User doctor = new User(userId,name,surname,email,phone,isBlocked,role);
-				DoctorSchedule doctorSchedule = new DoctorSchedule(doctorScheduleId, doctor, startTime, endTime,
-						scheduleDate);
+				User doctor = new User.Builder()
+						.setUserID(userId)
+						.setName(name)
+						.setSurname(surname)
+						.setEmail(email)
+						.setPhone(phone)
+						.setIsBlocked(isBlocked)
+						.serRole(role)
+						.build();
+				DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
+						.setId(doctorScheduleId)
+						.setDoctor(doctor)
+						.setStartTime(startTime)
+						.setEndTime(endTime)
+						.setDate(scheduleDate)
+						.build();
 				logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
 				schedule = Optional.of(doctorSchedule);
 			} else {
@@ -161,9 +187,22 @@ public class ScheduleDaoImpl implements ScheduleDao {
 				Time startTime = resultSet.getTime(START_TIME);
 				Time endTime = resultSet.getTime(END_TIME);
 				Date date = resultSet.getDate(DATE);
-				User doctor = new User(userId,name,surname,email,phone,isBlocked,role);
-				DoctorSchedule doctorSchedule = new DoctorSchedule(doctorScheduleId, doctor, startTime, endTime,
-						date);
+				User doctor = new User.Builder()
+						.setUserID(userId)
+						.setName(name)
+						.setSurname(surname)
+						.setEmail(email)
+						.setPhone(phone)
+						.setIsBlocked(isBlocked)
+						.serRole(role)
+						.build();
+				DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
+						.setId(doctorScheduleId)
+						.setDoctor(doctor)
+						.setStartTime(startTime)
+						.setEndTime(endTime)
+						.setDate(date)
+						.build();
 				logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
 				schedule = Optional.of(doctorSchedule);
 			} else {

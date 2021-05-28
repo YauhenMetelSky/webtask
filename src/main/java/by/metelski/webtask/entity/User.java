@@ -1,7 +1,6 @@
 package by.metelski.webtask.entity;
 
-
-public class User extends Entity {
+public class User {
 	private long userId;
 	private String name;
 	private String surname;
@@ -13,24 +12,9 @@ public class User extends Entity {
 	public enum Role{
 		ADMIN,GUEST,USER,DOCTOR
 	}
-	
-	public User() {
-	
-	}
-	public User(long userId) {
-		this.userId = userId;
+	private User() {
 		
-	}
-
-	public User(long userId, String name, String surname, String email, String phone, boolean isBlocked,Role role) {
-		this.userId = userId;
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.phone = phone;
-		this.isBlocked = isBlocked;
-		this.role = role;
-	}
+	}	
 
 	public String getName() {
 		return name;
@@ -82,7 +66,7 @@ public class User extends Entity {
 	public void setRole(Role role) {
 		this.role = role;//TODO remove setRole?
 	}
-
+		
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -155,5 +139,44 @@ public class User extends Entity {
 		builder.append("]");
 		return builder.toString();
 	}
-
+	
+	public static class Builder{
+		private User newUser;
+		
+		public Builder() {
+			newUser = new User();
+		}
+		
+		public Builder setUserID(long userId) {
+			newUser.userId =userId;
+			return this;
+		}
+		public Builder setName(String name) {
+			newUser.name=name;
+			return this;
+		}
+		public Builder setSurname(String surname) {
+			newUser.surname=surname;
+			return this;
+		}
+		public Builder setEmail(String email) {
+			newUser.email=email;
+			return this;
+		}
+		public Builder setPhone(String phone) {
+			newUser.phone=phone;
+			return this;
+		}
+		public Builder setIsBlocked(boolean isBlocked) {
+			newUser.isBlocked=isBlocked;
+			return this;
+		}
+		public Builder serRole(Role role) {
+			newUser.role=role;
+			return this;
+		}
+		public User build() {
+			return newUser;
+		}		
+	}
 }

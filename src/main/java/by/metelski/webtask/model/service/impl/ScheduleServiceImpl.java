@@ -1,6 +1,7 @@
 package by.metelski.webtask.model.service.impl;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,8 @@ import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.DoctorSchedule;
-import by.metelski.webtask.entity.DoctorScheduleFactory;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
@@ -29,8 +30,20 @@ public class ScheduleServiceImpl implements ScheduleService {
 		logger.log(Level.DEBUG, "add shedule data: " + data);
 		// FIXME startTime must be less than endTime check: is schedule exist
 		boolean isAdd = true;
+		User user = new User.Builder()
+				.setUserID(Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID)))
+				.build();
+		Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
+		Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));
+		Date date = Date.valueOf(data.get(ParameterAndAttribute.DATE));
+		DoctorSchedule schedule = new DoctorSchedule.Builder()
+				.setDoctor(user)
+				.setStartTime(startTime)
+				.setEndTime(endTime)
+				.setDate(date)
+				.build();
 		try {
-			isAdd = dao.addDoctorSchedule(DoctorScheduleFactory.getInstance().build(data));
+			isAdd = dao.addDoctorSchedule(schedule);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method addSchedule" + e);
 			throw new ServiceException(e);
@@ -42,7 +55,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<DoctorSchedule> findAllSchedulesByDoctorId(long userId) throws ServiceException {
 		logger.log(Level.DEBUG, "findAllSchedulesByDoctor. Id:" + userId);
 		List<DoctorSchedule> schedules = new ArrayList<>();
-		User user = new User(userId);
+		User user = new User.Builder()
+				.setUserID(userId)
+				.build();
 		try {
 			schedules = dao.findAllSchedulesByDoctor(user);
 			logger.log(Level.DEBUG, "finded shedules:" + schedules);

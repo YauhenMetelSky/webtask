@@ -3,9 +3,7 @@ package by.metelski.webtask.model.service.impl;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.Appointment;
 import by.metelski.webtask.entity.Appointment.Status;
-import by.metelski.webtask.entity.AppointmentFactory;
+import by.metelski.webtask.entity.Procedure;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
@@ -35,20 +33,39 @@ public class AppointmentServiceImpl implements AppointmentService {
 		logger.log(Level.DEBUG, "Add appointment; data" + data);
 		// TODO validate data
 		boolean isAdded = false;
-		Appointment appointment = null;
 		try {
 			long id = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
 			int duration = procedureDao.findDuration(id);
 			logger.log(Level.DEBUG, "procedure duration" + duration);
-			String startTime = data.get(ParameterAndAttribute.START_TIME);
-			logger.log(Level.DEBUG, "startTime:" + startTime);
-			Time endTime = calculateEndTime(startTime, duration);
-			data.put(ParameterAndAttribute.END_TIME, endTime.toString());
-			appointment = AppointmentFactory.getInstance().buildAppointment(data);
+			Time endTime = calculateEndTime(data.get(ParameterAndAttribute.START_TIME), duration);
+			long appointmentId = Long.parseLong(data.get(ParameterAndAttribute.APPOINTMENT_ID));
+			long userId = Long.parseLong(data.get(ParameterAndAttribute.USER_ID));
+			long doctorId = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID));
+			long procedureId = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
+			Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
+			Date date = Date.valueOf(data.get(ParameterAndAttribute.APPOINTMENT_DATE));
+			User client = new User.Builder()
+					.setUserID(userId)
+					.build();
+			User doctor = new User.Builder()
+					.setUserID(doctorId)
+					.build();
+			Procedure procedure = new Procedure.Builder()
+					.setProcedureId(procedureId)
+					.build();
+			Appointment appointment = new Appointment.Builder()
+					.setId(appointmentId)
+					.setUser(client)
+					.setDoctor(doctor)
+					.setProcedure(procedure)
+					.setStartTime(startTime)
+					.setEndTime(endTime)
+					.setDate(date)
+					.build();
 			isAdded = appointmentDao.add(appointment);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
-					"dao exception in method add, when we try to add appointment:" + appointment + ". " + e);
+					"dao exception in method add, when we try to add appointment,appointment data:" + data + ". " + e);
 			throw new ServiceException(e);
 		}
 		return isAdded;
@@ -65,20 +82,40 @@ public class AppointmentServiceImpl implements AppointmentService {
 		logger.log(Level.DEBUG, "Change appointment; data" + data);
 		// TODO validate data
 		boolean isChanged = false;
-		Appointment appointment = null;
 		try {
 			long id = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
 			int duration = procedureDao.findDuration(id);
 			logger.log(Level.DEBUG, "procedure duration" + duration);
-			String startTime = data.get(ParameterAndAttribute.START_TIME);
-			logger.log(Level.DEBUG, "startTime:" + startTime);
-			Time endTime = calculateEndTime(startTime, duration);
+			Time endTime = calculateEndTime(data.get(ParameterAndAttribute.START_TIME), duration);
 			data.put(ParameterAndAttribute.END_TIME, endTime.toString());
-			appointment = AppointmentFactory.getInstance().buildAppointment(data);
+			long appointmentId = Long.parseLong(data.get(ParameterAndAttribute.APPOINTMENT_ID));
+			long userId = Long.parseLong(data.get(ParameterAndAttribute.USER_ID));
+			long doctorId = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID));
+			long procedureId = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
+			Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
+			Date date = Date.valueOf(data.get(ParameterAndAttribute.APPOINTMENT_DATE));
+			User client = new User.Builder()
+					.setUserID(userId)
+					.build();
+			User doctor = new User.Builder()
+					.setUserID(doctorId)
+					.build();
+			Procedure procedure = new Procedure.Builder()
+					.setProcedureId(procedureId)
+					.build();
+			Appointment appointment = new Appointment.Builder()
+					.setId(appointmentId)
+					.setUser(client)
+					.setDoctor(doctor)
+					.setProcedure(procedure)
+					.setStartTime(startTime)
+					.setEndTime(endTime)
+					.setDate(date)
+					.build();
 			isChanged = appointmentDao.changeAppointment(appointment);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
-					"dao exception in method add, when we try to add appointment:" + appointment + ". " + e);
+					"dao exception in method add, when we try change appointment,appointment data:" + data + ". " + e);
 			throw new ServiceException(e);
 		}
 		return isChanged;

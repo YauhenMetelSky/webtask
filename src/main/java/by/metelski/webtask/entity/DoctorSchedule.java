@@ -11,24 +11,9 @@ public class DoctorSchedule {
 	private Time endTime;
 	private Date date;
 	
-	public DoctorSchedule() {
+	private DoctorSchedule() {
 		
-	}
-	
-	public DoctorSchedule(User doctor, Time startTime, Time endTime,Date date) {
-		this.doctor = doctor;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.date = date;
-	}
-		
-	public DoctorSchedule(long id, User doctor, Time startTime, Time endTime, Date date) {
-		this.id = id;
-		this.doctor = doctor;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.date = date;
-	}
+	}	
 
 	public User getDoctor() {
 		return doctor;
@@ -128,5 +113,35 @@ public class DoctorSchedule {
 		builder.append(date);
 		builder.append("]");
 		return builder.toString();
+	}
+	public static class Builder{
+		private DoctorSchedule newDoctorSchedule;
+		
+		public Builder() {
+			newDoctorSchedule = new DoctorSchedule();
+		}
+		public Builder setId(long id) {
+			newDoctorSchedule.id=id;
+			return this;
+		}
+		public Builder setDoctor(User doctor) {
+			newDoctorSchedule.doctor=doctor;
+			return this;
+		}
+		public Builder setStartTime(Time startTime) {
+			newDoctorSchedule.startTime=startTime;
+			return this;
+		}
+		public Builder setEndTime(Time endTime) {
+			newDoctorSchedule.endTime=endTime;
+			return this;
+		}
+		public Builder setDate(Date date) {
+			newDoctorSchedule.date=date;
+			return this;
+		}
+		public DoctorSchedule build() {
+			return newDoctorSchedule;
+		}
 	}
 }

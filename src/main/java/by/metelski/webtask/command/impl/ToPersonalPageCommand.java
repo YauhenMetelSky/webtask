@@ -1,17 +1,13 @@
 package by.metelski.webtask.command.impl;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
@@ -50,16 +46,12 @@ public class ToPersonalPageCommand implements Command {
 				router.setPagePath(PagePath.SIGN_IN);
 				break;
 			case USER:
-				LocalDate date = LocalDate.now();
-				LocalDate max = date.plusDays(14);//FIXME Magic String
-				request.setAttribute(ParameterAndAttribute.TODAY, date);//FIXME unused
-				request.setAttribute(ParameterAndAttribute.MAX_DATE, max);//FIXME unused
 				try {
 					List<User> doctors = userService.findUsersByRole(Role.DOCTOR);
-					request.setAttribute(ParameterAndAttribute.DOCTORS_LIST, doctors);
+					session.setAttribute(ParameterAndAttribute.DOCTORS_LIST, doctors);
 					logger.log(Level.DEBUG, "doctors: " + doctors);
 					List<Procedure> procedures = procedureService.findAll();
-					request.setAttribute(ParameterAndAttribute.PROCEDURES_LIST, procedures);
+					session.setAttribute(ParameterAndAttribute.PROCEDURES_LIST, procedures);
 				} catch (ServiceException e) {
 					logger.log(Level.ERROR, "ServiceException" + e);
 					router.setPagePath(PagePath.ERROR);		

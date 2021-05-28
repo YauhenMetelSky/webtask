@@ -77,7 +77,16 @@ public class ProcedureDaoImpl implements ProcedureDao {
 				String description = resultSet.getString(DESCRIPTION);
 				Duration duration = Duration.ofMinutes(resultSet.getLong(DURATION));
 				logger.log(Level.DEBUG, "procedure id:" + procedureId + " procedure name:" + name + " image name:" + imageName);
-				procedures.add(new Procedure(procedureId,name,imageName,price,isActive,description,duration));//TODO Use builder???
+				Procedure procedure = new Procedure.Builder()
+						.setProcedureId(procedureId)
+						.setName(name)
+					    .setImageName(imageName)
+					    .setPrice(price)
+					    .setIsActive(isActive)
+					    .setDescription(description)
+					    .setDuration(duration)
+					    .build();
+				procedures.add(procedure);			
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
