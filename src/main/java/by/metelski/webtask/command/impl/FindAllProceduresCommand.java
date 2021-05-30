@@ -30,9 +30,9 @@ public class FindAllProceduresCommand implements Command {
 		try {
 			procedures= procedureService.findAll();
 			router.setPagePath(page);
-			session.setAttribute(ParameterAndAttribute.PROCEDURES_LIST,procedures );
+			request.setAttribute(ParameterAndAttribute.PROCEDURES_LIST,procedures );
 		} catch (ServiceException e) {
-			logger.log(Level.ERROR, "UserServiceException in method execute FindAllProcedure");
+			logger.log(Level.ERROR, "ProcedureServiceException in method execute FindAllProcedure");
 			router.setPagePath(PagePath.ERROR);
 		}		
 		return router;

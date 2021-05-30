@@ -50,8 +50,8 @@ public class ToPersonalPageCommand implements Command {
 					List<User> doctors = userService.findUsersByRole(Role.DOCTOR);
 					session.setAttribute(ParameterAndAttribute.DOCTORS_LIST, doctors);
 					logger.log(Level.DEBUG, "doctors: " + doctors);
-					List<Procedure> procedures = procedureService.findAll();
-					session.setAttribute(ParameterAndAttribute.PROCEDURES_LIST, procedures);
+//FIXME delete, use it once in to Main page					List<Procedure> procedures = procedureService.findAll();
+//					session.setAttribute(ParameterAndAttribute.PROCEDURES_LIST, procedures);
 				} catch (ServiceException e) {
 					logger.log(Level.ERROR, "ServiceException" + e);
 					router.setPagePath(PagePath.ERROR);		

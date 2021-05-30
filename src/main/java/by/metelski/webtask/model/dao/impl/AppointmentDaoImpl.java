@@ -46,8 +46,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	public boolean add(Appointment appointment) throws DaoException {
 		logger.log(Level.INFO, "Try to add appointment in db" + appointment);
 		boolean isAdded = false;
-		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_ADD_APPOINTMENT);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_ADD_APPOINTMENT)) {
 			statement.setLong(1, appointment.getUser().getUserId());
 			statement.setLong(2, appointment.getDoctor().getUserId());
 			statement.setDate(3, appointment.getDate());
@@ -74,8 +74,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	public boolean changeStatus(long id, Status status) throws DaoException {
 		logger.log(Level.INFO, "change appointment status, appointmentId:" + id + ", status:" + status);
 		boolean isChanged = false;
-		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_APPOINTMENT_STATUS);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_APPOINTMENT_STATUS)) {
 			statement.setString(1, status.name());
 			statement.setLong(2, id);
 			int rowCount = statement.executeUpdate();
@@ -96,8 +96,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	public boolean changeAppointment(Appointment appointment) throws DaoException {
 		logger.log(Level.INFO, "Try to change appointment in db" + appointment);
 		boolean isChanged = false;
-		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_APPOINTMENT);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_APPOINTMENT)) {
 			statement.setLong(1, appointment.getUser().getUserId());
 			statement.setLong(2, appointment.getDoctor().getUserId());
 			statement.setDate(3, appointment.getDate());
@@ -137,8 +137,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	public Optional<Appointment> findById(long id) throws DaoException {
 		logger.log(Level.INFO, "Find all appointments by id, id=  " + id);
 		Optional<Appointment> optionalAppointment;
-		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_FIND_APPOINTMENT_BY_ID);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_APPOINTMENT_BY_ID)) {
 			statement.setLong(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
@@ -219,8 +219,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	public List<Appointment> findAllByStatus(Status status) throws DaoException {
 		logger.log(Level.INFO, "Find all appointments by status, status=  " + status);
 		List<Appointment> appointments = new ArrayList<>();
-		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_FIND_APPOINTMENT_BY_STATUS);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_APPOINTMENT_BY_STATUS)) {
 			statement.setString(1, status.name());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -299,8 +299,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	public List<Appointment> findAllByUserId(long userId) throws DaoException {
 		logger.log(Level.INFO, "Find all appointments by user id, useId=  " + userId);
 		List<Appointment> appointments = new ArrayList<>();
-		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_FIND_ALL_APPOINTMENTS_BY_USER_ID);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_ALL_APPOINTMENTS_BY_USER_ID)) {
 			statement.setLong(1, userId);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {

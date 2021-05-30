@@ -41,6 +41,7 @@
 				<th><fmt:message key="label.date" /></th>
 				<th><fmt:message key="label.start_time" /></th>
 				<th><fmt:message key="label.end_time" /></th>
+				<th><fmt:message key="label.action" /></th>
 			</tr>
 		</c:if>
 
@@ -49,17 +50,21 @@
 				<td><c:out value="${elem.date }" /></td>
 				<td><c:out value="${elem.startTime}" /></td>
 				<td><c:out value="${elem.endTime }" /></td>
+				<td>	
+		       <form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.change"/>
+				</button>
+				<input type="hidden" name="id" value="${elem.id}">
+				<input type="hidden" name="command" value="to_change_schedule">
+			</form>	
+			</td>
 			</tr>
 		</c:forEach>
 			</table>
 		</div> 
 		<div class="form-inline">
 			<form action="controller" method="POST">
-	<%-- 			<select class="form-control" name="schedule_id">
-					<c:forEach var="elem" items="${schedule_list}" varStatus="status">
-						<option value="${elem.id}"><c:out value="${elem.date}" /></option>
-					</c:forEach>
-				</select>  --%>
 				<input type="date" min="2021-05-16" name="date" value="" required class="form-control"
 					placeholder=<fmt:message key="label.date"/>> 
 				<input type="time" min="09:00" max="21:00" step="2" name="start_time" value="09:00:00" required class="form-control"

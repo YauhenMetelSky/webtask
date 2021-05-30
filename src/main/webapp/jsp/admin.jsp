@@ -27,8 +27,9 @@
 	<c:import url="header.jsp" />
 	<div class="container-fluid bg">
 	<div class="row">
+	<!--  <div class="form-group"> -->
 		<div class="col">
-	<h1>Find by name</h1>
+	<!-- <h1>Find by name</h1> -->
 		<div class="form-inline">
 			<form action="controller" method="POST">
 				<input type="text" name="name" value="" class="form-control"
@@ -39,51 +40,40 @@
 				</button>
 			</form>
 		</div>
-		<%-- <h1>Add schedule</h1>
-		<div class="form-inline">
-			<form action="controller" method="POST">
-				<input type="date" name="date" value="" class="form-control" pattern=".*[^<>]"
-					placeholder=<fmt:message key="label.date"/>> 
-					<input type="hidden" name="command" value="add_schedule">
-				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.submit" />
-				</button>
-			</form>
-		</div> --%>
+
 			<p>${message}</p>
-		<br />
-		<h1>Add procedure</h1>
+	<!-- 	<br /> -->
+		<!-- <h1>Add procedure</h1> -->
 		<div class="form-inline">
-			<form action="controller" method="POST">
-				<input type="text" name="procedure_name" value="" pattern=".*[^<>]" class="form-control"
-					placeholder=<fmt:message key="label.name"/>> 
-					<input type="text" name="procedure_image" value="" pattern=".*[^<>]" class="form-control"
-					placeholder=<fmt:message key="label.image"/>>
-					<input type="text" name="procedure_price" value="" required pattern="\d+[.]\d+" class="form-control"
-					placeholder=<fmt:message key="label.price"/>>
-					<input type="text" name="duration" value="" required pattern="\d+" class="form-control"
-					placeholder=<fmt:message key="label.duration"/>>
-					<input type="text" name="description" value="" required pattern=".*[^<>]" class="form-control"
-					placeholder=<fmt:message key="label.description"/>>
-					<input type="hidden" name="command" value="add_procedure">
+		<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.add" />
+					<fmt:message key="label.add_procedure" />
 				</button>
+				<input type="hidden" name="command" value="to_add_procedure">
 			</form>
 		</div>
-			<p>${message}</p>
 		<br />
-		<h1>Find all users</h1>
+		<div class="form-inline">
+		<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.find_all_procedures" />
+				</button>
+				<input type="hidden" name="command" value="find_all_procedures">
+			</form>
+		</div>
+			<%-- <p>${message}</p> --%>
+		<br />
+	<!-- 	<h1>Find all users</h1> -->
 		<div>
 			<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.find_all" />
+					<fmt:message key="label.find_all_users" />
 				</button>
 				<input type="hidden" name="command" value="find_all_users">
 			</form>
 		</div>
 		<br />
-		<h1>Send email</h1>
+		<!--<h1>Send email</h1> -->
 		<div class="form-inline">
 			<form action="controller" method="POST">
 				<input type="text" class="form-control" name="email_to" placeholder="email" />
@@ -91,18 +81,19 @@
 				<input type="hidden" name="command" value="send_email">
 			</form>
 		</div>
-		
-	<h1>Show all new appointments</h1>
+		<br />
+	<!-- <h1>Show all new appointments</h1> -->
 		<div>
 			<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.find_all" />
+					<fmt:message key="label.show_all_new_app" />
 				</button>
 				<input type="hidden" name="command" value="find_all_new_appointments">
 			</form>
 		</div>
 		</div>
-	
+	<!-- 	</div> -->
+	<br />
 		<div class="col">		
 		<table class="table table-striped">
 		<c:if test="${appointments_list ne null}">
@@ -134,7 +125,7 @@
 		<td>	
 		
 		<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
+				<button type="submit" class="btn btn-success">
 					<fmt:message key="label.confirm"/>
 				</button>
 				<input type="hidden" name="app_id" value="${elem.id}">
@@ -153,7 +144,7 @@
 		</td>
 		<td>	
 		<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
+				<button type="submit" class="btn btn-danger">
 					<fmt:message key="label.decline"/>
 				</button>
 				<input type="hidden" name="app_id" value="${elem.id}">
@@ -174,6 +165,8 @@
 				<th><fmt:message key="label.email" /></th>
 				<th><fmt:message key="label.phone" /></th>
 				<th><fmt:message key="label.blocked" /></th>
+				<th><fmt:message key="label.action" /></th>
+				
 			</tr>
 		</c:if>
 
@@ -186,6 +179,77 @@
 				<td><c:out value="${elem.email }" /></td>
 				<td><c:out value="${elem.phone }" /></td>
 				<td><c:out value="${elem.blocked }" /></td>
+				<c:if test="${elem.blocked==false}">		
+				<td>	
+		       <form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.block_user"/>
+				</button>
+				<input type="hidden" name="id" value="${elem.userId}">
+				<input type="hidden" name="command" value="block_user">
+			</form>	
+			</td>
+			</c:if>
+			<c:if test="${elem.blocked==true}">		
+				<td>	
+		       <form action="controller" method="POST">
+				<button type="submit" class="btn btn-success">
+					<fmt:message key="label.unblock_user"/>
+				</button>
+				<input type="hidden" name="id" value="${elem.userId}">
+				<input type="hidden" name="command" value="unblock_user">
+			</form>	
+			</td>
+			</c:if>
+			</tr>
+		</c:forEach>
+	</table>
+	
+	<table class="table table-striped">	
+		<c:if test="${procedures_list ne null}">
+			<tr>
+				<th><fmt:message key="label.id" /></th>
+				<th><fmt:message key="label.name" /></th>
+				<th><fmt:message key="label.image_name" /></th>
+				<th><fmt:message key="label.price" /></th>
+				<th><fmt:message key="label.is_active" /></th> 
+				<th><fmt:message key="label.description" /></th>
+				<th><fmt:message key="label.duration" /></th>
+				<th><fmt:message key="label.action" /></th>
+			</tr>
+		</c:if>
+
+		<c:forEach var="elem" items="${procedures_list}" varStatus="status">
+			<tr>
+				<td><c:out value="${elem.procedureId }" /></td>
+				<td><c:out value="${elem.name }" /></td>
+				<td><c:out value="${elem.imageName }" /></td>
+				<td><c:out value="${elem.price }" /></td>
+				 <td><c:out value="${elem.active }" /></td> 
+				<td><c:out value="${elem.description }" /></td>
+				<td><c:out value="${elem.duration }" /></td>
+					<c:if test="${elem.active==false}">		
+					<td>	
+		<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.activate"/>
+				</button>
+				<input type="hidden" name="procedure_id" value="${elem.procedureId}">
+				<input type="hidden" name="command" value="activate_procedure">
+			</form>	
+			</td>
+			</c:if>
+			<c:if test="${elem.active==true}">		
+					<td>	
+		<form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.deactivate"/>
+				</button>
+				<input type="hidden" name="procedure_id" value="${elem.procedureId}">
+				<input type="hidden" name="command" value="deactivate_procedure">
+			</form>	
+			</td>
+			</c:if>
 			</tr>
 		</c:forEach>
 

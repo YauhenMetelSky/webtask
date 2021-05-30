@@ -1,8 +1,9 @@
 package by.metelski.webtask.command;
 
 public final class PagePath {
-	public static final String ADMIN = "/jsp/admin.jsp";
 	public static final String ABOUT = "/jsp/about.jsp";
+	public static final String ADD_PROCEDURE = "/jsp/addprocedure.jsp";
+	public static final String ADMIN = "/jsp/admin.jsp";
 	public static final String CONTACT = "/jsp/contact.jsp";
 	public static final String CHANGE_APPOINTMENT = "/jsp/changeapp.jsp";
 	public static final String DOCTOR = "/jsp/doctor.jsp";

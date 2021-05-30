@@ -16,7 +16,7 @@ import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
-public class BlockUserCommand implements Command {
+public class UnblockUserCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserService userService = new UserServiceImpl();
 
@@ -24,11 +24,11 @@ public class BlockUserCommand implements Command {
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 	    Router router = new Router();
 	    boolean isBlocked = false;
-	    logger.log(Level.DEBUG, "execute method BlockUserCommand");
+	    logger.log(Level.DEBUG, "execute method UnblockUserCommand");
 		long id = Long.parseLong(request.getParameter(ParameterAndAttribute.USER_ID));		
 		try {
 			String page = request.getContextPath() +PagePath.TO_PERSONAL_PAGE;
-			isBlocked = userService.changeUserIsBlocked(id, true);
+			isBlocked = userService.changeUserIsBlocked(id, false);
 			if (isBlocked) {
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);

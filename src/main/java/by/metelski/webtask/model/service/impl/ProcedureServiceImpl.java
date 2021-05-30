@@ -45,18 +45,6 @@ public class ProcedureServiceImpl implements ProcedureService {
 	}
 
 	@Override
-	public boolean activate(long id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean deActivate(long id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public List<Procedure> findAll() throws ServiceException {
 		logger.log(Level.DEBUG, "findAll()");
 		List<Procedure> procedures;
@@ -64,6 +52,19 @@ public class ProcedureServiceImpl implements ProcedureService {
 			procedures = procedureDao.findAll();
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method FindAll" + e);
+			throw new ServiceException(e);
+		}
+
+		return procedures;
+	}
+	@Override
+	public List<Procedure> findAllActive() throws ServiceException {
+		logger.log(Level.DEBUG, "findAllActive()");
+		List<Procedure> procedures;
+		try {
+			procedures = procedureDao.findAllActive();
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method FindAllActive" + e);
 			throw new ServiceException(e);
 		}
 
@@ -80,5 +81,17 @@ public class ProcedureServiceImpl implements ProcedureService {
 	public Optional<Procedure> findById() throws ServiceException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean setIsActive(long id, boolean isActive) throws ServiceException {
+		boolean isChanged = false;
+		try {
+			isChanged=procedureDao.setIsActive(id, isActive);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method setIsActive" + e);
+			throw new ServiceException(e);
+		}
+		return isChanged;
 	}
 }

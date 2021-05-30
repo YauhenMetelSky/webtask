@@ -1,6 +1,7 @@
 package by.metelski.webtask.command;
 
 public final class ParameterAndAttribute {
+	public static final String ACTIVE_PROCEDURES_LIST = "active_procedures_list";
 	public static final String APPOINTMENT = "appointment";
 	public static final String APPOINTMENT_DATE = "app_date";
 	public static final String APPOINTMENT_ID = "app_id";

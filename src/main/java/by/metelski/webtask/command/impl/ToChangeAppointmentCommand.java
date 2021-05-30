@@ -49,7 +49,7 @@ public class ToChangeAppointmentCommand implements Command {
 			logger.log(Level.DEBUG, "appointment:" +optional.get());
 			if(optional.isPresent()) {
 				Appointment appointment = optional.get();
-//				long userId = appointment.getUser().getUserId();
+//FIXME delete				long userId = appointment.getUser().getUserId();
 //				logger.log(Level.DEBUG, "userId:" +userId);
 //				request.setAttribute(ParameterAndAttribute.USER_ID, userId);//TODO is it need?
 				DoctorSchedule schedule = scheduleService.findScheduleByDateAndDoctor(appointment.getDate(), appointment.getDoctor().getUserId()).get();

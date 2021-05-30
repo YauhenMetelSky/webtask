@@ -47,8 +47,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	public boolean addDoctorSchedule(DoctorSchedule schedule) throws DaoException {
 		logger.log(Level.INFO, "Try to add doctor shedule in db" + schedule);
 		boolean scheduleAdded = false;
-		try (Connection connection = connectionPool.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(SQL_ADD_DOCTOR_SCHEDULE);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_ADD_DOCTOR_SCHEDULE)) {
 			statement.setLong(1, schedule.getDoctor().getUserId());
 			statement.setTime(2, schedule.getStartTime());
 			statement.setTime(3, schedule.getEndTime());
@@ -72,8 +72,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	public List<DoctorSchedule> findAllSchedulesByDoctor(User user) throws DaoException {
 		List<DoctorSchedule> schedules = new ArrayList<>();
 		logger.log(Level.INFO, "Find schedules by doctor, doctorID: " + user.getUserId());
-		try (Connection connection = connectionPool.getConnection();) {
-			PreparedStatement statement = connection.prepareStatement(SQL_FIND_SCHEDULES_BY_DOCTOR_ID);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_SCHEDULES_BY_DOCTOR_ID)) {
 			statement.setLong(1, user.getUserId());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -119,8 +119,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	public Optional<DoctorSchedule> findScheduleByDateAndDoctor(Date date,long doctorId) throws DaoException {
 		Optional<DoctorSchedule> schedule;
 		logger.log(Level.INFO, "Find schedule by date and doctorId, date: " + date+" ,doctorId:" + doctorId);
-		try (Connection connection = connectionPool.getConnection();) {
-			PreparedStatement statement = connection.prepareStatement(SQL_FIND_SCHEDULE_BY_DOCTOR_ID_AND_DATE);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_SCHEDULE_BY_DOCTOR_ID_AND_DATE)) {
 			statement.setLong(1, doctorId);
 			statement.setDate(2, date);
 			ResultSet resultSet = statement.executeQuery();
@@ -171,8 +171,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	public Optional<DoctorSchedule> FindScheduleById(long id) throws DaoException {
 		Optional<DoctorSchedule> schedule;
 		logger.log(Level.INFO, "Find schedule by id, ID: " + id);
-		try (Connection connection = connectionPool.getConnection();) {
-			PreparedStatement statement = connection.prepareStatement(SQL_FIND_SCHEDULE_BY_ID);
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_SCHEDULE_BY_ID)) {
 			statement.setLong(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
