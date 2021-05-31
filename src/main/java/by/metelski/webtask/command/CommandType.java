@@ -30,6 +30,7 @@ import by.metelski.webtask.command.impl.CancelAppointmentCommand;
 import by.metelski.webtask.command.impl.ConfirmAppointmentCommand;
 import by.metelski.webtask.command.impl.DeactivateProcedureCommand;
 import by.metelski.webtask.command.impl.ToChangeAppointmentCommand;
+import by.metelski.webtask.command.impl.ToChangeScheduleCommand;
 import by.metelski.webtask.command.impl.FindAllProceduresCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByDoctorCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByIdCommand;
@@ -179,6 +180,11 @@ public enum CommandType {
 	TO_ADD_PROCEDURE{
 		{
 			this.command=new ToAddProcedureCommand();
+		}
+	},
+	TO_CHANGE_SCHEDULE {
+		{
+			this.command= new ToChangeScheduleCommand();
 		}
 	},
 	TO_PERSONAL_PAGE {

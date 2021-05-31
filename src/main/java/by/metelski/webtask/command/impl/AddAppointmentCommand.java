@@ -45,7 +45,7 @@ public class AddAppointmentCommand implements Command {
 		appointmentData.put(ParameterAndAttribute.START_TIME, time);
 		logger.log(Level.DEBUG, "data in map from request: " + appointmentData.toString());
 		try {
-			String date = scheduleService.FindScheduleById(Long.parseLong(scheduleId)).get().getDate().toString();
+			String date = scheduleService.findScheduleById(Long.parseLong(scheduleId)).get().getDate().toString();
 			appointmentData.put(ParameterAndAttribute.APPOINTMENT_DATE, date);
 			if (service.add(appointmentData)) {
 				// TODO Show message Appointment added, we recall you, send email

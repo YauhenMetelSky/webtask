@@ -31,6 +31,7 @@ public final class ParameterAndAttribute {
 	public static final String PROCEDURE_PRICE = "procedure_price";
 	public static final String PROCEDURES_LIST = "procedures_list";
 	public static final String START_TIME = "start_time";
+	public static final String SCHEDULE = "schedule";
 	public static final String SCHEDULE_ID = "schedule_id";
 	public static final String SCHEDULE_LIST = "schedule_list";
 	public static final String TODAY = "today";

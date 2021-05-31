@@ -28,13 +28,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public boolean addDoctorSchedule(Map<String, String> data) throws ServiceException {
 		logger.log(Level.DEBUG, "add shedule data: " + data);
-		// FIXME startTime must be less than endTime check: is schedule exist
 		boolean isAdd = true;
+		Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
+		Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));		
+		if(startTime.before(endTime)) {
 		User user = new User.Builder()
 				.setUserID(Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID)))
 				.build();
-		Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
-		Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));
 		Date date = Date.valueOf(data.get(ParameterAndAttribute.DATE));
 		DoctorSchedule schedule = new DoctorSchedule.Builder()
 				.setDoctor(user)
@@ -48,6 +48,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			logger.log(Level.ERROR, "dao exception in method addSchedule" + e);
 			throw new ServiceException(e);
 		}
+		} 
 		return isAdd;
 	}
 
@@ -69,7 +70,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public Optional<DoctorSchedule> FindScheduleById(long id) throws ServiceException {
+	public Optional<DoctorSchedule> findScheduleById(long id) throws ServiceException {
 		logger.log(Level.DEBUG, "findAllScheduleById. Id:" + id);
 		Optional<DoctorSchedule> schedule;
 		try {

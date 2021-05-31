@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -41,7 +42,7 @@ public class LogInCommand implements Command {
 				session.setAttribute(ParameterAndAttribute.USER, user);
 			} else {
 				router.setPagePath(PagePath.SIGN_IN);
-				request.setAttribute(ParameterAndAttribute.MESSAGE, "incorrect email or password");//FIXME magic string
+				request.setAttribute(ParameterAndAttribute.MESSAGE, Message.INCORRECT_EMAIL_OR_LOGIN);//FIXME magic string
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute" + e);

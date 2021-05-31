@@ -55,7 +55,7 @@
 				<button type="submit" class="btn btn-danger">
 					<fmt:message key="label.change"/>
 				</button>
-				<input type="hidden" name="id" value="${elem.id}">
+				<input type="hidden" name="schedule_id" value="${elem.id}">
 				<input type="hidden" name="command" value="to_change_schedule">
 			</form>	
 			</td>

@@ -43,15 +43,11 @@ public class ToChangeAppointmentCommand implements Command {
 		logger.log(Level.DEBUG, "appointmentId from request:" + request.getParameter(ParameterAndAttribute.APPOINTMENT_ID));
 		long appointmentId =Long.parseLong(request.getParameter(ParameterAndAttribute.APPOINTMENT_ID));
 		logger.log(Level.DEBUG, "appointmentId:" +appointmentId);
-		//TODO pop up window or new page,
 		try {
 			Optional<Appointment> optional = service.findById(appointmentId);
 			logger.log(Level.DEBUG, "appointment:" +optional.get());
 			if(optional.isPresent()) {
 				Appointment appointment = optional.get();
-//FIXME delete				long userId = appointment.getUser().getUserId();
-//				logger.log(Level.DEBUG, "userId:" +userId);
-//				request.setAttribute(ParameterAndAttribute.USER_ID, userId);//TODO is it need?
 				DoctorSchedule schedule = scheduleService.findScheduleByDateAndDoctor(appointment.getDate(), appointment.getDoctor().getUserId()).get();
 				List<String> intervals =IntervalCalculator.calculateIntervals(schedule, intervalIncrement);
 				request.setAttribute(ParameterAndAttribute.INTERVALS_LIST,intervals);
@@ -66,7 +62,7 @@ public class ToChangeAppointmentCommand implements Command {
 				request.setAttribute(ParameterAndAttribute.APPOINTMENT, optional.get());
 				router.setPagePath(PagePath.CHANGE_APPOINTMENT);
 			}else {
-				//TODO message nothing founded
+				//TODO message nothing founded??? or it is impossible situation
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "AppointmentServiceException in method execute");

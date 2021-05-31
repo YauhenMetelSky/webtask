@@ -29,7 +29,7 @@ public class FindScheduleByIdAsyncCommand implements Command{
 		Router router = new Router();
 		Long scheduleId = Long.parseLong(request.getParameter(ParameterAndAttribute.SCHEDULE_ID));
 		try {//FIXME empty optional
-			schedule =service.FindScheduleById(scheduleId).get();		
+			schedule =service.findScheduleById(scheduleId).get();		
 			String scheduleGson = new Gson().toJson(schedule);
 			logger.log(Level.DEBUG, "string gson: " + scheduleGson);
 			 response.getWriter().write(scheduleGson);

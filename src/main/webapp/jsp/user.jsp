@@ -118,7 +118,9 @@
 				<th><fmt:message key="label.end_time"/></th>
 				<th><fmt:message key="label.doctor"/></th>
 				<th><fmt:message key="label.procedure"/></th>
-				<th><fmt:message key="label.change"/></th>			
+				<th><fmt:message key="label.status"/></th>
+				<th><fmt:message key="label.change"/></th>	
+				<th><fmt:message key="label.cancel"/></th>		
 			</tr>
 		</c:if>
 		
@@ -129,7 +131,9 @@
 		<td><c:out value="${elem.endTime }" /></td>
 		<td><c:out value="${elem.doctor.name }" /><c:out value=" " /><c:out value="${elem.doctor.surname} " /></td>				
 		<td><c:out value="${elem.procedure.name }" /></td>
-		<td>	
+		<td><c:out value="${elem.status }" /></td>
+		<c:if test="${elem.status eq 'CLAIMED' }">
+		<td>
 		<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.change"/>
@@ -138,6 +142,28 @@
 				<input type="hidden" name="command" value="to_change_appointment">
 			</form>		
 		</td>
+		<td>
+		<form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.cancel"/>
+				</button>
+				<input type="hidden" name="app_id" value="${elem.id }">
+				<input type="hidden" name="command" value="cancel_appointment">
+			</form>		
+		</td>
+		</c:if>
+		<c:if test="${elem.status eq 'CONFIRMED' }">
+		<td></td>
+		<td>
+		<form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.cancel"/>
+				</button>
+				<input type="hidden" name="app_id" value="${elem.id }">
+				<input type="hidden" name="command" value="cancel_appointment">
+			</form>		
+		</td>
+		</c:if>
 		</tr>
 		</c:forEach>
 		</table>

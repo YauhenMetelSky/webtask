@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -47,14 +48,14 @@ public class SignUpCommand implements Command {
 						String page = request.getContextPath();
 						router.setPagePath(page);
 						router.setType(Type.REDIRECT);
-						request.setAttribute(ParameterAndAttribute.MESSAGE, "User created");//TODO magic string will be created new request
+						request.setAttribute(ParameterAndAttribute.MESSAGE, Message.USER_CREATED);
 					} else {
 						router.setPagePath(PagePath.ERROR);// TODO need to do smth
 					}
 				} else {
 					router.setPagePath(PagePath.SIGN_UP);
 					// TODO messages in separate file
-					request.setAttribute(ParameterAndAttribute.MESSAGE, "user with that login already exists");
+					request.setAttribute(ParameterAndAttribute.MESSAGE, Message.USER_ALREADY_EXISTS);
 				}
 			} catch (ServiceException e) {
 				logger.log(Level.ERROR, "UserServiceException in method execute SignUpCommand" + e);

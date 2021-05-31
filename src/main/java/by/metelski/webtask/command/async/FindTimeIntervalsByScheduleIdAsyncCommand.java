@@ -36,7 +36,7 @@ public class FindTimeIntervalsByScheduleIdAsyncCommand implements Command {
 		DoctorSchedule schedule;
 		Long scheduleId = Long.parseLong(request.getParameter(ParameterAndAttribute.SCHEDULE_ID));
 		try {// FIXME empty optional
-			schedule = service.FindScheduleById(scheduleId).get();
+			schedule = service.findScheduleById(scheduleId).get();
 			intervals = IntervalCalculator.calculateIntervals(schedule,intervalIncrement);
 			String intervalsGson = new Gson().toJson(intervals);
 			logger.log(Level.DEBUG, "string gson: " + intervalsGson);
