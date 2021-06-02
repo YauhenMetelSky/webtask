@@ -31,7 +31,7 @@ public class UpdateAppointmentCommand implements Command{
 	
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-		logger.log(Level.DEBUG, "execute method UpdateProcedureCommand");
+		logger.log(Level.DEBUG, "execute method UpdateAppointmentCommand");
 		Router router = new Router();
 		Map<String, String> appointmentData = new HashMap<>();
 		String userId = request.getParameter(ParameterAndAttribute.USER_ID);
@@ -61,5 +61,4 @@ public class UpdateAppointmentCommand implements Command{
 		}
 		return router;
 	}
-
 }

@@ -23,7 +23,7 @@ public class FindAllAppointmentsByUserIdCommand implements Command {
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-		logger.log(Level.DEBUG, "FindAllSchedulesByIdCommand");
+		logger.log(Level.DEBUG, "FindAllAppointmentsByIdCommand");
 		List<Appointment> appointments;
 		Router router = new Router();
 		HttpSession session = request.getSession();

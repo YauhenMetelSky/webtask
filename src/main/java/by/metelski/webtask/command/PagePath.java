@@ -6,6 +6,7 @@ public final class PagePath {
 	public static final String ADMIN = "/jsp/admin.jsp";
 	public static final String CONTACT = "/jsp/contact.jsp";
 	public static final String CHANGE_APPOINTMENT = "/jsp/changeapp.jsp";
+	public static final String CHANGE_PERSONAL_INFO = "/jsp/changepersonalinfo.jsp";
 	public static final String CHANGE_SCHEDULE = "/jsp/changeschedule.jsp";
 	public static final String DOCTOR = "/jsp/doctor.jsp";
 	public static final String EMPTY_RESULT = "/jsp/empty.jsp";

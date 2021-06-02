@@ -172,4 +172,19 @@ public class UserServiceImpl implements UserService {
 		return changeStatusResult;
 	}
 
+	@Override
+	public boolean changePersonalInfo(User user,Map<String, String> userData) throws ServiceException {
+		logger.log(Level.DEBUG, "Change personal info user:" + user);
+		user.setName(userData.get(ParameterAndAttribute.USER_NAME));
+		user.setSurname(userData.get(ParameterAndAttribute.USER_SURNAME));
+		user.setPhone(userData.get(ParameterAndAttribute.USER_PHONE));
+		boolean isChanged = false;
+		try {
+			isChanged=userDao.changePersonalInfo(user);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method changePersonalInfo" + e);
+			throw new ServiceException(e);
+		}
+		return isChanged;
+	}
 }

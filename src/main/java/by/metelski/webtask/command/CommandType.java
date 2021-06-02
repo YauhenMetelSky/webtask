@@ -27,9 +27,12 @@ import by.metelski.webtask.command.impl.AddProcedureCommand;
 import by.metelski.webtask.command.impl.AddDoctorScheduleCommand;
 import by.metelski.webtask.command.impl.BlockUserCommand;
 import by.metelski.webtask.command.impl.CancelAppointmentCommand;
+import by.metelski.webtask.command.impl.ChangeDoctorScheduleCommand;
+import by.metelski.webtask.command.impl.ChangePersonalInfoCommand;
 import by.metelski.webtask.command.impl.ConfirmAppointmentCommand;
 import by.metelski.webtask.command.impl.DeactivateProcedureCommand;
 import by.metelski.webtask.command.impl.ToChangeAppointmentCommand;
+import by.metelski.webtask.command.impl.ToChangePersonalInfoPageCommand;
 import by.metelski.webtask.command.impl.ToChangeScheduleCommand;
 import by.metelski.webtask.command.impl.FindAllProceduresCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByDoctorCommand;
@@ -74,6 +77,16 @@ public enum CommandType {
 	CANCEL_APPOINTMENT{
 		{
 		this.command = new CancelAppointmentCommand();	
+		}
+	},
+	CHANGE_DOCTOR_SCHEDULE{
+		{
+		this.command=new ChangeDoctorScheduleCommand();	
+		}
+	},
+	CHANGE_PERSONAL_INFO{
+		{
+			this.command= new ChangePersonalInfoCommand();
 		}
 	},
 	CONFIRM_APPOINTMENT{
@@ -180,6 +193,11 @@ public enum CommandType {
 	TO_ADD_PROCEDURE{
 		{
 			this.command=new ToAddProcedureCommand();
+		}
+	},
+	TO_CHANGE_PERSONAL_INFO{
+		{
+			this.command= new ToChangePersonalInfoPageCommand();
 		}
 	},
 	TO_CHANGE_SCHEDULE {

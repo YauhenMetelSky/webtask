@@ -10,6 +10,7 @@ public class DoctorSchedule {
 	private Time startTime;
 	private Time endTime;
 	private Date date;
+	boolean isActive;
 	
 	private DoctorSchedule() {
 		
@@ -51,6 +52,15 @@ public class DoctorSchedule {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 
 	@Override
 	public int hashCode() {
@@ -60,6 +70,7 @@ public class DoctorSchedule {
 		result = prime * result + ((doctor == null) ? 0 : doctor.hashCode());
 		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (isActive ? 1231 : 1237);
 		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
 		return result;
 	}
@@ -90,6 +101,8 @@ public class DoctorSchedule {
 			return false;
 		if (id != other.id)
 			return false;
+		if (isActive != other.isActive)
+			return false;
 		if (startTime == null) {
 			if (other.startTime != null)
 				return false;
@@ -100,20 +113,24 @@ public class DoctorSchedule {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("DoctorSchedule [id=");
-		builder.append(id);
-		builder.append(", doctor=");
-		builder.append(doctor);
-		builder.append(", startTime=");
-		builder.append(startTime);
-		builder.append(", endTime=");
-		builder.append(endTime);
-		builder.append(", date=");
-		builder.append(date);
-		builder.append("]");
-		return builder.toString();
+		StringBuilder builder2 = new StringBuilder();
+		builder2.append("DoctorSchedule [id=");
+		builder2.append(id);
+		builder2.append(", doctor=");
+		builder2.append(doctor);
+		builder2.append(", startTime=");
+		builder2.append(startTime);
+		builder2.append(", endTime=");
+		builder2.append(endTime);
+		builder2.append(", date=");
+		builder2.append(date);
+		builder2.append(", isActive=");
+		builder2.append(isActive);
+		builder2.append("]");
+		return builder2.toString();
 	}
+
+
 	public static class Builder{
 		private DoctorSchedule newDoctorSchedule;
 		
@@ -140,8 +157,13 @@ public class DoctorSchedule {
 			newDoctorSchedule.date=date;
 			return this;
 		}
+		public Builder setIsActive(boolean isActive) {
+			newDoctorSchedule.isActive=isActive;
+			return this;
+		}
 		public DoctorSchedule build() {
 			return newDoctorSchedule;
 		}
+		
 	}
 }

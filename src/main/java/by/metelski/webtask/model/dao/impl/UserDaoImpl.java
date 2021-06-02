@@ -29,6 +29,7 @@ public class UserDaoImpl implements UserDao {
 	private static final String SQL_ADD_USER = "INSERT INTO users (name,surname,password,email,phone) values(?,?,?,?,?,?)";
 	private static final String SQL_ACTIVATE_ACCOUNT = "UPDATE users SET is_active=true WHERE email=?";
 	private static final String SQL_CHANGE_USER_IS_BLOCKED = "UPDATE users SET is_blocked=? WHERE user_id=?";
+	private static final String SQL_CHANGE_USER_PERSONAL_INFO = "UPDATE users SET name=?, surname=?, phone=? WHERE user_id=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
@@ -233,7 +234,7 @@ public class UserDaoImpl implements UserDao {
 				isActive = true;
 				logger.log(Level.INFO, "account " + email + " is active.");
 			} else {
-				logger.log(Level.ERROR, "account " + email + " was't activated");
+				logger.log(Level.ERROR, "account " + email + " wasn't activated");
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
@@ -245,22 +246,46 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public boolean changeIsBlockedStatus(long id,boolean isBlocked) throws DaoException {
 		logger.log(Level.INFO, "Try to block user account :" + id);
-		boolean resultShangeStatus = false;
+		boolean resultChangeStatus = false;
 		try (Connection connection = connectionPool.getConnection();
 				PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_USER_IS_BLOCKED)) {
 			statement.setBoolean(1, isBlocked);
 			statement.setLong(2, id);
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
-				resultShangeStatus = true;
+				resultChangeStatus = true;
 				logger.log(Level.INFO, "account " + id + " change status, isBlocked: " + isBlocked);
 			} else {
-				logger.log(Level.ERROR, "account " + id + "status was't changed");
+				logger.log(Level.ERROR, "account " + id + "status wasn't changed");
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
 			throw new DaoException("Dao exception in method activateAccount", e);
 		}
-		return resultShangeStatus;
+		return resultChangeStatus;
+	}
+
+	@Override
+	public boolean changePersonalInfo(User user) throws DaoException {
+		logger.log(Level.INFO, "Change user personal info, user id:" + user.getUserId());
+		boolean isChanged = false;
+		try (Connection connection = connectionPool.getConnection();
+			PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_USER_PERSONAL_INFO)) {
+			statement.setString(1, user.getName());
+			statement.setString(2, user.getSurname());
+			statement.setString(3, user.getPhone());
+			statement.setLong(4, user.getUserId());
+			int rowCount = statement.executeUpdate();
+			if (rowCount != 0) {
+				isChanged = true;
+				logger.log(Level.INFO, "user personal information changed, user id:" +user.getUserId());
+			} else {
+				logger.log(Level.INFO, "user personal information wasn't changed, user id:" +user.getUserId());
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException("Dao exception in method changePersonalInfo", e);
+		}	
+		return isChanged;
 	}
 }
