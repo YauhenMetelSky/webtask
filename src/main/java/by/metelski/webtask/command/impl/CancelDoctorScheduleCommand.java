@@ -1,9 +1,7 @@
 package by.metelski.webtask.command.impl;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,30 +9,29 @@ import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
-import by.metelski.webtask.entity.DoctorSchedule;
+import by.metelski.webtask.command.Router.Type;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
 import by.metelski.webtask.model.service.ScheduleService;
 import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 
-public class FindAllSchedulesByIdCommand implements Command{
+public class CancelDoctorScheduleCommand  implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	private ScheduleService service = new ScheduleServiceImpl(new ScheduleDaoImpl());
+	private ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-		logger.log(Level.DEBUG, "FindAllSchedulesByIdCommand");
-		List<DoctorSchedule> schedules;
+		logger.log(Level.DEBUG, "CancelDoctorScheduleCommand");
 		Router router = new Router();
-		HttpSession session = request.getSession();
-		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
-		Long userId = Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_ID));
-		try {//FIXME look to the FindAllSchedulesByDoctorCommand 
-			schedules = service.findAllSchedulesByDoctorId(userId);
+		long scheduleId =Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_SCHEDULE_ID));
+		try {
+			if(scheduleService.changeFieldIsActive(scheduleId, false)) {
+			String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
 			router.setPagePath(page);
-			request.setAttribute(ParameterAndAttribute.DOCTOR_SCHEDULES_LIST, schedules);
+			router.setType(Type.REDIRECT);
+			}
 		} catch (ServiceException e) {
-			logger.log(Level.ERROR, "ScheduleServiceException in method execute");
+			logger.log(Level.ERROR, "ScheduleServiceException in method execute",e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

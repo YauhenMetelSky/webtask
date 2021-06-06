@@ -10,8 +10,9 @@ import by.metelski.webtask.exception.ServiceException;
 public interface ProcedureService {
 	boolean add(Map<String, String> procedureData) throws ServiceException;
 	boolean setIsActive(long id, boolean isActive) throws ServiceException;
+	boolean changeProcedure(Map<String,String> procedureData) throws ServiceException;
 	List<Procedure> findAll() throws ServiceException;
 	List<Procedure> findAllActive() throws ServiceException;
 	Optional<Procedure> findByName() throws ServiceException;
-	Optional<Procedure> findById() throws ServiceException;
+	Optional<Procedure> findById(long id) throws ServiceException;
 }

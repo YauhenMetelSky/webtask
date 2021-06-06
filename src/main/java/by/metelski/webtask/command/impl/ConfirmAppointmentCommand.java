@@ -14,12 +14,14 @@ import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.Router.Type;
 import by.metelski.webtask.entity.Appointment.Status;
 import by.metelski.webtask.exception.ServiceException;
+import by.metelski.webtask.model.dao.impl.AppointmentDaoImpl;
+import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.service.AppointmentService;
 import by.metelski.webtask.model.service.impl.AppointmentServiceImpl;
 
 public class ConfirmAppointmentCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	private AppointmentService service = new AppointmentServiceImpl();
+	private AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {

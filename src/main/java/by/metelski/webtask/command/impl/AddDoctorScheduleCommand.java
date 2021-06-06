@@ -26,7 +26,7 @@ public class AddDoctorScheduleCommand implements Command {
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-		logger.log(Level.DEBUG, "execute method AddProcedureCommand");
+		logger.log(Level.DEBUG, "execute method AddDoctorScheduleCommand");
 		Router router = new Router();
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute(ParameterAndAttribute.USER);

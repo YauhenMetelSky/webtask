@@ -18,6 +18,8 @@ import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.Router.Type;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
+import by.metelski.webtask.model.dao.impl.AppointmentDaoImpl;
+import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
 import by.metelski.webtask.model.service.AppointmentService;
 import by.metelski.webtask.model.service.ScheduleService;
@@ -26,7 +28,7 @@ import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 
 public class UpdateAppointmentCommand implements Command{
 	private static final Logger logger = LogManager.getLogger();
-	AppointmentService service = new AppointmentServiceImpl();
+	AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
 	ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());
 	
 	@Override

@@ -21,6 +21,7 @@ import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 public class FindAllSchedulesByUserIdAsyncCommand implements Command{
 	private static final Logger logger = LogManager.getLogger();
 	private ScheduleService service = new ScheduleServiceImpl(new ScheduleDaoImpl());
+	//FIXME delete or use
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response){

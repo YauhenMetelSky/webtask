@@ -55,7 +55,7 @@
 				<button type="submit" class="btn btn-danger">
 					<fmt:message key="label.change"/>
 				</button>
-				<input type="hidden" name="schedule_id" value="${elem.id}">
+				<input type="hidden" name="doctor_schedule_id" value="${elem.id}">
 				<input type="hidden" name="command" value="to_change_schedule">
 			</form>	
 			</td>
@@ -63,6 +63,40 @@
 		</c:forEach>
 			</table>
 		</div> 
+		
+		 <div>
+			<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.appointments_to_me" />
+				</button>
+				<input type="hidden" name="command" value="find_all_appointments_by_doctor_id">
+			</form>
+		<table class="table table-striped">
+		<c:if test="${appointments_list ne null}">
+			<tr>
+				<th><fmt:message key="label.date"/></th>
+				<th><fmt:message key="label.start_time"/></th>
+				<th><fmt:message key="label.end_time"/></th>
+				<th><fmt:message key="label.client"/></th>
+				<th><fmt:message key="label.procedure"/></th>
+			</tr>
+		</c:if>
+		
+		<c:forEach var="elem" items="${appointments_list}" varStatus="status">
+		<tr>
+		<td><c:out value="${elem.date }" /></td>
+		<td><c:out value="${elem.startTime }" /></td>
+		<td><c:out value="${elem.endTime }" /></td>
+		<td><c:out value="${elem.user.name }" /><c:out value=" " /><c:out value="${elem.user.surname} " /></td>				
+		<td><c:out value="${elem.procedure.name }" /></td>		
+		</tr>
+		</c:forEach>
+		</table>
+		</div> 
+		
+		
+		
+		
 		<div class="form-inline">
 			<form action="controller" method="POST">
 				<input type="date" min="2021-05-16" name="date" value="" required class="form-control"

@@ -35,14 +35,14 @@
 				<input type="time" min="09:00" max="21:00" step="2" name="start_time" value="${schedule.startTime }" required class="form-control"
 					placeholder=<fmt:message key="label.start_time"/>> 
 				<input	type="time" name="end_time" min="09:00" max="21:00" step="2" value="${schedule.endTime }" required class="form-control"
-					placeholder=<fmt:message key="label.end_time"/>> <input
-					type="hidden" name="command" value="change_doctor_schedule">
+					placeholder=<fmt:message key="label.end_time"/>> 
+					<input type="hidden" name="doctor_schedule_id" value="${schedule.id}">
+					<input type="hidden" name="command" value="change_doctor_schedule">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.submit" />
 				</button>
 			</form>
-		</div>
-			
+		</div>			
 	</div>
 		
 	<c:import url="footer.jsp" />

@@ -48,7 +48,7 @@
 							<div class="form-group">
 								<select class="form-control" name="procedure_id" required>
 								<option value="">select procedure</option>
-									<c:forEach var="elem" items="${procedures_list}"
+									<c:forEach var="elem" items="${active_procedures_list}"
 										varStatus="status">
 										<option value="${elem.procedureId}"><c:out
 												value="${elem.name }" />
@@ -190,7 +190,7 @@
 					type : 'POST',
 					data : {
 						doctor_id : doctor_id,
-						command: 'find_all_schedules_by_user_id_async'
+						command: 'find_all_active_schedules_by_doctor_async'
 					},
 					url : 'ajaxcontroller',
 					success : function(result) {

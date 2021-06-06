@@ -6,6 +6,7 @@ import by.metelski.webtask.command.impl.sendEmailCommand;
 import by.metelski.webtask.command.impl.ToSignUpCommand;
 import by.metelski.webtask.command.impl.UnblockUserCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
+import by.metelski.webtask.command.impl.FindUsersBySurnameCommand;
 import by.metelski.webtask.command.impl.LogInCommand;
 import by.metelski.webtask.command.impl.LogOutCommand;
 import by.metelski.webtask.command.impl.SetLocaleCommand;
@@ -17,6 +18,7 @@ import by.metelski.webtask.command.impl.ToMainCommand;
 import by.metelski.webtask.command.impl.ToPersonalPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
+import by.metelski.webtask.command.async.FindAllActiveSchedulesByDoctorIdAsyncCommand;
 import by.metelski.webtask.command.async.FindAllSchedulesByUserIdAsyncCommand;
 import by.metelski.webtask.command.async.FindScheduleByIdAsyncCommand;
 import by.metelski.webtask.command.async.FindTimeIntervalsByScheduleIdAsyncCommand;
@@ -29,14 +31,20 @@ import by.metelski.webtask.command.impl.BlockUserCommand;
 import by.metelski.webtask.command.impl.CancelAppointmentCommand;
 import by.metelski.webtask.command.impl.ChangeDoctorScheduleCommand;
 import by.metelski.webtask.command.impl.ChangePersonalInfoCommand;
+import by.metelski.webtask.command.impl.ChangeProcedureCommand;
+import by.metelski.webtask.command.impl.ChangeUserRoleAdminCommand;
+import by.metelski.webtask.command.impl.ChangeUserRoleDoctorCommand;
 import by.metelski.webtask.command.impl.ConfirmAppointmentCommand;
 import by.metelski.webtask.command.impl.DeactivateProcedureCommand;
+import by.metelski.webtask.command.impl.FindAllAppointmentsByDoctorIdCommand;
 import by.metelski.webtask.command.impl.ToChangeAppointmentCommand;
 import by.metelski.webtask.command.impl.ToChangePersonalInfoPageCommand;
+import by.metelski.webtask.command.impl.ToChangeProcedureCommand;
 import by.metelski.webtask.command.impl.ToChangeScheduleCommand;
 import by.metelski.webtask.command.impl.FindAllProceduresCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByDoctorCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByIdCommand;
+import by.metelski.webtask.command.impl.FindAllSchedulesCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
 import by.metelski.webtask.command.impl.FindAllNewAppointmentsCommand;
 import by.metelski.webtask.command.impl.FindAllAppointmentsByUserIdCommand;
@@ -89,6 +97,21 @@ public enum CommandType {
 			this.command= new ChangePersonalInfoCommand();
 		}
 	},
+	CHANGE_PROCEDURE{
+		{
+			this.command= new ChangeProcedureCommand();
+		}
+	},
+	CHANGE_USER_ROLE_ADMIN{
+		{
+		this.command=new ChangeUserRoleAdminCommand();	
+		}
+	},
+	CHANGE_USER_ROLE_DOCTOR{
+		{
+		this.command=new ChangeUserRoleDoctorCommand();	
+		}
+	},
 	CONFIRM_APPOINTMENT{
 		{
 			this.command = new ConfirmAppointmentCommand();
@@ -109,6 +132,11 @@ public enum CommandType {
 			this.command = new FindAllNewAppointmentsCommand();
 		}
 	},
+	FIND_ALL_SCHEDULES{
+		{
+		this.command=new FindAllSchedulesCommand();	
+		}
+	},
 	FIND_ALL_USERS {
 		{
 			this.command = new FindAllUsersCommand();
@@ -119,9 +147,19 @@ public enum CommandType {
 			this.command = new FindAllProceduresCommand();
 		}
 	},
+	FIND_ALL_APPOINTMENTS_BY_DOCTOR_ID{
+		{
+			this.command=new FindAllAppointmentsByDoctorIdCommand();
+		}
+	},
 	FIND_ALL_APPOINTMENTS_BY_USER_ID {
 		{
 			this.command = new FindAllAppointmentsByUserIdCommand();
+		}
+	},
+	FIND_ALL_ACTIVE_SCHEDULES_BY_DOCTOR_ASYNC{
+		{
+			this.command= new FindAllActiveSchedulesByDoctorIdAsyncCommand();
 		}
 	},
 	FIND_ALL_SCHEDULES_BY_DOCTOR {
@@ -139,15 +177,20 @@ public enum CommandType {
 			this.command = new FindAllSchedulesByUserIdAsyncCommand();
 		}
 	},
+	FIND_BY_EMAIL {
+		{
+			this.command = new FindUserByEmailCommand();
+		}
+	},
 
 	FIND_BY_NAME {
 		{
 			this.command = new FindUsersByNameCommand();
 		}
 	},
-	FIND_BY_EMAIL {
+	FIND_BY_SURNAME{
 		{
-			this.command = new FindUserByEmailCommand();
+			this.command = new FindUsersBySurnameCommand();
 		}
 	},
 	FIND_SCHEDULE_BY_ID_ASYNC {
@@ -198,6 +241,11 @@ public enum CommandType {
 	TO_CHANGE_PERSONAL_INFO{
 		{
 			this.command= new ToChangePersonalInfoPageCommand();
+		}
+	},
+	TO_CHANGE_PROCEDURE{
+		{
+			this.command=new ToChangeProcedureCommand();
 		}
 	},
 	TO_CHANGE_SCHEDULE {

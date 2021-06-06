@@ -20,7 +20,10 @@ import by.metelski.webtask.entity.Procedure;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.exception.ServiceException;
+import by.metelski.webtask.model.dao.impl.AppointmentDaoImpl;
+import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
+import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.service.AppointmentService;
 import by.metelski.webtask.model.service.ProcedureService;
 import by.metelski.webtask.model.service.ScheduleService;
@@ -32,9 +35,9 @@ import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
 public class ToChangePersonalInfoPageCommand  implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	AppointmentService service = new AppointmentServiceImpl();
-	UserService userService = new UserServiceImpl();
-	ProcedureService procedureService = new ProcedureServiceImpl();
+	AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
+	UserService userService = new UserServiceImpl(new UserDaoImpl());
+	ProcedureService procedureService = new ProcedureServiceImpl(new ProcedureDaoImpl());
 	ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());
 
 	@Override

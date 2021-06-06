@@ -16,5 +16,6 @@ public interface AppointmentService {
 	List<Appointment> findAll() throws ServiceException;
 	List<Appointment> findAllByStatus(Status status) throws ServiceException;
 	List<Appointment> findAllByUserId(long userId) throws ServiceException;
+	List<Appointment> findAllByDoctorId(long doctorId) throws ServiceException;
 	Optional<Appointment> findById(long id) throws ServiceException;
 }

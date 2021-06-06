@@ -22,10 +22,14 @@ import by.metelski.webtask.validator.UserValidator;
 
 public class UserServiceImpl implements UserService {
 	private static final Logger logger = LogManager.getLogger();
-	private UserDao userDao = new UserDaoImpl();
+	private UserDao userDao;
 	private final String COMMAND_CONFIRM = "?command=activate";
 	private final String TOKEN = "&token=";
 	private final String EMAIL = "&email=";
+	
+	public UserServiceImpl(UserDao userDao) {
+		this.userDao = userDao;
+	}
 	
 	@Override
 	public Optional<User> findUserByEmailPassword(String email, String password) throws ServiceException {
@@ -81,6 +85,20 @@ public class UserServiceImpl implements UserService {
 				users = userDao.findUsersByName(userName);
 			} catch (DaoException e) {
 				logger.log(Level.ERROR, "dao exception in method FindUsersByName" + e);
+				throw new ServiceException(e);
+			}
+		}
+		return users;
+	}
+	@Override
+	public List<User> findUsersBySurname(String userSurname) throws ServiceException {
+		logger.log(Level.DEBUG, "findUsersBySurname(), user surname:" + userSurname);
+		List<User> users = new ArrayList<>();
+		if (UserValidator.isValidName(userSurname)) {
+			try {
+				users = userDao.findUsersBySurname(userSurname);
+			} catch (DaoException e) {
+				logger.log(Level.ERROR, "dao exception in method FindUsersBySurname" + e);
 				throw new ServiceException(e);
 			}
 		}
@@ -170,6 +188,18 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException(e);
 		}	
 		return changeStatusResult;
+	}
+	@Override
+	public boolean changeUserRole(long id, Role role) throws ServiceException {
+		logger.log(Level.DEBUG, "changeUserRole, id:" + id+", new role:"+ role);
+		boolean isChanged =false;
+		try {
+			isChanged = userDao.changeUserRole(id,role);
+		}catch(DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method changeUserRole" + e);
+			throw new ServiceException(e);
+		}	
+		return isChanged;
 	}
 
 	@Override

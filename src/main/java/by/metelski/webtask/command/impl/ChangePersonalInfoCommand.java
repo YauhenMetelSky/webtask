@@ -18,13 +18,14 @@ import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.Router.Type;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
+import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
 
 public class ChangePersonalInfoCommand implements Command{
 	private static final Logger logger = LogManager.getLogger();
-    UserService userService = new UserServiceImpl();
+    UserService userService = new UserServiceImpl(new UserDaoImpl());
 	
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {

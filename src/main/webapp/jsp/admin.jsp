@@ -40,22 +40,45 @@
 				</button>
 			</form>
 		</div>
+		<br />
+		
+		<div class="form-inline">
+			<form action="controller" method="POST">
+				<input type="text" name="name" value="" class="form-control"
+					placeholder=<fmt:message key="label.surname"/>> 
+					<input type="hidden" name="command" value="find_by_surname">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.find" />
+				</button>
+			</form>
+		</div>
+		<br />
+		
+		<!--<h1>Send email</h1> -->
+		<div class="form-inline">
+			<form action="controller" method="POST">
+				<input type="text" class="form-control" name="email_to" placeholder=<fmt:message key="label.email"/> />
+				<button type="submit" class="btn btn-primary"><fmt:message key="label.send_email"/></button>
+				<input type="hidden" name="command" value="send_email">
+			</form>
+		</div>
+		<br />
 
 			<p>${message}</p>
 	<!-- 	<br /> -->
 		<!-- <h1>Add procedure</h1> -->
-		<div class="form-inline">
+		<div>
 		<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
+				<button type="submit" class="btn btn-primary btn-block">
 					<fmt:message key="label.add_procedure" />
 				</button>
 				<input type="hidden" name="command" value="to_add_procedure">
 			</form>
 		</div>
 		<br />
-		<div class="form-inline">
+		<div>
 		<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
+				<button type="submit" class="btn btn-primary btn-block">
 					<fmt:message key="label.find_all_procedures" />
 				</button>
 				<input type="hidden" name="command" value="find_all_procedures">
@@ -63,29 +86,31 @@
 		</div>
 			<%-- <p>${message}</p> --%>
 		<br />
+		<div>
+		<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary btn-block">
+					<fmt:message key="label.find_all_schedules" />
+				</button>
+				<input type="hidden" name="command" value="find_all_schedules">
+			</form>
+		</div>
+			<%-- <p>${message}</p> --%>
+		<br />
 	<!-- 	<h1>Find all users</h1> -->
 		<div>
 			<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
+				<button type="submit" class="btn btn-primary btn-block">
 					<fmt:message key="label.find_all_users" />
 				</button>
 				<input type="hidden" name="command" value="find_all_users">
 			</form>
 		</div>
 		<br />
-		<!--<h1>Send email</h1> -->
-		<div class="form-inline">
-			<form action="controller" method="POST">
-				<input type="text" class="form-control" name="email_to" placeholder="email" />
-				<button type="submit" class="btn btn-primary">Send email</button>
-				<input type="hidden" name="command" value="send_email">
-			</form>
-		</div>
-		<br />
+		
 	<!-- <h1>Show all new appointments</h1> -->
 		<div>
 			<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
+				<button type="submit" class="btn btn-primary btn-block">
 					<fmt:message key="label.show_all_new_app" />
 				</button>
 				<input type="hidden" name="command" value="find_all_new_appointments">
@@ -215,6 +240,7 @@
 				<th><fmt:message key="label.is_active" /></th> 
 				<th><fmt:message key="label.description" /></th>
 				<th><fmt:message key="label.duration" /></th>
+				<th><fmt:message key="label.change" /></th>
 				<th><fmt:message key="label.action" /></th>
 			</tr>
 		</c:if>
@@ -227,7 +253,16 @@
 				<td><c:out value="${elem.price }" /></td>
 				 <td><c:out value="${elem.active }" /></td> 
 				<td><c:out value="${elem.description }" /></td>
-				<td><c:out value="${elem.duration }" /></td>
+				<td><c:out value="${elem.duration.toMinutes()}" /></td>
+				<td>	
+		<form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.change"/>
+				</button>
+				<input type="hidden" name="procedure_id" value="${elem.procedureId}">
+				<input type="hidden" name="command" value="to_change_procedure">
+			</form>	
+			</td>
 					<c:if test="${elem.active==false}">		
 					<td>	
 		<form action="controller" method="POST">
@@ -254,6 +289,48 @@
 		</c:forEach>
 
 	</table>
+	
+	<table class="table table-striped">	
+		<c:if test="${doctor_schedules_list ne null}">
+			<tr>
+				<th><fmt:message key="label.date" /></th>
+				<th><fmt:message key="label.doctor" /></th>
+				<th><fmt:message key="label.start_time" /></th>
+				<th><fmt:message key="label.end_time" /></th>
+				<th><fmt:message key="label.change" /></th>
+				<th><fmt:message key="label.cancel" /></th>
+			</tr>
+		</c:if>
+
+		<c:forEach var="elem" items="${doctor_schedules_list}" varStatus="status">
+			<tr>
+				<td><c:out value="${elem.date }" /></td>
+				<td><c:out value="${elem.doctor.surname }" /><c:out value=" ${elem.doctor.name }" /></td>
+				<td><c:out value="${elem.startTime}" /></td>
+				<td><c:out value="${elem.endTime }" /></td>
+				<td>	
+		       <form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.change"/>
+				</button>
+				<input type="hidden" name="doctor_schedule_id" value="${elem.id}">
+				<input type="hidden" name="command" value="to_change_schedule">
+			</form>	
+			</td>
+			<td>
+			<form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.cancel"/>
+				</button>
+				<input type="hidden" name="doctor_schedule_id" value="${elem.id}">
+				<input type="hidden" name="command" value="cancel_schedule">
+			</form>	
+			</td>
+			</tr>
+		</c:forEach>
+			</table>
+	
+	
 	</div>
 	</div>
 	</div>

@@ -16,12 +16,13 @@ import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.entity.Procedure;
 import by.metelski.webtask.exception.ServiceException;
+import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.service.ProcedureService;
 import by.metelski.webtask.model.service.impl.ProcedureServiceImpl;
 
 public class ToMainCommand implements Command{
 	private static final Logger logger = LogManager.getLogger();
-	ProcedureService procedureService = new ProcedureServiceImpl();
+	ProcedureService procedureService = new ProcedureServiceImpl(new ProcedureDaoImpl());
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {

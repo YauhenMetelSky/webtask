@@ -25,8 +25,13 @@ import by.metelski.webtask.model.service.AppointmentService;
 
 public class AppointmentServiceImpl implements AppointmentService {
 	private static final Logger logger = LogManager.getLogger();
-	AppointmentDao appointmentDao = new AppointmentDaoImpl();
-	ProcedureDao procedureDao = new ProcedureDaoImpl();// FIXME inject in constructor
+	AppointmentDao appointmentDao;
+	ProcedureDao procedureDao;
+	
+	 public AppointmentServiceImpl(AppointmentDao appointmentDao,ProcedureDao procedureDao) {
+		this.appointmentDao=appointmentDao;
+		this.procedureDao=procedureDao;
+	}
 
 	@Override
 	public boolean add(Map<String, String> data) throws ServiceException {
@@ -35,10 +40,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 		boolean isAdded = false;
 		try {
 			long id = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
-			int duration = procedureDao.findDuration(id);
+			long duration = procedureDao.findDuration(id).get().toMinutes();//FIXME pay attention return Optional
 			logger.log(Level.DEBUG, "procedure duration" + duration);
 			Time endTime = calculateEndTime(data.get(ParameterAndAttribute.START_TIME), duration);
-			long appointmentId = Long.parseLong(data.get(ParameterAndAttribute.APPOINTMENT_ID));
 			long userId = Long.parseLong(data.get(ParameterAndAttribute.USER_ID));
 			long doctorId = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID));
 			long procedureId = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
@@ -54,13 +58,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 					.setProcedureId(procedureId)
 					.build();
 			Appointment appointment = new Appointment.Builder()
-					.setId(appointmentId)
 					.setUser(client)
 					.setDoctor(doctor)
 					.setProcedure(procedure)
 					.setStartTime(startTime)
 					.setEndTime(endTime)
 					.setDate(date)
+					.setStatus(Status.CLAIMED)
 					.build();
 			isAdded = appointmentDao.add(appointment);
 		} catch (DaoException e) {
@@ -71,7 +75,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return isAdded;
 	}
 
-	@Override
+	@Override//FIXME not need
 	public boolean changeAppointment(long id) throws ServiceException {
 		// TODO Auto-generated method stub
 		return false;
@@ -84,10 +88,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 		boolean isChanged = false;
 		try {
 			long id = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
-			int duration = procedureDao.findDuration(id);
+			long duration = procedureDao.findDuration(id).get().toMinutes();//FIXME pay attention return Optional
 			logger.log(Level.DEBUG, "procedure duration" + duration);
 			Time endTime = calculateEndTime(data.get(ParameterAndAttribute.START_TIME), duration);
-			data.put(ParameterAndAttribute.END_TIME, endTime.toString());
 			long appointmentId = Long.parseLong(data.get(ParameterAndAttribute.APPOINTMENT_ID));
 			long userId = Long.parseLong(data.get(ParameterAndAttribute.USER_ID));
 			long doctorId = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID));
@@ -166,7 +169,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return appointments;
 	}
 
-	private Time calculateEndTime(String startTime, int duration) {
+	private Time calculateEndTime(String startTime, long duration) {
 		LocalTime tmpTime = LocalTime.parse(startTime);
 		logger.log(Level.DEBUG, "tmpTime:" + tmpTime);
 		Time endTime = Time.valueOf(tmpTime.plusMinutes(duration));
@@ -185,5 +188,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 			throw new ServiceException(e);
 		}		
 		return changeStatusResult;
+	}
+
+	@Override
+	public List<Appointment> findAllByDoctorId(long doctorId) throws ServiceException {
+		logger.log(Level.DEBUG, "findAllByDoctorId, doctorId:" + doctorId);
+		List<Appointment> appointments = new ArrayList<>();
+		try {
+			appointments = appointmentDao.findAllByDoctorId(doctorId);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findAllByUserId(), " + e);
+			throw new ServiceException(e);
+		}
+		return appointments;
 	}
 }

@@ -20,6 +20,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,12 +39,33 @@ import by.metelski.webtask.model.dao.ScheduleDao;
 
 public class ScheduleDaoImpl implements ScheduleDao {
 	private static final Logger logger = LogManager.getLogger();
-	private static final String SQL_ADD_DOCTOR_SCHEDULE = "INSERT INTO doctor_schedules(doctor_id,start_time,end_time,date) values(?,?,?,?)";
-	private static final String SQL_FIND_SCHEDULES_BY_DOCTOR_ID = "SELECT id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,start_time,end_time,date,is_active FROM doctor_schedules JOIN users d ON doctor_id=user_id WHERE doctor_id=?";
-	private static final String SQL_FIND_ACTIVE_SCHEDULES_BY_DOCTOR_ID = "SELECT id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,start_time,end_time,date,is_active FROM doctor_schedules JOIN users d ON doctor_id=user_id WHERE doctor_id=? AND date>=? AND isActive=true";
-	private static final String SQL_FIND_SCHEDULE_BY_ID = "SELECT id_doctor_schedule,user_id,name,surname,email,phone,is_blocked,role, start_time,end_time,date,is_active FROM doctor_schedules JOIN users ON doctor_id=user_id WHERE id_doctor_schedule=?";
-	private static final String SQL_FIND_SCHEDULE_BY_DOCTOR_ID_AND_DATE = "SELECT id_doctor_schedule,user_id,name,surname,email,phone,is_blocked,role, start_time,end_time,date,is_active FROM doctor_schedules JOIN users ON doctor_id=user_id WHERE doctor_id=? AND date=?";
+	private static final String SQL_ADD_DOCTOR_SCHEDULE = "INSERT INTO doctor_schedules (doctor_id,start_time,end_time,date) values(?,?,?,?)";
+	private static final String SQL_CHANGE_DOCTOR_SCHEDULE = "UPDATE doctor_schedules SET start_time=?,end_time=?,date=? WHERE id_doctor_schedule=?";
+	private static final String SQL_CHANGE_DOCTOR_SCHEDULE_IS_ACTIVE = "UPDATE doctor_schedules SET is_active=? WHERE id_doctor_schedule=?";
+	private static final String SQL_FIND_ALL_SCHEDULES = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id";
+	private static final String SQL_FIND_SCHEDULES_BY_DOCTOR_ID = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id WHERE doctor_id=?";
+	private static final String SQL_FIND_ACTIVE_SCHEDULES_BY_DOCTOR_ID = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id WHERE doctor_id=? AND date>=? AND ds.is_active=true";
+	private static final String SQL_FIND_SCHEDULE_BY_ID = "SELECT ds.id_doctor_schedule,user_id,name,surname,email,phone,is_blocked,role, ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users ON doctor_id=user_id WHERE ds.id_doctor_schedule=?";
+	private static final String SQL_FIND_SCHEDULE_BY_DOCTOR_ID_AND_DATE = "SELECT ds.id_doctor_schedule,user_id,name,surname,email,phone,is_blocked,role, ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users ON doctor_id=user_id WHERE doctor_id=? AND ds.date=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
+
+	@Override
+	public List<DoctorSchedule> findAllSchedules() throws DaoException {
+		List<DoctorSchedule> schedules = new ArrayList<>();
+		logger.log(Level.INFO, "Find all schedules");
+		try (Connection connection = connectionPool.getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_SCHEDULES)) {
+			while (resultSet.next()) {
+	            DoctorSchedule doctorSchedule = createSchedule(resultSet);
+	            schedules.add(doctorSchedule);
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
+			throw new DaoException("Dao exception", e);
+		}
+		return schedules;
+	}
 
 	@Override
 	public boolean addDoctorSchedule(DoctorSchedule schedule) throws DaoException {
@@ -70,6 +92,31 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 
 	@Override
+	public boolean changeDoctorSchedule(DoctorSchedule schedule) throws DaoException {
+		logger.log(Level.INFO, "Try to change doctor shedule in db" + schedule);
+		boolean isChanged = false;
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_DOCTOR_SCHEDULE)) {
+			statement.setTime(1, schedule.getStartTime());
+			statement.setTime(2, schedule.getEndTime());
+			statement.setDate(3, schedule.getDate());
+			statement.setLong(4, schedule.getId());
+			int rowCount = statement.executeUpdate();
+			if (rowCount != 0) {
+				isChanged = true;
+				logger.log(Level.INFO, "schedule changed:" + schedule);
+			} else {
+				logger.log(Level.ERROR, "schedule was not changed");
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException(
+					"Dao exception in method changeDoctorSchedule, when we try to change chedule:" + schedule, e);
+		}
+		return isChanged;
+	}
+
+	@Override
 	public List<DoctorSchedule> findAllSchedulesByDoctor(User user) throws DaoException {
 		List<DoctorSchedule> schedules = new ArrayList<>();
 		logger.log(Level.INFO, "Find schedules by doctor, doctorID: " + user.getUserId());
@@ -78,46 +125,17 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			statement.setLong(1, user.getUserId());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				long doctorScheduleId = resultSet.getLong(ID_DOCTOR_SCHEDULE);
-				long doctorId = resultSet.getLong(ColumnName.USER_ID);
-				String doctorName=resultSet.getString(ColumnName.USER_NAME);
-				String doctorSurname=resultSet.getString(ColumnName.USER_SURNAME);
-				String doctorEmail=resultSet.getString(ColumnName.USER_EMAIL);
-				String doctorPhone=resultSet.getString(ColumnName.USER_PHONE);
-				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
-				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
-				User doctor = new User.Builder()
-						.setUserID(doctorId)
-						.setName(doctorName)
-						.setSurname(doctorSurname)
-						.setEmail(doctorEmail)
-						.setPhone(doctorPhone)
-						.setIsBlocked(doctorIsBlocked)
-						.serRole(doctorRole)
-						.build();
-				Time startTime = resultSet.getTime(START_TIME);
-				Time endTime = resultSet.getTime(END_TIME);
-				Date date = resultSet.getDate(DATE);
-				boolean isActive=resultSet.getBoolean(IS_ACTIVE);
-				DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
-						.setId(doctorScheduleId)
-						.setDoctor(doctor)
-						.setStartTime(startTime)
-						.setEndTime(endTime)
-						.setDate(date)
-						.setIsActive(isActive)
-						.build();
-				logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
-				schedules.add(doctorSchedule);
+	            DoctorSchedule doctorSchedule = createSchedule(resultSet);
+	            schedules.add(doctorSchedule);
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
-			throw new DaoException("Dao exception in method findByDoctor, doctorId:" + user.getUserId() + " " + e.getErrorCode(),
-					e);
+			throw new DaoException(
+					"Dao exception in method findByDoctor, doctorId:" + user.getUserId() + " " + e.getErrorCode(), e);
 		}
 		return schedules;
 	}
-	
+
 	@Override
 	public List<DoctorSchedule> findAllActiveSchedulesByDoctor(User user) throws DaoException {
 		List<DoctorSchedule> schedules = new ArrayList<>();
@@ -127,102 +145,44 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			statement.setLong(1, user.getUserId());
 			Date today = Date.valueOf(LocalDate.now());
 			logger.log(Level.INFO, "Date today: " + today);
-			statement.setDate(2, null);
+			statement.setDate(2, today);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				long doctorScheduleId = resultSet.getLong(ID_DOCTOR_SCHEDULE);
-				long doctorId = resultSet.getLong(ColumnName.USER_ID);
-				String doctorName=resultSet.getString(ColumnName.USER_NAME);
-				String doctorSurname=resultSet.getString(ColumnName.USER_SURNAME);
-				String doctorEmail=resultSet.getString(ColumnName.USER_EMAIL);
-				String doctorPhone=resultSet.getString(ColumnName.USER_PHONE);
-				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
-				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
-				User doctor = new User.Builder()
-						.setUserID(doctorId)
-						.setName(doctorName)
-						.setSurname(doctorSurname)
-						.setEmail(doctorEmail)
-						.setPhone(doctorPhone)
-						.setIsBlocked(doctorIsBlocked)
-						.serRole(doctorRole)
-						.build();
-				Time startTime = resultSet.getTime(START_TIME);
-				Time endTime = resultSet.getTime(END_TIME);
-				Date date = resultSet.getDate(DATE);
-				boolean isActive=resultSet.getBoolean(IS_ACTIVE);
-				DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
-						.setId(doctorScheduleId)
-						.setDoctor(doctor)
-						.setStartTime(startTime)
-						.setEndTime(endTime)
-						.setDate(date)
-						.setIsActive(isActive)
-						.build();
-				logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
-				schedules.add(doctorSchedule);
+	            DoctorSchedule doctorSchedule = createSchedule(resultSet);
+	            schedules.add(doctorSchedule);
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
-			throw new DaoException("Dao exception in method findByDoctor, doctorId:" + user.getUserId() + " " + e.getErrorCode(),
-					e);
+			throw new DaoException(
+					"Dao exception in method findByDoctor, doctorId:" + user.getUserId() + " " + e.getErrorCode(), e);
 		}
 		return schedules;
 	}
 
 	@Override
-	public Optional<DoctorSchedule> findScheduleByDateAndDoctor(Date date,long doctorId) throws DaoException {
+	public Optional<DoctorSchedule> findScheduleByDateAndDoctor(Date date, long doctorId) throws DaoException {
 		Optional<DoctorSchedule> schedule;
-		logger.log(Level.INFO, "Find schedule by date and doctorId, date: " + date+" ,doctorId:" + doctorId);
+		logger.log(Level.INFO, "Find schedule by date and doctorId, date: " + date + " ,doctorId:" + doctorId);
 		try (Connection connection = connectionPool.getConnection();
 				PreparedStatement statement = connection.prepareStatement(SQL_FIND_SCHEDULE_BY_DOCTOR_ID_AND_DATE)) {
 			statement.setLong(1, doctorId);
 			statement.setDate(2, date);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				long doctorScheduleId = resultSet.getLong(ID_DOCTOR_SCHEDULE);
-				long userId =resultSet.getLong(USER_ID);
-				String name = resultSet.getString(USER_NAME);
-				String surname = resultSet.getString(USER_SURNAME);
-				String email = resultSet.getString(USER_EMAIL);
-				String phone = resultSet.getString(USER_PHONE);
-				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-				Role role = Role.valueOf(resultSet.getString(ROLE));
-				Time startTime = resultSet.getTime(START_TIME);
-				Time endTime = resultSet.getTime(END_TIME);
-				Date scheduleDate = resultSet.getDate(DATE);
-				boolean isActive=resultSet.getBoolean(IS_ACTIVE);
-				User doctor = new User.Builder()
-						.setUserID(userId)
-						.setName(name)
-						.setSurname(surname)
-						.setEmail(email)
-						.setPhone(phone)
-						.setIsBlocked(isBlocked)
-						.serRole(role)
-						.build();
-				DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
-						.setId(doctorScheduleId)
-						.setDoctor(doctor)
-						.setStartTime(startTime)
-						.setEndTime(endTime)
-						.setDate(scheduleDate)
-						.setIsActive(isActive)
-						.build();
-				logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
+				DoctorSchedule doctorSchedule = createSchedule(resultSet);
 				schedule = Optional.of(doctorSchedule);
 			} else {
-				logger.log(Level.INFO, "didn't find schedule by date and doctorId, date: " + date+" ,doctorId:" + doctorId);
+				logger.log(Level.INFO,
+						"didn't find schedule by date and doctorId, date: " + date + " ,doctorId:" + doctorId);
 				schedule = Optional.empty();
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
-			throw new DaoException(
-					"Dao exception in method findScheduleByDateAndDoctor, date:" + date+" doctorId:"+doctorId+ ", error code: " + e.getErrorCode(), e);
+			throw new DaoException("Dao exception in method findScheduleByDateAndDoctor, date:" + date + " doctorId:"
+					+ doctorId + ", error code: " + e.getErrorCode(), e);
 		}
 		return schedule;
 	}
-	
 
 	@Override
 	public Optional<DoctorSchedule> FindScheduleById(long id) throws DaoException {
@@ -233,36 +193,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			statement.setLong(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				long doctorScheduleId = resultSet.getLong(ID_DOCTOR_SCHEDULE);
-				long userId =resultSet.getLong(USER_ID);
-				String name = resultSet.getString(USER_NAME);
-				String surname = resultSet.getString(USER_SURNAME);
-				String email = resultSet.getString(USER_EMAIL);
-				String phone = resultSet.getString(USER_PHONE);
-				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-				Role role = Role.valueOf(resultSet.getString(ROLE));
-				Time startTime = resultSet.getTime(START_TIME);
-				Time endTime = resultSet.getTime(END_TIME);
-				Date date = resultSet.getDate(DATE);
-				boolean isActive=resultSet.getBoolean(IS_ACTIVE);
-				User doctor = new User.Builder()
-						.setUserID(userId)
-						.setName(name)
-						.setSurname(surname)
-						.setEmail(email)
-						.setPhone(phone)
-						.setIsBlocked(isBlocked)
-						.serRole(role)
-						.build();
-				DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
-						.setId(doctorScheduleId)
-						.setDoctor(doctor)
-						.setStartTime(startTime)
-						.setEndTime(endTime)
-						.setDate(date)
-						.setIsActive(isActive)
-						.build();
-				logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
+		        DoctorSchedule doctorSchedule = createSchedule(resultSet);
 				schedule = Optional.of(doctorSchedule);
 			} else {
 				logger.log(Level.INFO, "didn't find schedule by id:" + id);
@@ -274,5 +205,64 @@ public class ScheduleDaoImpl implements ScheduleDao {
 					"Dao exception in method FindScheduleById, id:" + id + " error code: " + e.getErrorCode(), e);
 		}
 		return schedule;
+	}
+
+	@Override
+	public boolean changeFieldIsActive(long scheduleId, boolean isActive) throws DaoException {
+		logger.log(Level.INFO,
+				"Try to change doctor shedule is_active field for:" + isActive + " in db.Schedule id:" + scheduleId);
+		boolean isChanged = false;
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_DOCTOR_SCHEDULE_IS_ACTIVE)) {
+			statement.setBoolean(1, isActive);
+			statement.setLong(2, scheduleId);
+			int rowCount = statement.executeUpdate();
+			if (rowCount != 0) {
+				isChanged = true;
+				logger.log(Level.INFO, "schedule changed, id:" + scheduleId);
+			} else {
+				logger.log(Level.ERROR, "schedule was not changed,id:" + scheduleId);
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException(
+					"Dao exception in method changeIsActive, when we try to change chedule, scheduleId:" + scheduleId,
+					e);
+		}
+		return isChanged;
+	}
+
+	private DoctorSchedule createSchedule(ResultSet resultSet) throws SQLException {
+		long doctorScheduleId = resultSet.getLong(ID_DOCTOR_SCHEDULE);
+		long userId = resultSet.getLong(USER_ID);
+		String name = resultSet.getString(USER_NAME);
+		String surname = resultSet.getString(USER_SURNAME);
+		String email = resultSet.getString(USER_EMAIL);
+		String phone = resultSet.getString(USER_PHONE);
+		boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
+		Role role = Role.valueOf(resultSet.getString(ROLE));
+		Time startTime = resultSet.getTime(START_TIME);
+		Time endTime = resultSet.getTime(END_TIME);
+		Date date = resultSet.getDate(DATE);
+		boolean isActive = resultSet.getBoolean(IS_ACTIVE);
+		User doctor = new User.Builder()
+				.setUserID(userId)
+				.setName(name)
+				.setSurname(surname)
+				.setEmail(email)
+				.setPhone(phone)
+				.setIsBlocked(isBlocked)
+				.setRole(role)
+				.build();
+		DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
+				.setId(doctorScheduleId)
+				.setDoctor(doctor)
+				.setStartTime(startTime)
+				.setEndTime(endTime)
+				.setDate(date)
+				.setIsActive(isActive)
+				.build();
+		logger.log(Level.INFO, "finded doctor shedule" + doctorSchedule.toString());
+		return doctorSchedule;
 	}
 }

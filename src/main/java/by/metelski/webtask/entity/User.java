@@ -171,7 +171,7 @@ public class User {
 			newUser.isBlocked=isBlocked;
 			return this;
 		}
-		public Builder serRole(Role role) {
+		public Builder setRole(Role role) {
 			newUser.role=role;
 			return this;
 		}

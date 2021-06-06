@@ -7,6 +7,7 @@ public final class PagePath {
 	public static final String CONTACT = "/jsp/contact.jsp";
 	public static final String CHANGE_APPOINTMENT = "/jsp/changeapp.jsp";
 	public static final String CHANGE_PERSONAL_INFO = "/jsp/changepersonalinfo.jsp";
+	public static final String CHANGE_PROCEDURE = "/jsp/changeprocedure.jsp";
 	public static final String CHANGE_SCHEDULE = "/jsp/changeschedule.jsp";
 	public static final String DOCTOR = "/jsp/doctor.jsp";
 	public static final String EMPTY_RESULT = "/jsp/empty.jsp";
@@ -18,6 +19,7 @@ public final class PagePath {
 	public static final String USER = "/jsp/user.jsp";
 	
 	public static final String TO_PERSONAL_PAGE="/controller?command=to_personal_page";
+	public static final String TO_MAIN_PAGE="/controller?command=to_main";
 
 	private PagePath() {
 	}

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.util.MailSender;
@@ -22,10 +23,10 @@ public class sendEmailCommand implements Command{
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
 		router.setPagePath(page);
-		request.setAttribute(ParameterAndAttribute.MESSAGE, "Message sent");
+		request.setAttribute(ParameterAndAttribute.MESSAGE, Message.EMAIL_SEND);
 		String emailTo = request.getParameter(ParameterAndAttribute.EMAIL_TO);
 		logger.log(Level.DEBUG, "Sending email to: " +emailTo);
-		MailSender.sendEmail(emailTo,"TestEmail","Hello from DoctorPro");//FIXME magic string
+		MailSender.sendEmail(emailTo,Message.EMAIL_SUBJECT,Message.EMAIL_TEXT);
 		  return router;
 	}
 }

@@ -23,12 +23,14 @@ public class UserDaoImpl implements UserDao {
 	private static final Logger logger = LogManager.getLogger();
 	private static final String SQL_FIND_ALL_USERS = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users";
 	private static final String SQL_FIND_USERS_BY_NAME = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE name=?";
+	private static final String SQL_FIND_USERS_BY_SURNAME = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE surname=?";
 	private static final String SQL_FIND_USERS_BY_ROLE = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE role=?";
 	private static final String SQL_FIND_PASSWORD_BY_EMAIL = "SELECT password FROM users WHERE email=?";
 	private static final String SQL_FIND_USER_BY_EMAIL = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE email=?";
-	private static final String SQL_ADD_USER = "INSERT INTO users (name,surname,password,email,phone) values(?,?,?,?,?,?)";
+	private static final String SQL_ADD_USER = "INSERT INTO users (name,surname,password,email,phone) values(?,?,?,?,?)";
 	private static final String SQL_ACTIVATE_ACCOUNT = "UPDATE users SET is_active=true WHERE email=?";
 	private static final String SQL_CHANGE_USER_IS_BLOCKED = "UPDATE users SET is_blocked=? WHERE user_id=?";
+	private static final String SQL_CHANGE_USER_ROLE = "UPDATE users SET role=? WHERE user_id=?";
 	private static final String SQL_CHANGE_USER_PERSONAL_INFO = "UPDATE users SET name=?, surname=?, phone=? WHERE user_id=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
@@ -40,23 +42,7 @@ public class UserDaoImpl implements UserDao {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_USERS)) {
 			while (resultSet.next()) {
-				long userId = resultSet.getLong(USER_ID);
-				String name = resultSet.getString(USER_NAME);
-				String surname = resultSet.getString(USER_SURNAME);
-				String email = resultSet.getString(USER_EMAIL);
-				String phone = resultSet.getString(USER_PHONE);
-				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
-				logger.log(Level.DEBUG, "user id:" + userId + " user name:" + name + " user surname:" + surname);
-				User user = new User.Builder()
-						.setUserID(userId)
-						.setName(name)
-						.setSurname(surname)
-						.setEmail(email)
-						.setPhone(phone)
-						.setIsBlocked(isBlocked)
-						.serRole(role)
-						.build();
+				User user = createUser(resultSet);
 				users.add(user);
 			}
 		} catch (SQLException e) {
@@ -75,23 +61,7 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, userName);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				long userId = resultSet.getLong(USER_ID);
-				String name = resultSet.getString(USER_NAME);
-				String surname = resultSet.getString(USER_SURNAME);
-				String email = resultSet.getString(USER_EMAIL);
-				String phone = resultSet.getString(USER_PHONE);
-				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
-				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
-				User user = new User.Builder()
-						.setUserID(userId)
-						.setName(name)
-						.setSurname(surname)
-						.setEmail(email)
-						.setPhone(phone)
-						.setIsBlocked(isBlocked)
-						.serRole(role)
-						.build();
+				User user = createUser(resultSet);
 				users.add(user);
 			}
 		} catch (SQLException e) {
@@ -101,6 +71,23 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
+	public List<User> findUsersBySurname(String userSurname) throws DaoException {
+		logger.log(Level.INFO, "Find user by surname, surname=  " + userSurname);
+		List<User> users = new ArrayList<User>();
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_BY_SURNAME)) {		
+			statement.setString(1, userSurname);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				User user = createUser(resultSet);
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Dao exception", e);
+		}
+		return users;
+	}
+	@Override
 	public List<User> findUsersByRole(Role role) throws DaoException {
 		logger.log(Level.INFO, "Find user by role, role=  " + role);
 		List<User> users = new ArrayList<User>();
@@ -109,23 +96,7 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, role.name());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				long userId = resultSet.getLong(USER_ID);
-				String name = resultSet.getString(USER_NAME);
-				String surname = resultSet.getString(USER_SURNAME);
-				String email = resultSet.getString(USER_EMAIL);
-				String phone = resultSet.getString(USER_PHONE);
-				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-				Role userRole = Role.valueOf(resultSet.getString(ROLE));
-				logger.log(Level.INFO, "finded user id:" + userId + ", FIO: " + name + " " + surname);
-				User user = new User.Builder()
-						.setUserID(userId)
-						.setName(name)
-						.setSurname(surname)
-						.setEmail(email)
-						.setPhone(phone)
-						.setIsBlocked(isBlocked)
-						.serRole(userRole)
-						.build();
+			User user = createUser(resultSet);
 				users.add(user);
 			}
 		} catch (SQLException e) {
@@ -168,24 +139,8 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, email);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				long userId = resultSet.getLong(USER_ID);
-				String name = resultSet.getString(USER_NAME);
-				String surname = resultSet.getString(USER_SURNAME);
-				String userEmail = resultSet.getString(USER_EMAIL);
-				String phone = resultSet.getString(USER_PHONE);
-				boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-				Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());// FIXME delete toUpperCase
-				User user =  new User.Builder()
-						.setUserID(userId)
-						.setName(name)
-						.setSurname(surname)
-						.setEmail(userEmail)
-						.setPhone(phone)
-						.setIsBlocked(isBlocked)
-						.serRole(role)
-						.build();
-				logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
-				optionalUser = Optional.of(user);
+				User user = createUser(resultSet);
+				optionalUser = Optional.of(user);//TODO invoke method in parameter
 			} else {
 				logger.log(Level.INFO, "didn't find user with login:" + email);
 				optionalUser = Optional.empty();
@@ -205,9 +160,9 @@ public class UserDaoImpl implements UserDao {
 				PreparedStatement statement = connection.prepareStatement(SQL_ADD_USER)) {
 			statement.setString(1, user.getName());
 			statement.setString(2, user.getSurname());
-			statement.setString(4, password);
-			statement.setString(5, user.getEmail());
-			statement.setString(6, user.getPhone());
+			statement.setString(3, password);
+			statement.setString(4, user.getEmail());
+			statement.setString(5, user.getPhone());
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
 				userAdded = true;
@@ -260,7 +215,7 @@ public class UserDaoImpl implements UserDao {
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
-			throw new DaoException("Dao exception in method activateAccount", e);
+			throw new DaoException("Dao exception in method changeIsBlockedStatus", e);
 		}
 		return resultChangeStatus;
 	}
@@ -287,5 +242,46 @@ public class UserDaoImpl implements UserDao {
 			throw new DaoException("Dao exception in method changePersonalInfo", e);
 		}	
 		return isChanged;
+	}
+	@Override
+	public boolean changeUserRole(long id, Role role) throws DaoException {
+			logger.log(Level.INFO, "Try to change user role, new role:"+role +", user id:" + id);
+			boolean isChanged = false;
+			try (Connection connection = connectionPool.getConnection();
+					PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_USER_ROLE)) {
+				statement.setString(1, role.name());
+				statement.setLong(2, id);
+				int rowCount = statement.executeUpdate();
+				if (rowCount != 0) {
+					isChanged = true;
+					logger.log(Level.INFO, "account " + id + " changed role, new role: " + role);
+				} else {
+					logger.log(Level.ERROR, "account " + id + "role wasn't changed");
+				}
+			} catch (SQLException e) {
+				logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+				throw new DaoException("Dao exception in method changeUserRole", e);
+			}
+			return isChanged;
+	}
+	private User createUser(ResultSet resultSet) throws SQLException {
+		long userId = resultSet.getLong(USER_ID);
+		String name = resultSet.getString(USER_NAME);
+		String surname = resultSet.getString(USER_SURNAME);
+		String userEmail = resultSet.getString(USER_EMAIL);
+		String phone = resultSet.getString(USER_PHONE);
+		boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
+		Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());// FIXME delete toUpperCase
+		User user =  new User.Builder()
+				.setUserID(userId)
+				.setName(name)
+				.setSurname(surname)
+				.setEmail(userEmail)
+				.setPhone(phone)
+				.setIsBlocked(isBlocked)
+				.setRole(role)
+				.build();
+		logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
+		return user;
 	}
 }

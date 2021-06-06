@@ -15,7 +15,10 @@ import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.entity.DoctorSchedule;
 import by.metelski.webtask.exception.ServiceException;
+import by.metelski.webtask.model.dao.impl.AppointmentDaoImpl;
+import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
+import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.service.AppointmentService;
 import by.metelski.webtask.model.service.ProcedureService;
 import by.metelski.webtask.model.service.ScheduleService;
@@ -27,9 +30,9 @@ import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
 public class ToChangeScheduleCommand  implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	AppointmentService service = new AppointmentServiceImpl();
-	UserService userService = new UserServiceImpl();
-	ProcedureService procedureService = new ProcedureServiceImpl();
+	AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
+	UserService userService = new UserServiceImpl(new UserDaoImpl());
+	ProcedureService procedureService = new ProcedureServiceImpl(new ProcedureDaoImpl());
 	ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());
 
 	@Override
@@ -37,7 +40,7 @@ public class ToChangeScheduleCommand  implements Command {
 		logger.log(Level.DEBUG, "execute method ToChangeScheduleCommand");
 		Router router = new Router();
 		logger.log(Level.DEBUG, "cheduleId from request:" + request.getParameter(ParameterAndAttribute.SCHEDULE_ID));
-		long scheduleId =Long.parseLong(request.getParameter(ParameterAndAttribute.SCHEDULE_ID));
+		long scheduleId =Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_SCHEDULE_ID));
 		logger.log(Level.DEBUG, "scheduleId:" +scheduleId);
 		try {
 			Optional<DoctorSchedule> optional = scheduleService.findScheduleById(scheduleId);

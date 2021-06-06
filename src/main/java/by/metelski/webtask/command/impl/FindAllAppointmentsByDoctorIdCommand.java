@@ -1,12 +1,15 @@
 package by.metelski.webtask.command.impl;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
@@ -19,13 +22,13 @@ import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.service.AppointmentService;
 import by.metelski.webtask.model.service.impl.AppointmentServiceImpl;
 
-public class FindAllAppointmentsByUserIdCommand implements Command {
+public class FindAllAppointmentsByDoctorIdCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-		logger.log(Level.DEBUG, "FindAllAppointmentsByIdCommand");
+		logger.log(Level.DEBUG, "FindAllAppointmentsByDoctorCommand");
 		List<Appointment> appointments;
 		Router router = new Router();
 		HttpSession session = request.getSession();
@@ -33,7 +36,7 @@ public class FindAllAppointmentsByUserIdCommand implements Command {
 		User user = (User) session.getAttribute(ParameterAndAttribute.USER);
 		long userId = user.getUserId();
 		try {
-			appointments = service.findAllByUserId(userId);
+			appointments = service.findAllByDoctorId(userId);
 			router.setPagePath(page);
 			request.setAttribute(ParameterAndAttribute.APPOINTMENTS_LIST, appointments);
 		} catch (ServiceException e) {

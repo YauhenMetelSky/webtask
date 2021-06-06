@@ -10,11 +10,13 @@ import by.metelski.webtask.exception.ServiceException;
 public interface UserService {
 	List<User> findAllUsers() throws ServiceException;
 	List<User> findUsersByName(String userName) throws ServiceException;
+	List<User> findUsersBySurname(String userSurname) throws ServiceException;
 	List<User> findUsersByRole(Role role) throws ServiceException;
 	Optional<User> findUserByEmail(String email) throws ServiceException;
 	Optional<User> findUserByEmailPassword(String login, String password) throws ServiceException;
 	boolean addUser(Map<String, String> userData) throws ServiceException;	
 	boolean activateAccount(String token,String email) throws ServiceException;	
 	boolean changeUserIsBlocked(long id,boolean isBlocked) throws ServiceException;
+	boolean changeUserRole(long id,Role role) throws ServiceException;
 	boolean changePersonalInfo(User user,Map<String, String> userData) throws ServiceException;
 }
