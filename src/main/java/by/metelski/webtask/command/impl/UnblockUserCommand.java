@@ -2,12 +2,14 @@ package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -24,6 +26,7 @@ public class UnblockUserCommand implements Command {
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 	    Router router = new Router();
+	    HttpSession session = request.getSession();
 	    boolean isBlocked = false;
 	    logger.log(Level.DEBUG, "execute method UnblockUserCommand");
 		long id = Long.parseLong(request.getParameter(ParameterAndAttribute.USER_ID));		
@@ -33,11 +36,11 @@ public class UnblockUserCommand implements Command {
 			if (isBlocked) {
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
-				//TODO session attribute message user blocked
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 			} else {
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
-				//TODO session attribute message not blocked"
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute BlockUserCommand" + e);

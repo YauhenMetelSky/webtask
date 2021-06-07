@@ -51,11 +51,11 @@ public class SignUpCommand implements Command {
 						router.setType(Type.REDIRECT);
 						request.setAttribute(ParameterAndAttribute.MESSAGE, Message.USER_CREATED);
 					} else {
-						router.setPagePath(PagePath.ERROR);// TODO need to do smth
+						router.setPagePath(PagePath.SIGN_UP);
+						request.setAttribute(ParameterAndAttribute.MESSAGE, Message.CANT_ADD_USER);
 					}
 				} else {
 					router.setPagePath(PagePath.SIGN_UP);
-					// TODO messages in separate file
 					request.setAttribute(ParameterAndAttribute.MESSAGE, Message.USER_ALREADY_EXISTS);
 				}
 			} catch (ServiceException e) {
@@ -64,7 +64,6 @@ public class SignUpCommand implements Command {
 			}
 		} else {
 			router.setPagePath(PagePath.SIGN_UP);
-			// TODO messages in separate file
 			request.setAttribute(ParameterAndAttribute.MESSAGE, "password and confirmed password do not match");
 		}
 		return router;

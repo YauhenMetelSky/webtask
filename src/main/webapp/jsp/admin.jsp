@@ -44,7 +44,7 @@
 		
 		<div class="form-inline">
 			<form action="controller" method="POST">
-				<input type="text" name="name" value="" class="form-control"
+				<input type="text" name="surname" value="" class="form-control"
 					placeholder=<fmt:message key="label.surname"/>> 
 					<input type="hidden" name="command" value="find_by_surname">
 				<button type="submit" class="btn btn-primary">
@@ -190,6 +190,7 @@
 				<th><fmt:message key="label.email" /></th>
 				<th><fmt:message key="label.phone" /></th>
 				<th><fmt:message key="label.blocked" /></th>
+				<th><fmt:message key="label.change_role" /></th>
 				<th><fmt:message key="label.action" /></th>
 				
 			</tr>
@@ -204,6 +205,15 @@
 				<td><c:out value="${elem.email }" /></td>
 				<td><c:out value="${elem.phone }" /></td>
 				<td><c:out value="${elem.blocked }" /></td>
+				<td>	
+		       <form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.change_role_to_doctor"/>
+				</button>
+				<input type="hidden" name="id" value="${elem.userId}">
+				<input type="hidden" name="command" value="change_user_role_doctor">
+			</form>	
+			</td>
 				<c:if test="${elem.blocked==false}">		
 				<td>	
 		       <form action="controller" method="POST">

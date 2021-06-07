@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.ParameterAndAttribute;
 
 import java.io.File;
@@ -48,15 +49,14 @@ public class UploadServlet extends HttpServlet {
 			try {
 				String path = part.getSubmittedFileName();
 				part.write(savePath+File.separator+path);
-				request.setAttribute("upload_result","upload successfully");//FIXME magic string
+				request.setAttribute(ParameterAndAttribute.UPLOAD_RESULT,Message.SUCCESSFUL);
 			} catch (IOException e) {
-				logger.log(Level.ERROR, "UPS... Cap we have a problem");//FIXME strange message
-				request.setAttribute("upload_result","upload filed");//FIXME magic string
-				// TODO: handle exception
+				logger.log(Level.ERROR, "IOExcception in doPost, uploadServlet"+e);
+				request.setAttribute(ParameterAndAttribute.UPLOAD_RESULT,Message.UNSUCCESSFUL);
 			}
 		});
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
-		request.getRequestDispatcher(page).forward(request,response);//TODO F5
+		request.getRequestDispatcher(page).forward(request,response);
 	}
 
 	@Override

@@ -38,6 +38,7 @@ public final class ParameterAndAttribute {
 	public static final String SCHEDULE_LIST = "schedule_list";
 	public static final String TODAY = "today";
 	public static final String TOKEN = "token";
+	public static final String UPLOAD_RESULT = "upload_result";
 	public static final String URL = "url";
 	public static final String USER = "user";
 	public static final String USER_EMAIL = "email";

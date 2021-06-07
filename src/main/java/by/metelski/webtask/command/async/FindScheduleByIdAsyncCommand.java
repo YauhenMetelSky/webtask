@@ -1,6 +1,8 @@
 package by.metelski.webtask.command.async;
 
 import java.io.IOException;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Level;
@@ -28,7 +30,7 @@ public class FindScheduleByIdAsyncCommand implements Command{
 		DoctorSchedule schedule;
 		Router router = new Router();
 		Long scheduleId = Long.parseLong(request.getParameter(ParameterAndAttribute.SCHEDULE_ID));
-		try {//FIXME empty optional
+		try {//FIXME null in optional
 			schedule =service.findScheduleById(scheduleId).get();		
 			String scheduleGson = new Gson().toJson(schedule);
 			logger.log(Level.DEBUG, "string gson: " + scheduleGson);

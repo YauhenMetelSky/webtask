@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -45,10 +46,12 @@ public class ChangePersonalInfoCommand implements Command{
 		userData.put(ParameterAndAttribute.USER_PHONE, phone);
 		try {//FIXME VAlidation
 			if(userService.changePersonalInfo(user, userData)) {
-				//TODO message successful!!!
 				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
+			} else {
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
 			router.setPagePath(PagePath.ERROR);

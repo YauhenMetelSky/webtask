@@ -54,7 +54,6 @@
 						class="btn btn-light"> <input type="hidden" name="command"
 						value="to_personal_page">
 				</form>
-				${message_for_user }
 
 			</div>
 			<c:if test="${user.getRole().toString() eq null }">
@@ -68,6 +67,7 @@
 			</c:if>
 			<c:if test="${user.getRole().toString() ne null }">
 				<h3>
+				${message_for_user }
 					<fmt:message key="label.hello" />
 					, ${user.name}
 				</h3>

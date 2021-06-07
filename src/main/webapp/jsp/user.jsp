@@ -197,6 +197,7 @@
 						 console.log(result); 
 						console.log(result.length);
 						$("#date").empty();
+						$("#date").append("<option value=''>select date</option>");
 						for(var i =0;i<result.length;i++){
 							console.log(result[i]);
 							console.log(result[i].id);
@@ -224,6 +225,7 @@
 						 console.log(result); 
 						console.log(result.length);
 							$("#time").empty();
+							$("#time").append("<option value=''>select time</option>");
 							for(var i =0;i<result.length;i++){
 								console.log(result[i]);
 								 $("#time").append("<option value='"+result[i]+"'>"+ result[i]+"</option>"); 

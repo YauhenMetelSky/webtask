@@ -12,16 +12,21 @@ import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
+import by.metelski.webtask.entity.Procedure;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.exception.ServiceException;
+import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.dao.impl.UserDaoImpl;
+import by.metelski.webtask.model.service.ProcedureService;
 import by.metelski.webtask.model.service.UserService;
+import by.metelski.webtask.model.service.impl.ProcedureServiceImpl;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
 public class ToPersonalPageCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
     private UserService userService = new UserServiceImpl(new UserDaoImpl());
+    private ProcedureService procedureService = new ProcedureServiceImpl(new ProcedureDaoImpl());
 	
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
@@ -44,8 +49,10 @@ public class ToPersonalPageCommand implements Command {
 				break;
 			case USER:
 				try {
+					List<Procedure> procedures = procedureService.findAllActive();
 					List<User> doctors = userService.findUsersByRole(Role.DOCTOR);
 					session.setAttribute(ParameterAndAttribute.DOCTORS_LIST, doctors);
+					session.setAttribute(ParameterAndAttribute.ACTIVE_PROCEDURES_LIST, procedures);
 					logger.log(Level.DEBUG, "doctors: " + doctors);
 				} catch (ServiceException e) {
 					logger.log(Level.ERROR, "ServiceException" + e);

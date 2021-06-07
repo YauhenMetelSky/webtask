@@ -1,8 +1,5 @@
 package by.metelski.webtask.command.impl;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,14 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
-import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
-import by.metelski.webtask.entity.Appointment;
-import by.metelski.webtask.entity.DoctorSchedule;
-import by.metelski.webtask.entity.Procedure;
-import by.metelski.webtask.entity.User;
-import by.metelski.webtask.entity.User.Role;
-import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.impl.AppointmentDaoImpl;
 import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
@@ -44,7 +34,6 @@ public class ToChangePersonalInfoPageCommand  implements Command {
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.DEBUG, "execute method ToChangePersonalInfoPageCommand");
 		Router router = new Router();
-//FIXME delete		logger.log(Level.DEBUG, "appointmentId from request:" + request.getParameter(ParameterAndAttribute.APPOINTMENT_ID));
 		router.setPagePath(PagePath.CHANGE_PERSONAL_INFO);
 		return router;
 	}

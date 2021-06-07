@@ -75,12 +75,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return isAdded;
 	}
 
-	@Override//FIXME not need
-	public boolean changeAppointment(long id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	@Override
 	public boolean change(Map<String, String> data) throws ServiceException {
 		logger.log(Level.DEBUG, "Change appointment; data" + data);

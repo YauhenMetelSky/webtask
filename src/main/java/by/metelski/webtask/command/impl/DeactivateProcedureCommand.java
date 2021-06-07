@@ -2,12 +2,14 @@ package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -24,6 +26,7 @@ public class DeactivateProcedureCommand implements Command {
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 	    Router router = new Router();
+	    HttpSession session = request.getSession();
 	    boolean isActive = false;
 	    logger.log(Level.DEBUG, "execute method DeactivateProcedureCommand");
 		Long id = Long.parseLong(request.getParameter(ParameterAndAttribute.PROCEDURE_ID));
@@ -34,12 +37,12 @@ public class DeactivateProcedureCommand implements Command {
 						String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
 						router.setPagePath(page);
 						router.setType(Type.REDIRECT);
-				//TODO session attribute message successful activation
+						session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 			} else {
 				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
-				//TODO session attribute message try to activate your account later"
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "ProcedureServiceException in method execute" + e);

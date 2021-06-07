@@ -32,7 +32,7 @@ public class FindUserByEmailCommand implements Command {
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
 		String email = request.getParameter(ParameterAndAttribute.USER_EMAIL);
 		logger.log(Level.INFO, "Find by email: " + email);
-		try {
+		try {//FIXME null in optional
 			user = userService.findUserByEmail(email);
 			if (user.isPresent()) {
 				router.setPagePath(page);

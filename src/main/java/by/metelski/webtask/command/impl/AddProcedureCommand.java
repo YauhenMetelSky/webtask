@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -25,6 +28,7 @@ public class AddProcedureCommand implements Command {
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.DEBUG, "execute method AddProcedureCommand");
 		Router router = new Router();
+		HttpSession session = request.getSession();
 		Map<String, String> procedureData = new HashMap<>();
 		String procedureName = request.getParameter(ParameterAndAttribute.PROCEDURE_NAME);
 		String procedureImage = request.getParameter(ParameterAndAttribute.PROCEDURE_IMAGE);
@@ -40,7 +44,7 @@ public class AddProcedureCommand implements Command {
 		try {
 			if(procedureService.add(procedureData)) {
 				String page = request.getContextPath() +PagePath.TO_PERSONAL_PAGE;
-				//TODO Show message Procedure added
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
 			}

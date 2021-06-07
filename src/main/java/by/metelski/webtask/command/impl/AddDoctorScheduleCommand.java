@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -42,13 +43,13 @@ public class AddDoctorScheduleCommand implements Command {
 			if (service.findScheduleByDateAndDoctor(date, user.getUserId()).isEmpty()) {
 				if (service.addDoctorSchedule(scheduleData)) {
 					String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
-					// TODO Show message Schedule added
+					session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 					router.setPagePath(page);
 					router.setType(Type.REDIRECT);
 				}
 			} else {
 				router.setPagePath(PagePath.DOCTOR);
-				request.setAttribute(ParameterAndAttribute.MESSAGE, "schedule with this date already exists");
+				request.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
 			router.setPagePath(PagePath.ERROR);

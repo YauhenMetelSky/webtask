@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.User;
 import by.metelski.webtask.entity.User.Role;
@@ -26,11 +28,11 @@ public class UserServiceImpl implements UserService {
 	private final String COMMAND_CONFIRM = "?command=activate";
 	private final String TOKEN = "&token=";
 	private final String EMAIL = "&email=";
-	
+
 	public UserServiceImpl(UserDao userDao) {
 		this.userDao = userDao;
 	}
-	
+
 	@Override
 	public Optional<User> findUserByEmailPassword(String email, String password) throws ServiceException {
 		logger.log(Level.DEBUG, "findUserByEmailPassword()");
@@ -90,6 +92,7 @@ public class UserServiceImpl implements UserService {
 		}
 		return users;
 	}
+
 	@Override
 	public List<User> findUsersBySurname(String userSurname) throws ServiceException {
 		logger.log(Level.DEBUG, "findUsersBySurname(), user surname:" + userSurname);
@@ -104,17 +107,17 @@ public class UserServiceImpl implements UserService {
 		}
 		return users;
 	}
-	
+
 	@Override
 	public List<User> findUsersByRole(Role role) throws ServiceException {
 		logger.log(Level.DEBUG, "findUsersByRole(), role:" + role);
 		List<User> users = new ArrayList<>();
-			try {
-				users = userDao.findUsersByRole(role);
-			} catch (DaoException e) {
-				logger.log(Level.ERROR, "dao exception in method FindUsersByRole" + e);
-				throw new ServiceException(e);
-			}
+		try {
+			users = userDao.findUsersByRole(role);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method FindUsersByRole" + e);
+			throw new ServiceException(e);
+		}
 
 		return users;
 	}
@@ -125,9 +128,9 @@ public class UserServiceImpl implements UserService {
 		Optional<User> user;
 		try {
 			if (UserValidator.isValidEmail(email)) {
-				user=userDao.findUserByEmail(email);
+				user = userDao.findUserByEmail(email);
 			} else {
-				user= Optional.empty();
+				user = Optional.empty();
 			}
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method FindUsersByLoginPassword" + e);
@@ -135,30 +138,33 @@ public class UserServiceImpl implements UserService {
 		}
 		return user;
 	}
-	
 
 	@Override
 	public boolean addUser(Map<String, String> userData) throws ServiceException {
 		logger.log(Level.DEBUG, "addUser(), userData:" + userData);
-		String encodedPassword = Encoder.encodePassword(userData.get(ColumnName.PASSWORD));
-		//TODO check user email. Must be unique.																				
-		 User user = new User.Builder()
-				  .setName(userData.get(ParameterAndAttribute.USER_NAME))
-				  .setSurname(userData.get(ParameterAndAttribute.USER_SURNAME))
-				  .setEmail(userData.get(ParameterAndAttribute.USER_EMAIL))
-				  .setPhone(userData.get(ParameterAndAttribute.USER_PHONE))
-				  .build();
-		String uniqToken = Encoder.encodePassword(userData.get(ColumnName.USER_EMAIL));
-		String url = userData.get(ParameterAndAttribute.URL) + COMMAND_CONFIRM + TOKEN + uniqToken + EMAIL
-				+ userData.get(ParameterAndAttribute.USER_EMAIL);// TODO url for check
-		String message = "Welcome and thanks... " + url;// TODO Magic string
-		boolean userAdded = false;
-		try {
-			userAdded = userDao.addUser(user, encodedPassword);
-			MailSender.sendEmail(user.getEmail(), "Account confirmation", message);
-		} catch (DaoException e) {
-			logger.log(Level.ERROR, "dao exception in method addUser" + e);
-			throw new ServiceException(e);
+		boolean userAdded;
+		if (UserValidator.isValidPassword(userData.get(ColumnName.PASSWORD))
+				&& UserValidator.isValidName(userData.get(ParameterAndAttribute.USER_NAME))
+				&& UserValidator.isValidEmail(userData.get(ParameterAndAttribute.USER_EMAIL))) {
+			String encodedPassword = Encoder.encodePassword(userData.get(ColumnName.PASSWORD));
+			User user = new User.Builder().setName(userData.get(ParameterAndAttribute.USER_NAME))
+					.setSurname(userData.get(ParameterAndAttribute.USER_SURNAME))
+					.setEmail(userData.get(ParameterAndAttribute.USER_EMAIL))
+					.setPhone(userData.get(ParameterAndAttribute.USER_PHONE)).build();
+			String uniqToken = Encoder.encodePassword(userData.get(ColumnName.USER_EMAIL));
+			String url = userData.get(ParameterAndAttribute.URL) + COMMAND_CONFIRM + TOKEN + uniqToken + EMAIL
+					+ userData.get(ParameterAndAttribute.USER_EMAIL);
+			String message = Message.WELCOM + url;
+			try {
+				userAdded = userDao.addUser(user, encodedPassword);
+				MailSender.sendEmail(user.getEmail(), "Account confirmation", message);
+			} catch (DaoException e) {
+				logger.log(Level.ERROR, "dao exception in method addUser" + e);
+				throw new ServiceException(e);
+			}
+		} else {
+			userAdded = false;
+
 		}
 		return userAdded;
 	}
@@ -166,13 +172,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean activateAccount(String token, String email) throws ServiceException {
 		logger.log(Level.DEBUG, "activateAccount(), email:" + email);
-		// TODO compare token
+		String uniqToken = Encoder.encodePassword(email);
 		boolean isActive = false;
-		try {
-			isActive = userDao.activateAccount(email);
-		} catch (DaoException e) {
-			logger.log(Level.ERROR, "dao exception in method activateAccount" + e);
-			throw new ServiceException(e);
+		if (UserValidator.isValidEmail(email)) {
+			if (uniqToken.equals(token)) {
+				try {
+					isActive = userDao.activateAccount(email);
+				} catch (DaoException e) {
+					logger.log(Level.ERROR, "dao exception in method activateAccount" + e);
+					throw new ServiceException(e);
+				}
+			}
 		}
 		return isActive;
 	}
@@ -180,37 +190,38 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean changeUserIsBlocked(long id, boolean isBlocked) throws ServiceException {
 		logger.log(Level.DEBUG, "blockUser(), id:" + id);
-		boolean changeStatusResult =false;
+		boolean changeStatusResult = false;
 		try {
-			changeStatusResult = userDao.changeIsBlockedStatus(id,isBlocked);
-		}catch(DaoException e) {
+			changeStatusResult = userDao.changeIsBlockedStatus(id, isBlocked);
+		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method blockUser" + e);
 			throw new ServiceException(e);
-		}	
+		}
 		return changeStatusResult;
 	}
+
 	@Override
 	public boolean changeUserRole(long id, Role role) throws ServiceException {
-		logger.log(Level.DEBUG, "changeUserRole, id:" + id+", new role:"+ role);
-		boolean isChanged =false;
+		logger.log(Level.DEBUG, "changeUserRole, id:" + id + ", new role:" + role);
+		boolean isChanged = false;
 		try {
-			isChanged = userDao.changeUserRole(id,role);
-		}catch(DaoException e) {
+			isChanged = userDao.changeUserRole(id, role);
+		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method changeUserRole" + e);
 			throw new ServiceException(e);
-		}	
+		}
 		return isChanged;
 	}
 
 	@Override
-	public boolean changePersonalInfo(User user,Map<String, String> userData) throws ServiceException {
+	public boolean changePersonalInfo(User user, Map<String, String> userData) throws ServiceException {
 		logger.log(Level.DEBUG, "Change personal info user:" + user);
 		user.setName(userData.get(ParameterAndAttribute.USER_NAME));
 		user.setSurname(userData.get(ParameterAndAttribute.USER_SURNAME));
 		user.setPhone(userData.get(ParameterAndAttribute.USER_PHONE));
 		boolean isChanged = false;
 		try {
-			isChanged=userDao.changePersonalInfo(user);
+			isChanged = userDao.changePersonalInfo(user);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method changePersonalInfo" + e);
 			throw new ServiceException(e);

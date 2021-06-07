@@ -38,15 +38,14 @@ public class ActivateAccountCommand implements Command {
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.ACCOUNT_IS_ACTIVE);
 				logger.log(Level.DEBUG,session.getAttribute(ParameterAndAttribute.MESSAGE_FOR_USER));
 				router.setPagePath(page);
-				router.setType(Type.REDIRECT);
-				
-				//TODO session attribute message successful activation
+				router.setType(Type.REDIRECT);			
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 			} else {
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.CANT_ACTIVATE);
 				logger.log(Level.DEBUG,session.getAttribute(ParameterAndAttribute.MESSAGE_FOR_USER));
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
-				//TODO session attribute message try to activate your account later"
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute" + e);
