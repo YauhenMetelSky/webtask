@@ -36,6 +36,7 @@ import by.metelski.webtask.command.impl.ChangeUserRoleAdminCommand;
 import by.metelski.webtask.command.impl.ChangeUserRoleDoctorCommand;
 import by.metelski.webtask.command.impl.ConfirmAppointmentCommand;
 import by.metelski.webtask.command.impl.DeactivateProcedureCommand;
+import by.metelski.webtask.command.impl.FindAllActiveSchedulesByDoctorCommand;
 import by.metelski.webtask.command.impl.FindAllAppointmentsByDoctorIdCommand;
 import by.metelski.webtask.command.impl.ToChangeAppointmentCommand;
 import by.metelski.webtask.command.impl.ToChangePersonalInfoPageCommand;
@@ -160,6 +161,11 @@ public enum CommandType {
 	FIND_ALL_ACTIVE_SCHEDULES_BY_DOCTOR_ASYNC{
 		{
 			this.command= new FindAllActiveSchedulesByDoctorIdAsyncCommand();
+		}
+	},
+	FIND_ALL_ACTIVE_SCHEDULES_BY_DOCTOR{
+		{
+			this.command= new FindAllActiveSchedulesByDoctorCommand();
 		}
 	},
 	FIND_ALL_SCHEDULES_BY_DOCTOR {

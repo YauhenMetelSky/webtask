@@ -16,5 +16,4 @@ public interface ScheduleDao {
 	List<DoctorSchedule> findAllActiveSchedulesByDoctor(User user) throws DaoException;
 	Optional<DoctorSchedule> FindScheduleById(long id) throws DaoException;
 	Optional<DoctorSchedule> findScheduleByDateAndDoctor(Date date,long doctorId) throws DaoException;
-	//TODO add deactivate schedule method
 }

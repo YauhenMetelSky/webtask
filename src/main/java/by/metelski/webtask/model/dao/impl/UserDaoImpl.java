@@ -21,6 +21,7 @@ import static by.metelski.webtask.model.dao.ColumnName.*;
 
 public class UserDaoImpl implements UserDao {
 	private static final Logger logger = LogManager.getLogger();
+	private static final String SQL_COUNT_ALL_USERS = "SELECT COUNT(*) FROM users";
 	private static final String SQL_FIND_ALL_USERS = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users";
 	private static final String SQL_FIND_USERS_BY_NAME = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE name=?";
 	private static final String SQL_FIND_USERS_BY_SURNAME = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE surname=?";
@@ -57,7 +58,7 @@ public class UserDaoImpl implements UserDao {
 		logger.log(Level.INFO, "Find user by name, name=  " + userName);
 		List<User> users = new ArrayList<User>();
 		try (Connection connection = connectionPool.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_BY_NAME)) {		
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_BY_NAME)) {
 			statement.setString(1, userName);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -75,7 +76,7 @@ public class UserDaoImpl implements UserDao {
 		logger.log(Level.INFO, "Find user by surname, surname=  " + userSurname);
 		List<User> users = new ArrayList<User>();
 		try (Connection connection = connectionPool.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_BY_SURNAME)) {		
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_BY_SURNAME)) {
 			statement.setString(1, userSurname);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -87,6 +88,7 @@ public class UserDaoImpl implements UserDao {
 		}
 		return users;
 	}
+
 	@Override
 	public List<User> findUsersByRole(Role role) throws DaoException {
 		logger.log(Level.INFO, "Find user by role, role=  " + role);
@@ -96,7 +98,7 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, role.name());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-			User user = createUser(resultSet);
+				User user = createUser(resultSet);
 				users.add(user);
 			}
 		} catch (SQLException e) {
@@ -140,7 +142,7 @@ public class UserDaoImpl implements UserDao {
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				User user = createUser(resultSet);
-				optionalUser = Optional.of(user);//TODO invoke method in parameter
+				optionalUser = Optional.of(user);// TODO invoke method in parameter
 			} else {
 				logger.log(Level.INFO, "didn't find user with login:" + email);
 				optionalUser = Optional.empty();
@@ -199,7 +201,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean changeIsBlockedStatus(long id,boolean isBlocked) throws DaoException {
+	public boolean changeIsBlockedStatus(long id, boolean isBlocked) throws DaoException {
 		logger.log(Level.INFO, "Try to block user account :" + id);
 		boolean resultChangeStatus = false;
 		try (Connection connection = connectionPool.getConnection();
@@ -225,7 +227,7 @@ public class UserDaoImpl implements UserDao {
 		logger.log(Level.INFO, "Change user personal info, user id:" + user.getUserId());
 		boolean isChanged = false;
 		try (Connection connection = connectionPool.getConnection();
-			PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_USER_PERSONAL_INFO)) {
+				PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_USER_PERSONAL_INFO)) {
 			statement.setString(1, user.getName());
 			statement.setString(2, user.getSurname());
 			statement.setString(3, user.getPhone());
@@ -233,37 +235,39 @@ public class UserDaoImpl implements UserDao {
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
 				isChanged = true;
-				logger.log(Level.INFO, "user personal information changed, user id:" +user.getUserId());
+				logger.log(Level.INFO, "user personal information changed, user id:" + user.getUserId());
 			} else {
-				logger.log(Level.INFO, "user personal information wasn't changed, user id:" +user.getUserId());
+				logger.log(Level.INFO, "user personal information wasn't changed, user id:" + user.getUserId());
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
 			throw new DaoException("Dao exception in method changePersonalInfo", e);
-		}	
+		}
 		return isChanged;
 	}
+
 	@Override
 	public boolean changeUserRole(long id, Role role) throws DaoException {
-			logger.log(Level.INFO, "Try to change user role, new role:"+role +", user id:" + id);
-			boolean isChanged = false;
-			try (Connection connection = connectionPool.getConnection();
-					PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_USER_ROLE)) {
-				statement.setString(1, role.name());
-				statement.setLong(2, id);
-				int rowCount = statement.executeUpdate();
-				if (rowCount != 0) {
-					isChanged = true;
-					logger.log(Level.INFO, "account " + id + " changed role, new role: " + role);
-				} else {
-					logger.log(Level.ERROR, "account " + id + "role wasn't changed");
-				}
-			} catch (SQLException e) {
-				logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
-				throw new DaoException("Dao exception in method changeUserRole", e);
+		logger.log(Level.INFO, "Try to change user role, new role:" + role + ", user id:" + id);
+		boolean isChanged = false;
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_USER_ROLE)) {
+			statement.setString(1, role.name());
+			statement.setLong(2, id);
+			int rowCount = statement.executeUpdate();
+			if (rowCount != 0) {
+				isChanged = true;
+				logger.log(Level.INFO, "account " + id + " changed role, new role: " + role);
+			} else {
+				logger.log(Level.ERROR, "account " + id + "role wasn't changed");
 			}
-			return isChanged;
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException("Dao exception in method changeUserRole", e);
+		}
+		return isChanged;
 	}
+
 	private User createUser(ResultSet resultSet) throws SQLException {
 		long userId = resultSet.getLong(USER_ID);
 		String name = resultSet.getString(USER_NAME);
@@ -272,16 +276,26 @@ public class UserDaoImpl implements UserDao {
 		String phone = resultSet.getString(USER_PHONE);
 		boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
 		Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());// FIXME delete toUpperCase
-		User user =  new User.Builder()
-				.setUserID(userId)
-				.setName(name)
-				.setSurname(surname)
-				.setEmail(userEmail)
-				.setPhone(phone)
-				.setIsBlocked(isBlocked)
-				.setRole(role)
-				.build();
+		User user = new User.Builder().setUserID(userId).setName(name).setSurname(surname).setEmail(userEmail)
+				.setPhone(phone).setIsBlocked(isBlocked).setRole(role).build();
 		logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
 		return user;
+	}
+
+	@Override
+	public int findNumberOfRows() throws DaoException {
+		logger.log(Level.INFO, "findNumberOfRows");
+		int numberOfRows = 0;
+		try (Connection connection = connectionPool.getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(SQL_COUNT_ALL_USERS)) {
+			if (resultSet.next()) {
+				numberOfRows = resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
+			throw new DaoException("Dao exception", e);
+		}
+		return numberOfRows;
 	}
 }

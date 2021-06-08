@@ -14,6 +14,7 @@ public interface UserService {
 	List<User> findUsersByRole(Role role) throws ServiceException;
 	Optional<User> findUserByEmail(String email) throws ServiceException;
 	Optional<User> findUserByEmailPassword(String login, String password) throws ServiceException;
+	int findNumberOfPages() throws ServiceException;
 	boolean addUser(Map<String, String> userData) throws ServiceException;	
 	boolean activateAccount(String token,String email) throws ServiceException;	
 	boolean changeUserIsBlocked(long id,boolean isBlocked) throws ServiceException;

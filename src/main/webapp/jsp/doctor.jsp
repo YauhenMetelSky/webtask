@@ -28,20 +28,22 @@
 	<div class="container-fluid bg">
 		<h1>Doctor page content</h1>
 		<h1>Show all my schedules</h1>
-	 <div>
+	
+			<div>
 			<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.my_schedules" />
 				</button>
 				<input type="hidden" name="command" value="find_all_schedules_by_doctor">
 			</form>
+			</div>
+			<div>
 			<table class="table table-striped">	
 		<c:if test="${doctor_schedules_list ne null}">
 			<tr>
 				<th><fmt:message key="label.date" /></th>
 				<th><fmt:message key="label.start_time" /></th>
 				<th><fmt:message key="label.end_time" /></th>
-				<th><fmt:message key="label.action" /></th>
 			</tr>
 		</c:if>
 
@@ -50,7 +52,36 @@
 				<td><c:out value="${elem.date }" /></td>
 				<td><c:out value="${elem.startTime}" /></td>
 				<td><c:out value="${elem.endTime }" /></td>
-				<td>	
+			</tr>
+		</c:forEach>
+			</table>
+		</div> 
+		
+			<div>
+			<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.my_active_schedules" />
+				</button>
+				<input type="hidden" name="command" value="find_all_active_schedules_by_doctor">
+			</form>
+			</div>
+			<div>
+			<table class="table table-striped">	
+		<c:if test="${doctor_active_schedules_list ne null}">
+			<tr>
+				<th><fmt:message key="label.date" /></th>
+				<th><fmt:message key="label.start_time" /></th>
+				<th><fmt:message key="label.end_time" /></th>
+				<th><fmt:message key="label.action" /></th>
+			</tr>
+		</c:if>
+
+		<c:forEach var="elem" items="${doctor_active_schedules_list}" varStatus="status">
+			<tr>
+				<td><c:out value="${elem.date }" /></td>
+				<td><c:out value="${elem.startTime}" /></td>
+				<td><c:out value="${elem.endTime }" /></td>
+					<td>	
 		       <form action="controller" method="POST">
 				<button type="submit" class="btn btn-danger">
 					<fmt:message key="label.change"/>

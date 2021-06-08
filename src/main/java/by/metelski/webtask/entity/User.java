@@ -53,7 +53,7 @@ public class User {
 	}
 
 	public void setBlocked(boolean isBlocked) {
-		this.isBlocked = isBlocked; //TODO remove setBlocked?
+		this.isBlocked = isBlocked; 
 	}
 
 	public long getUserId() {
@@ -64,7 +64,7 @@ public class User {
 	}
 
 	public void setRole(Role role) {
-		this.role = role;//TODO remove setRole?
+		this.role = role;
 	}
 		
 	@Override

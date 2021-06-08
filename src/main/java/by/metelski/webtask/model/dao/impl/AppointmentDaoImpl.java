@@ -40,6 +40,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	private static final String SQL_CHANGE_APPOINTMENT_STATUS = "UPDATE appointments set status=? WHERE id_appointment=?";
 	private static final String SQL_FIND_ALL_APPOINTMENTS_BY_USER_ID = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_client=?";
 	private static final String SQL_FIND_ALL_APPOINTMENTS_BY_DOCTOR_ID = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users d ON id_doctor=d.user_id JOIN users c ON id_client=c.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_doctor=? AND date>=? AND status=?";
+//	private static final String SQL_FIND_ALL_APPOINTMENTS_BY_DOCTOR_ID = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users d ON id_doctor=d.user_id JOIN users c ON id_client=c.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_doctor=? AND date>=? AND status=?";
 	private static final String SQL_FIND_APPOINTMENT_BY_STATUS = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE status=?";
 	private static final String SQL_FIND_APPOINTMENT_BY_ID = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_appointment=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -125,7 +126,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
 	@Override
 	public List<Appointment> findAll() throws DaoException {
-		// TODO Auto-generated method stub
+		// FIXME realization
 		return null;
 	}
 
@@ -447,6 +448,89 @@ public class AppointmentDaoImpl implements AppointmentDao {
 						.setStartTime(start)
 						.setEndTime(end)
 						.setDate(date)
+						.setStatus(procedureStatus)
+						.build();
+				appointments.add(appointment);
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
+			throw new DaoException("Dao exception in method findAllByDoctorId", e);
+		}
+		logger.log(Level.INFO, "Finded appointments: " + appointments);
+		return appointments;
+	}
+	@Override
+	public List<Appointment> findAllByDoctorIdAndDate(long doctorId,Date date) throws DaoException {
+		logger.log(Level.INFO, "Find all appointments by doctor id, doctroId=  " + doctorId +",and Date:"+ date);
+		List<Appointment> appointments = new ArrayList<>();
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_ALL_APPOINTMENTS_BY_DOCTOR_ID)) {
+			statement.setLong(1, doctorId);
+			statement.setDate(2, date);
+			statement.setString(3, Status.CONFIRMED.name());
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				long appointmentId = resultSet.getLong(ColumnName.APPOINTMENT_ID);
+				long clientId = resultSet.getLong(ColumnName.CLIENT_ID);
+				String clientName = resultSet.getString(ColumnName.CLIENT_NAME);
+				String clientSurname = resultSet.getString(ColumnName.CLIENT_SURNAME);
+				String clientEmail = resultSet.getString(ColumnName.CLIENT_EMAIL);
+				String clientPhone = resultSet.getString(ColumnName.CLIENT_PHONE);
+				boolean clientIsBlocked = resultSet.getBoolean(ColumnName.CLIENT_IS_BLOCKED);
+				Role clientRole = Role.valueOf(resultSet.getString(ColumnName.CLIENT_ROLE));
+				User client = new User.Builder()
+						.setUserID(clientId)
+						.setName(clientName)
+						.setSurname(clientSurname)
+						.setEmail(clientEmail)
+						.setPhone(clientPhone)
+						.setIsBlocked(clientIsBlocked)
+						.setRole(clientRole)
+						.build();
+				long doctorIdFromDB = resultSet.getLong(ColumnName.USER_ID);
+				String doctorName = resultSet.getString(ColumnName.USER_NAME);
+				String doctorSurname = resultSet.getString(ColumnName.USER_SURNAME);
+				String doctorEmail = resultSet.getString(ColumnName.USER_EMAIL);
+				String doctorPhone = resultSet.getString(ColumnName.USER_PHONE);
+				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
+				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
+				User doctor = new User.Builder()
+						.setUserID(doctorIdFromDB)
+						.setName(doctorName)
+						.setSurname(doctorSurname)
+						.setEmail(doctorEmail)
+						.setPhone(doctorPhone)
+						.setIsBlocked(doctorIsBlocked)
+						.setRole(doctorRole)
+						.build();
+				long procedureId = resultSet.getLong(ColumnName.PROCEDURE_ID);
+				String name = resultSet.getString(ColumnName.PROCEDURE_NAME);
+				String imageName = resultSet.getString(ColumnName.IMAGE_NAME);
+				BigDecimal price = resultSet.getBigDecimal(ColumnName.PRICE);
+				boolean procedureIsActive = resultSet.getBoolean(ColumnName.IS_ACTIVE);
+				String description = resultSet.getString(ColumnName.DESCRIPTION);
+				Duration duration = Duration.ofMinutes(resultSet.getInt(ColumnName.DURATION));
+				Procedure procedure = new Procedure.Builder()
+						.setProcedureId(procedureId)
+						.setName(name)
+					    .setImageName(imageName)
+					    .setPrice(price)
+					    .setIsActive(procedureIsActive)
+					    .setDescription(description)
+					    .setDuration(duration)
+					    .build();
+				Time start = resultSet.getTime(ColumnName.START);
+				Time end = resultSet.getTime(ColumnName.END);
+				Date appointmentDate = resultSet.getDate(ColumnName.DATE);
+				Status procedureStatus = Status.valueOf(resultSet.getString(ColumnName.STATUS));
+				Appointment appointment = new Appointment.Builder()
+						.setId(appointmentId)
+						.setUser(client)
+						.setDoctor(doctor)
+						.setProcedure(procedure)
+						.setStartTime(start)
+						.setEndTime(end)
+						.setDate(appointmentDate)
 						.setStatus(procedureStatus)
 						.build();
 				appointments.add(appointment);

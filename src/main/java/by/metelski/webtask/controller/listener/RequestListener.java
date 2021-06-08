@@ -28,8 +28,6 @@ public class RequestListener implements ServletRequestListener {
 	@Override
 	public void requestInitialized(ServletRequestEvent sre) {
 		logger.log(Level.DEBUG, "RequestInitializedIvent");
-		
-		// TODO Auto-generated method stub
 		ServletRequestListener.super.requestInitialized(sre);
 	}
 }

@@ -80,7 +80,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 
 	@Override
 	public Optional<Procedure> findByName() throws ServiceException {
-		// TODO Auto-generated method stub
+		// FIXME realization
 		return null;
 	}
 

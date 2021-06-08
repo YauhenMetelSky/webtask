@@ -36,7 +36,7 @@ public class ToPersonalPageCommand implements Command {
 		User user = (User)session.getAttribute(ParameterAndAttribute.USER);
 		if(user!= null) {
 			if(user.isBlocked()) {
-				router.setPagePath(PagePath.SIGN_IN);
+				router.setPagePath(PagePath.TO_MAIN_PAGE);
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER,Message.ACCOUNT_IS_BLOCKED);
 				return router;
 			}

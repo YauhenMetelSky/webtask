@@ -120,7 +120,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public List<Appointment> findAll() throws ServiceException {
-		// TODO Auto-generated method stub
+		// FIXME realization
 		return null;
 	}
 
@@ -192,6 +192,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 			appointments = appointmentDao.findAllByDoctorId(doctorId);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method findAllByUserId(), " + e);
+			throw new ServiceException(e);
+		}
+		return appointments;
+	}
+	@Override
+	public List<Appointment> findAllByDoctorIdAndDate(long doctorId,Date date) throws ServiceException {
+		logger.log(Level.DEBUG, "findAllByDoctorIdAndDate, doctorId:" + doctorId+ ",Date:" + date);
+		List<Appointment> appointments = new ArrayList<>();
+		try {
+			appointments = appointmentDao.findAllByDoctorIdAndDate(doctorId, date);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findAllByDoctorIdAndDate(), " + e);
 			throw new ServiceException(e);
 		}
 		return appointments;

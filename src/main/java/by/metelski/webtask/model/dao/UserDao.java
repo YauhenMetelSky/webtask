@@ -14,6 +14,7 @@ public interface UserDao {
 	List<User> findUsersByRole(Role role) throws DaoException;
 	Optional<String> findPasswordByEmail(String email) throws DaoException;	
 	Optional<User> findUserByEmail(String email) throws DaoException;
+	int findNumberOfRows() throws DaoException;
 	boolean addUser(User user, String password) throws DaoException;	
 	boolean activateAccount(String email) throws DaoException;	
 	boolean changeIsBlockedStatus(long id,boolean isBlocked) throws DaoException;

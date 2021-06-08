@@ -13,6 +13,7 @@ public final class ParameterAndAttribute {
 	public static final String DATES = "dates";
 	public static final String DATE = "date";
 	public static final String DESCRIPTION = "description";
+	public static final String DOCTOR_ACTIVE_SCHEDULES_LIST = "doctor_active_schedules_list";
 	public static final String DOCTOR_ID = "doctor_id";
 	public static final String DOCTORS_LIST = "doctors_list";
 	public static final String DOCTOR_SCHEDULE_ID = "doctor_schedule_id";

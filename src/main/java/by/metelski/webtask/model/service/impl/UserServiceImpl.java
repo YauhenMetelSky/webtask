@@ -24,7 +24,8 @@ import by.metelski.webtask.validator.UserValidator;
 
 public class UserServiceImpl implements UserService {
 	private static final Logger logger = LogManager.getLogger();
-	private UserDao userDao;
+	private final UserDao userDao;
+	private final int numberOfUsersInPage = 10;
 	private final String COMMAND_CONFIRM = "?command=activate";
 	private final String TOKEN = "&token=";
 	private final String EMAIL = "&email=";
@@ -157,7 +158,7 @@ public class UserServiceImpl implements UserService {
 			String message = Message.WELCOM + url;
 			try {
 				userAdded = userDao.addUser(user, encodedPassword);
-				MailSender.sendEmail(user.getEmail(), "Account confirmation", message);
+				MailSender.sendEmail(user.getEmail(), "Account confirmation", message);// TODO magic string
 			} catch (DaoException e) {
 				logger.log(Level.ERROR, "dao exception in method addUser" + e);
 				throw new ServiceException(e);
@@ -227,5 +228,24 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException(e);
 		}
 		return isChanged;
+	}
+
+	@Override
+	public int findNumberOfPages() throws ServiceException {
+		logger.log(Level.DEBUG, "FindNumberOfPages:");
+		int numberOfPages;
+		int numberOfUser;
+		try {
+			numberOfUser = userDao.findNumberOfRows();
+			if (numberOfUser > numberOfUsersInPage) {
+				numberOfPages = (int) Math.ceil((double) numberOfUser / numberOfUsersInPage);
+			} else {
+				numberOfPages = 1;
+			}
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findNumberOfRows()" + e);
+			throw new ServiceException(e);
+		}
+		return numberOfPages;
 	}
 }

@@ -1,5 +1,6 @@
 package by.metelski.webtask.model.service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,5 +17,6 @@ public interface AppointmentService {
 	List<Appointment> findAllByStatus(Status status) throws ServiceException;
 	List<Appointment> findAllByUserId(long userId) throws ServiceException;
 	List<Appointment> findAllByDoctorId(long doctorId) throws ServiceException;
+	List<Appointment> findAllByDoctorIdAndDate(long doctorId,Date date) throws ServiceException;
 	Optional<Appointment> findById(long id) throws ServiceException;
 }

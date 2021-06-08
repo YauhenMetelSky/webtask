@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -35,6 +36,7 @@ public class UpdateAppointmentCommand implements Command{
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.DEBUG, "execute method UpdateAppointmentCommand");
 		Router router = new Router();
+		HttpSession session = request.getSession();
 		Map<String, String> appointmentData = new HashMap<>();
 		String userId = request.getParameter(ParameterAndAttribute.USER_ID);
 		logger.log(Level.DEBUG, "userId:"+userId);
@@ -52,11 +54,13 @@ public class UpdateAppointmentCommand implements Command{
 		try {
 			String date = scheduleService.findScheduleById(Long.parseLong(scheduleId)).get().getDate().toString();
 			appointmentData.put(ParameterAndAttribute.APPOINTMENT_DATE, date);
+			String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
+			router.setPagePath(page);			
 			if(service.change(appointmentData)) {
-				//TODO message successful!!!
-				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
-				router.setPagePath(page);
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 				router.setType(Type.REDIRECT);
+			} else {
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
 			router.setPagePath(PagePath.ERROR);

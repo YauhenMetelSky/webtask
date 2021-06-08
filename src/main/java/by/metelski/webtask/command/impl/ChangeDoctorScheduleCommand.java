@@ -5,11 +5,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -29,6 +32,7 @@ public class ChangeDoctorScheduleCommand implements Command{
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.DEBUG, "execute method ChangeDoctorScheduleCommand");
 		Router router = new Router();
+		HttpSession session = request.getSession();
 		Map<String,String> scheduleData = new HashMap<>();
 		String scheduleId = request.getParameter(ParameterAndAttribute.DOCTOR_SCHEDULE_ID);
 		logger.log(Level.DEBUG, "doctor_schedule id:"+ scheduleId);
@@ -39,12 +43,15 @@ public class ChangeDoctorScheduleCommand implements Command{
 		scheduleData.put(ParameterAndAttribute.START_TIME, startTime);
 		scheduleData.put(ParameterAndAttribute.END_TIME, endTime);
 		scheduleData.put(ParameterAndAttribute.DATE, date);
-		try {//TODO message successful!!!
+		String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
+		router.setPagePath(page);
+		try {
 			if(scheduleService.changeDoctorSchedule(scheduleData)) {
-				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
-				router.setPagePath(page);
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 				router.setType(Type.REDIRECT);
-			} 
+			} else {
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
+			}
 		} catch (ServiceException e) {
 			router.setPagePath(PagePath.ERROR);
 		}
