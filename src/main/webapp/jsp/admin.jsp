@@ -180,6 +180,66 @@
 		</c:forEach>
 		</table>
 		<br />
+		<table class="table table-striped">	
+		<c:if test="${result_list ne null}">
+			<tr>
+				<th><fmt:message key="label.number" /></th>
+				<th><fmt:message key="label.id" /></th>
+				<th><fmt:message key="label.name" /></th>
+				<th><fmt:message key="label.surname" /></th>
+				<th><fmt:message key="label.email" /></th>
+				<th><fmt:message key="label.phone" /></th>
+				<th><fmt:message key="label.blocked" /></th>
+				<th><fmt:message key="label.change_role" /></th>
+				<th><fmt:message key="label.action" /></th>
+				
+			</tr>
+		
+		<c:forEach var="elem" items="${result_list}" varStatus="status">
+			<tr>
+				<td><c:out value="${status.count }" /></td>
+				<td><c:out value="${elem.userId }" /></td>
+				<td><c:out value="${elem.name }" /></td>
+				<td><c:out value="${elem.surname }" /></td>
+				<td><c:out value="${elem.email }" /></td>
+				<td><c:out value="${elem.phone }" /></td>
+				<td><c:out value="${elem.blocked }" /></td>
+				<td>	
+		       <form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.change_role_to_doctor"/>
+				</button>
+				<input type="hidden" name="id" value="${elem.userId}">
+				<input type="hidden" name="command" value="change_user_role_doctor">
+			</form>	
+			</td>
+				<c:if test="${elem.blocked==false}">		
+				<td>	
+		       <form action="controller" method="POST">
+				<button type="submit" class="btn btn-danger">
+					<fmt:message key="label.block_user"/>
+				</button>
+				<input type="hidden" name="id" value="${elem.userId}">
+				<input type="hidden" name="command" value="block_user">
+			</form>	
+			</td>
+			</c:if>
+			<c:if test="${elem.blocked==true}">		
+				<td>	
+		       <form action="controller" method="POST">
+				<button type="submit" class="btn btn-success">
+					<fmt:message key="label.unblock_user"/>
+				</button>
+				<input type="hidden" name="id" value="${elem.userId}">
+				<input type="hidden" name="command" value="unblock_user">
+			</form>	
+			</td>
+			</c:if>
+			</tr>
+		</c:forEach>
+		</c:if>
+	</table>
+	
 	<table class="table table-striped">	
 		<c:if test="${list ne null}">
 			<tr>
@@ -194,8 +254,7 @@
 				<th><fmt:message key="label.action" /></th>
 				
 			</tr>
-		</c:if>
-
+		
 		<c:forEach var="elem" items="${list}" varStatus="status">
 			<tr>
 				<td><c:out value="${status.count }" /></td>
@@ -238,6 +297,21 @@
 			</c:if>
 			</tr>
 		</c:forEach>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+<c:forEach begin="1" end="${number_of_pages }" var="i">
+    <li class="page-item">
+              <form action="controller" method="POST">
+				<button type="submit" class="page-link" value="${i }"><c:out value="${i }"/>				
+				</button>
+				<input type="hidden" name="start_from" value="${i}">
+				<input type="hidden" name="command" value="find_users_pagination">
+			</form>	
+			</li>
+ </c:forEach>
+  </ul>
+</nav>
+		</c:if>
 	</table>
 	
 	<table class="table table-striped">	

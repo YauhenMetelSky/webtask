@@ -2,6 +2,7 @@
 	language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+ <%@ taglib uri="customtag" prefix="custom"%>
 <fmt:setLocale value="${locale}" scope="session" />
 <fmt:setBundle basename="pagecontent" />
 
@@ -23,7 +24,7 @@
 </head>
 <body>
 <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups"> 
-Minsk, 2021
+<custom:copyright/>
 <form action="controller" method="post">
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button"

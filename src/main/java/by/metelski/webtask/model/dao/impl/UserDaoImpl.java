@@ -23,6 +23,7 @@ public class UserDaoImpl implements UserDao {
 	private static final Logger logger = LogManager.getLogger();
 	private static final String SQL_COUNT_ALL_USERS = "SELECT COUNT(*) FROM users";
 	private static final String SQL_FIND_ALL_USERS = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users";
+	private static final String SQL_FIND_USERS_FROM_ROW = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users LIMIT ?,?";
 	private static final String SQL_FIND_USERS_BY_NAME = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE name=?";
 	private static final String SQL_FIND_USERS_BY_SURNAME = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE surname=?";
 	private static final String SQL_FIND_USERS_BY_ROLE = "SELECT user_id,name,surname,email,phone,is_blocked,role FROM users WHERE role=?";
@@ -297,5 +298,26 @@ public class UserDaoImpl implements UserDao {
 			throw new DaoException("Dao exception", e);
 		}
 		return numberOfRows;
+	}
+
+	@Override
+	public List<User> findUsersFromRow(int fromRow,int numberOfUsersInPage) throws DaoException {
+		logger.log(Level.INFO, "Find all users");
+		List<User> users = new ArrayList<User>();
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_FROM_ROW))
+				{
+			statement.setInt(1,fromRow);
+			statement.setInt(2,numberOfUsersInPage);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				User user = createUser(resultSet);
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQLException in findUsersFromRow(): " + e.getMessage() + " : " + e.getErrorCode());
+			throw new DaoException("Dao exception", e);
+		}
+		return users;
 	}
 }

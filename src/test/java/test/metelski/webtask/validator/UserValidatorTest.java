@@ -1,4 +1,4 @@
-package test.metelski.webtask.command.impl;
+package test.metelski.webtask.validator;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -26,6 +26,11 @@ public class UserValidatorTest extends Assert {
 		boolean actualResult = UserValidator.isValidEmail(email);
 		assertEquals(actualResult, expectedResult);		
 	}
+	@Test(dataProvider="isValidPasswordData")
+	public void testIsValidPassword(String password, boolean expectedResult) {
+		boolean actualResult = UserValidator.isValidPassword(password);
+		assertEquals(actualResult, expectedResult);
+	}
 	
 	@DataProvider
 	public Object[][] isValidEmailData(){
@@ -52,10 +57,22 @@ public class UserValidatorTest extends Assert {
 			{"ThisNameIsToLongForRealMen",false},
 			{"",false},
 			{" ",false},
-//			{null,false},//TODO it doesn't work!!! NPE
 			{ "<Notname>", false },
 			{ "Number345", false }, 
 			{ "punct.,punct", false } 
 			};
+	}
+	@DataProvider
+	public Object[][] isValidPasswordData(){
+		return new Object[][] {
+			{"1",true},
+			{"123456789123456",true},
+			{"1234567891234567",false},
+			{"Ё",false},
+			{"",false},
+			{"12 912",false},
+			{"  ",false},
+			{"a79866B978c",true}
+		};
 	}
 }

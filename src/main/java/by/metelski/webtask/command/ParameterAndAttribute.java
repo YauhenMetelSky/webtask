@@ -27,12 +27,15 @@ public final class ParameterAndAttribute {
 	public static final String MAX_DATE = "max_date";
 	public static final String MESSAGE = "message";
 	public static final String MESSAGE_FOR_USER = "message_for_user";
+	public static final String NUMBER_OF_PAGES = "number_of_pages";
 	public static final String PROCEDURE ="procedure";
 	public static final String PROCEDURE_ID = "procedure_id";
 	public static final String PROCEDURE_IMAGE = "procedure_image";
 	public static final String PROCEDURE_NAME = "procedure_name";
 	public static final String PROCEDURE_PRICE = "procedure_price";
 	public static final String PROCEDURES_LIST = "procedures_list";
+	public static final String RESULT_LIST = "result_list";
+	public static final String START_FROM = "start_from";
 	public static final String START_TIME = "start_time";
 	public static final String SCHEDULE = "schedule";
 	public static final String SCHEDULE_ID = "schedule_id";

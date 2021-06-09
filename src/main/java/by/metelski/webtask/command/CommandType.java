@@ -7,6 +7,7 @@ import by.metelski.webtask.command.impl.ToSignUpCommand;
 import by.metelski.webtask.command.impl.UnblockUserCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
 import by.metelski.webtask.command.impl.FindUsersBySurnameCommand;
+import by.metelski.webtask.command.impl.FindUsersPaginationCommand;
 import by.metelski.webtask.command.impl.LogInCommand;
 import by.metelski.webtask.command.impl.LogOutCommand;
 import by.metelski.webtask.command.impl.SetLocaleCommand;
@@ -207,6 +208,11 @@ public enum CommandType {
 	FIND_TIME_INTERVALS_BY_SCHEDULE_ID_ASYNC {
 		{
 			this.command = new FindTimeIntervalsByScheduleIdAsyncCommand();
+		}
+	},
+	FIND_USERS_PAGINATION{
+		{
+		this.command=new FindUsersPaginationCommand();	
 		}
 	},
 	LOG_IN {

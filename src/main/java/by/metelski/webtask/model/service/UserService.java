@@ -9,6 +9,7 @@ import by.metelski.webtask.exception.ServiceException;
 
 public interface UserService {
 	List<User> findAllUsers() throws ServiceException;
+	List<User> findUsersFromRow(int pageNumber) throws ServiceException;
 	List<User> findUsersByName(String userName) throws ServiceException;
 	List<User> findUsersBySurname(String userSurname) throws ServiceException;
 	List<User> findUsersByRole(Role role) throws ServiceException;

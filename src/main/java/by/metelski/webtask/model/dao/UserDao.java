@@ -9,6 +9,7 @@ import by.metelski.webtask.exception.DaoException;
 
 public interface UserDao {
 	List<User> findAll() throws DaoException;
+	List<User> findUsersFromRow(int fromRow,int numberOfUsersInPage) throws DaoException;
 	List<User> findUsersByName(String userName) throws DaoException;
 	List<User> findUsersBySurname(String userSurname) throws DaoException;
 	List<User> findUsersByRole(Role role) throws DaoException;

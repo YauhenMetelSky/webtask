@@ -248,4 +248,24 @@ public class UserServiceImpl implements UserService {
 		}
 		return numberOfPages;
 	}
+
+	@Override
+	public List<User> findUsersFromRow(int pageNumber) throws ServiceException {
+		logger.log(Level.DEBUG, "findUsersFromRow(), page number:" + pageNumber);
+		List<User> users = new ArrayList<>();
+		int fromRow;
+		if(pageNumber>1) {
+			fromRow=(pageNumber-1)*numberOfUsersInPage;
+		} else {
+			fromRow=0;
+		}	
+		try {
+			users = userDao.findUsersFromRow(fromRow, numberOfUsersInPage);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findUsersFromRow" + e);
+			throw new ServiceException(e);
+		}
+
+		return users;
+	}
 }

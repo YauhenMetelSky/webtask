@@ -36,7 +36,7 @@ public class FindUsersBySurnameCommand implements Command {
 			users = userService.findUsersBySurname(userSurname);
 			if (users.size() > 0) {
 				router.setPagePath(page);
-				request.setAttribute(ParameterAndAttribute.LIST, users);
+				request.setAttribute(ParameterAndAttribute.RESULT_LIST, users);
 			} else {
 				router.setPagePath(page);
 				request.setAttribute(ParameterAndAttribute.MESSAGE, "Can't find such user");
