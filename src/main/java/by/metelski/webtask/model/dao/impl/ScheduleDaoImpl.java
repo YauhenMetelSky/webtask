@@ -42,9 +42,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	private static final String SQL_ADD_DOCTOR_SCHEDULE = "INSERT INTO doctor_schedules (doctor_id,start_time,end_time,date) values(?,?,?,?)";
 	private static final String SQL_CHANGE_DOCTOR_SCHEDULE = "UPDATE doctor_schedules SET start_time=?,end_time=?,date=? WHERE id_doctor_schedule=?";
 	private static final String SQL_CHANGE_DOCTOR_SCHEDULE_IS_ACTIVE = "UPDATE doctor_schedules SET is_active=? WHERE id_doctor_schedule=?";
-	private static final String SQL_FIND_ALL_SCHEDULES = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id";
-	private static final String SQL_FIND_SCHEDULES_BY_DOCTOR_ID = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id WHERE doctor_id=?";
-	private static final String SQL_FIND_ACTIVE_SCHEDULES_BY_DOCTOR_ID = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id WHERE doctor_id=? AND date>=? AND ds.is_active=true";
+	private static final String SQL_FIND_ALL_SCHEDULES = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id ORDER BY ds.date DESC";
+	private static final String SQL_FIND_SCHEDULES_BY_DOCTOR_ID = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id WHERE doctor_id=? ORDER BY ds.date DESC";
+	private static final String SQL_FIND_ACTIVE_SCHEDULES_BY_DOCTOR_ID = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id WHERE doctor_id=? AND date>=? AND ds.is_active=true ORDER BY ds.date DESC";
 	private static final String SQL_FIND_SCHEDULE_BY_ID = "SELECT ds.id_doctor_schedule,user_id,name,surname,email,phone,is_blocked,role, ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users ON doctor_id=user_id WHERE ds.id_doctor_schedule=?";
 	private static final String SQL_FIND_SCHEDULE_BY_DOCTOR_ID_AND_DATE = "SELECT ds.id_doctor_schedule,user_id,name,surname,email,phone,is_blocked,role, ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users ON doctor_id=user_id WHERE doctor_id=? AND ds.date=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -185,7 +185,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 
 	@Override
-	public Optional<DoctorSchedule> FindScheduleById(long id) throws DaoException {
+	public Optional<DoctorSchedule> findScheduleById(long id) throws DaoException {
 		Optional<DoctorSchedule> schedule;
 		logger.log(Level.INFO, "Find schedule by id, ID: " + id);
 		try (Connection connection = connectionPool.getConnection();

@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -34,12 +35,11 @@ public class FindUserByEmailCommand implements Command {
 		logger.log(Level.INFO, "Find by email: " + email);
 		try {//FIXME null in optional
 			user = userService.findUserByEmail(email);
+			router.setPagePath(page);
 			if (user.isPresent()) {
-				router.setPagePath(page);
 				request.setAttribute(ParameterAndAttribute.FINDED_USER, user);
 			} else {
-				router.setPagePath(page);
-				request.setAttribute(ParameterAndAttribute.MESSAGE, "Can't find such user");
+				request.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.NOTHING_FOUNDED);
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");

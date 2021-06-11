@@ -49,7 +49,7 @@
 					placeholder=<fmt:message key="label.image"/>>
 					<input type="text" name="procedure_price" value="${procedure.price }" required pattern="\d+[.]\d+" class="form-control"
 					placeholder=<fmt:message key="label.price"/>>
-					<input type="text" name="duration" value="${procedure.duration}" required pattern="\d+" class="form-control"
+					<input type="text" name="duration" value="${procedure.duration.toMinutes()}" required pattern="\d+" class="form-control"
 					placeholder=<fmt:message key="label.duration"/>>
 					<input type="text" name="description" value="${procedure.description }" required pattern=".*[^<>]" class="form-control"
 					placeholder=<fmt:message key="label.description"/>>

@@ -32,7 +32,6 @@ public class FindAllSchedulesByUserIdAsyncCommand implements Command{
 		Long userId = Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_ID));
 		try {
 			schedules = service.findAllSchedulesByDoctorId(userId);		
-			request.setAttribute(ParameterAndAttribute.DOCTOR_SCHEDULES_LIST, schedules);
 			String stringGson = new Gson().toJson(schedules);
 			logger.log(Level.DEBUG, "string gson: " + stringGson);
 			 response.getWriter().write(stringGson);

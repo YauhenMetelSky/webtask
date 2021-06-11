@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +29,7 @@ public class SignUpCommand implements Command {
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		Router router = new Router();
+		HttpSession session = request.getSession();
 		Map<String, String> userData = new HashMap<>();
 		logger.log(Level.DEBUG, "execute method SignUp");
 		String name = request.getParameter(ParameterAndAttribute.USER_NAME);
@@ -49,7 +51,7 @@ public class SignUpCommand implements Command {
 						String page = request.getContextPath();
 						router.setPagePath(page);
 						router.setType(Type.REDIRECT);
-						request.setAttribute(ParameterAndAttribute.MESSAGE, Message.USER_CREATED);
+						session.setAttribute(ParameterAndAttribute.CHECK_EMAIL, Message.EMAIL_ACTIVATE);
 					} else {
 						router.setPagePath(PagePath.SIGN_UP);
 						request.setAttribute(ParameterAndAttribute.MESSAGE, Message.CANT_ADD_USER);

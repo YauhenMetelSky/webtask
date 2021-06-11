@@ -5,6 +5,7 @@ public final class Message {
 	public static final String ACCOUNT_IS_BLOCKED="Sorry,your account is blocked.";
 	public static final String CANT_ACTIVATE="Try to activate your account later.";
 	public static final String CANT_ADD_USER="Can't add user";
+	public static final String EMAIL_ACTIVATE="Account created, please check your email to activate it.";
 	public static final String EMAIL_SEND="Email send";
 	public static final String EMAIL_SUBJECT ="Account activation.";
 	public static final String EMAIL_TEXT ="We are glad to welcome you on our site.";

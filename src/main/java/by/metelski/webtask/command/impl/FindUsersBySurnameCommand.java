@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -34,12 +35,11 @@ public class FindUsersBySurnameCommand implements Command {
 		logger.log(Level.INFO, "Find by surname: " + userSurname);
 		try {
 			users = userService.findUsersBySurname(userSurname);
+			router.setPagePath(page);
 			if (users.size() > 0) {
-				router.setPagePath(page);
 				request.setAttribute(ParameterAndAttribute.RESULT_LIST, users);
 			} else {
-				router.setPagePath(page);
-				request.setAttribute(ParameterAndAttribute.MESSAGE, "Can't find such user");
+				request.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.NOTHING_FOUNDED);
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");

@@ -90,7 +90,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		logger.log(Level.DEBUG, "findAllScheduleById. Id:" + id);
 		Optional<DoctorSchedule> schedule;
 		try {
-			schedule = dao.FindScheduleById(id);
+			schedule = dao.findScheduleById(id);
 			logger.log(Level.DEBUG, "finded schedule:" + schedule);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method FindScheduleById, id: " + id);

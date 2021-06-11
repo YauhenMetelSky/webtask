@@ -8,6 +8,7 @@ public final class ParameterAndAttribute {
 	public static final String APPOINTMENTS_LIST = "appointments_list";
 	public static final String EMAIL_TO = "email_to";
 	public static final String END_TIME = "end_time";
+	public static final String CHECK_EMAIL = "check_email";
 	public static final String COMMAND = "command";
 	public static final String CURRENT_PAGE = "current_page";
 	public static final String DATES = "dates";

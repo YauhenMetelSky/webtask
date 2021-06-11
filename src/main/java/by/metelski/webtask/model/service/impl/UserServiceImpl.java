@@ -16,7 +16,6 @@ import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ColumnName;
 import by.metelski.webtask.model.dao.UserDao;
-import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.util.Encoder;
 import by.metelski.webtask.util.MailSender;
@@ -48,8 +47,7 @@ public class UserServiceImpl implements UserService {
 					logger.log(Level.DEBUG, "passwordFromDB: " + passwordFromDB);
 					if (passwordFromDB.equals(encodedPassword)) {
 						logger.log(Level.INFO, "passwords equals, authorization is successful for user: " + email);
-						User user = userDao.findUserByEmail(email).get();
-						optionalUser = Optional.of(user);
+						optionalUser = userDao.findUserByEmail(email);
 					} else {
 						optionalUser = Optional.empty();
 					}

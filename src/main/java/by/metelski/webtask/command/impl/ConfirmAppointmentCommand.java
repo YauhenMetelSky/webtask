@@ -1,13 +1,14 @@
 package by.metelski.webtask.command.impl;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -27,9 +28,11 @@ public class ConfirmAppointmentCommand implements Command {
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
 		logger.log(Level.DEBUG, "ConfirmAppointmentCommand");
 		Router router = new Router();
+		HttpSession session = request.getSession();
 		long appointmentId =Long.parseLong(request.getParameter(ParameterAndAttribute.APPOINTMENT_ID));
 		try {
 			if(service.changeStatus(appointmentId, Status.CONFIRMED)) {
+			session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 			String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
 			router.setPagePath(page);
 			router.setType(Type.REDIRECT);

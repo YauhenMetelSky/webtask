@@ -13,7 +13,6 @@ public class Procedure {
 	private Duration duration;
 	
 	private Procedure() {
-		
 	}
 	public String getName() {
 		return name;
