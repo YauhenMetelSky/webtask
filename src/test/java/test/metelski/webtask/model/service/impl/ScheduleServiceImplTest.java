@@ -134,5 +134,18 @@ public class ScheduleServiceImplTest extends Assert {
 		boolean actualResult = service.changeDoctorSchedule(data);
 		assertEquals(actualResult, expectedResult);
 	}
-	
+	@Test
+	public void testChangeFieldIsActive() throws DaoException, ServiceException {
+		boolean expectedResult=true;
+		when(dao.changeFieldIsActive(1, true)).thenReturn(true);
+		boolean actualREsult = service.changeFieldIsActive(1, true);
+		assertEquals(actualREsult, expectedResult);
+	}
+	@Test
+	public void testFindAllSchedules() throws DaoException, ServiceException {
+		List<DoctorSchedule> expectedResult = schedulesListDoctor1;
+		when(dao.findAllSchedules()).thenReturn(schedulesListDoctor1);
+		List<DoctorSchedule> actualResult = service.findAllSchedules();
+		assertEquals(actualResult, expectedResult);
+	}
 }
