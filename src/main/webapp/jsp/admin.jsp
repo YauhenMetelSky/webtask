@@ -117,6 +117,13 @@
 			</form>
 		</div>
 		</div>
+		<div class="col">
+			<table class="table table-striped" id="app_table">
+				</table>
+		 		 		 
+		 </div>
+		</div>
+		<!-- End row -->
 	<!-- 	</div> -->
 	<br />
 		<div class="col">		
@@ -143,7 +150,10 @@
 		<td><c:out value="${elem.date }" /></td>
 		<td><c:out value="${elem.startTime }" /></td>
 		<td><c:out value="${elem.endTime }" /></td>
-		<td><c:out value="${elem.doctor.name }" /><c:out value=" " /><c:out value="${elem.doctor.surname} " /></td>				
+		<td><button class="btn btn-link" id="button_doctor" value="${elem.doctor.userId}:${elem.date}"><c:out value="${elem.doctor.name }" />
+					<c:out value=" " /><c:out value="${elem.doctor.surname} " />
+				</button>		
+			</td>		
 		<td><c:out value="${elem.procedure.name }" /></td>
 		<td><c:out value="${elem.user.name }" /><c:out value=" " /><c:out value="${elem.user.surname} " /></td>	
 		<td><c:out value="${elem.user.phone }" /></td>	
@@ -417,9 +427,32 @@
 	
 	</div>
 	</div>
-	</div>
 
 	<c:import url="footer.jsp" />
 	
+	<script type="text/javascript">
+		$(document).on('click',"#button_doctor",function() {
+				var app_data = $(this).val();
+				console.log(app_data);
+				$.ajax({
+					type : 'POST',
+					data : {
+						app_data : app_data,
+						command: 'find_all_appointments_by_doctor_and_date_async'
+					},
+					url : 'ajaxcontroller',
+					success : function(result) {						
+						 console.log(result); 
+						console.log(result.length);
+						 	$("#app_table").empty();
+							$("#app_table").append("<tr><th>Client</th><th>Start time</th><th>End time</th><th>Procedure</th></tr>");
+							for(var i =0;i<result.length;i++){
+								console.log(result[i]);
+								 $("#app_table").append("<tr><td>"+result[i].user.name+"</td><td>"+ result[i].startTime+"</td><td>"+result[i].endTime+"</td><td>"+result[i].procedure.name+"</td></tr>"); 
+							} 		 								                 
+					}
+				});
+			});
+	</script>	   
 </body>
 </html>

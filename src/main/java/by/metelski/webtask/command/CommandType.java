@@ -20,6 +20,7 @@ import by.metelski.webtask.command.impl.ToPersonalPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
 import by.metelski.webtask.command.async.FindAllActiveSchedulesByDoctorIdAsyncCommand;
+import by.metelski.webtask.command.async.FindAllAppointmentsByDoctorIDAndDateAsyncCommand;
 import by.metelski.webtask.command.async.FindAllSchedulesByUserIdAsyncCommand;
 import by.metelski.webtask.command.async.FindScheduleByIdAsyncCommand;
 import by.metelski.webtask.command.async.FindTimeIntervalsByScheduleIdAsyncCommand;
@@ -157,6 +158,11 @@ public enum CommandType {
 	FIND_ALL_APPOINTMENTS_BY_USER_ID {
 		{
 			this.command = new FindAllAppointmentsByUserIdCommand();
+		}
+	},
+	FIND_ALL_APPOINTMENTS_BY_DOCTOR_AND_DATE_ASYNC{
+		{
+			this.command=new FindAllAppointmentsByDoctorIDAndDateAsyncCommand();
 		}
 	},
 	FIND_ALL_ACTIVE_SCHEDULES_BY_DOCTOR_ASYNC{
