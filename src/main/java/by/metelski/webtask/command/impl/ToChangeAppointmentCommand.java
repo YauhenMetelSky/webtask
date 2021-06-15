@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -66,7 +67,9 @@ public class ToChangeAppointmentCommand implements Command {
 				request.setAttribute(ParameterAndAttribute.APPOINTMENT, optional.get());
 				router.setPagePath(PagePath.CHANGE_APPOINTMENT);
 			}else {
-				//TODO message nothing founded??? or it is impossible situation
+				logger.log(Level.ERROR, "Nothing founded");
+				request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, Message.UNKNOWN_PROBLEM);
+				router.setPagePath(PagePath.ERROR);
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "AppointmentServiceException in method execute");

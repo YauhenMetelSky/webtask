@@ -1,5 +1,6 @@
 package by.metelski.webtask.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -27,8 +28,8 @@ public class MailSender {
 	static {
 		try(InputStream inputStream = MailSender.class.getClassLoader().getResourceAsStream(MAIL_PROPERTIES)){
 			properties.load(inputStream);
-		}catch(Exception e) {
-			logger.log(Level.ERROR, "Properties exception: " + e.getMessage());//TODO catch and right exception
+		}catch(IOException e) {
+			logger.log(Level.ERROR, "Properties exception: " + e.getMessage());
 		}
 		
 	}
@@ -48,7 +49,7 @@ public class MailSender {
             message.setText(messageText);
             Transport.send(message);
 		  }catch(MessagingException e) {
-			  logger.log(Level.ERROR, "MessagingException: " + e.getMessage());//TODO catch
+			  logger.log(Level.ERROR, "MessagingException: " + e.getMessage());
 		  }
 	}
 }

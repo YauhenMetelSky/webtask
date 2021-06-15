@@ -3,8 +3,6 @@ package by.metelski.webtask.model.connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -20,13 +18,12 @@ public class ConnectionPool {
 	private static ConnectionPool instance = new ConnectionPool();
 	private static Lock locker = new ReentrantLock(true);
 	private BlockingQueue<ProxyConnection> freeConnection;
-	private Queue<ProxyConnection> givenAwayConnections;
-	// TODO default pool size from connection or properties
+	private BlockingQueue<ProxyConnection> givenAwayConnections;
 	private static final int DEFAULT_POOL_SIZE = 8;
-//TODO 2 blocking queues
+
 	private ConnectionPool() {
 		freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
-		givenAwayConnections = new ArrayDeque<>();
+		givenAwayConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
 		for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
 			try {
 				Connection connection = ConnectionCreator.getConnection();

@@ -44,7 +44,7 @@ public class ChangePersonalInfoCommand implements Command{
 		userData.put(ParameterAndAttribute.USER_NAME, name);
 		userData.put(ParameterAndAttribute.USER_SURNAME, surname);
 		userData.put(ParameterAndAttribute.USER_PHONE, phone);
-		try {//FIXME VAlidation
+		try {
 			if(userService.changePersonalInfo(user, userData)) {
 				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
 				router.setPagePath(page);
@@ -54,6 +54,9 @@ public class ChangePersonalInfoCommand implements Command{
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
+			logger.log(Level.ERROR, "ServiceException: " + e);
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

@@ -53,6 +53,9 @@ public class ChangeProcedureCommand implements Command{
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 			} 
 		} catch (ServiceException e) {
+			logger.log(Level.ERROR, "ServiceException: " + e);
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 			return router;

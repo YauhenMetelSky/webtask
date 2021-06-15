@@ -40,6 +40,8 @@ public class FindAllSchedulesByDoctorCommand implements Command {
 			request.setAttribute(ParameterAndAttribute.DOCTOR_SCHEDULES_LIST, schedules);
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "ScheduleServiceException in method execute");
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

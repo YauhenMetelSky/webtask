@@ -38,6 +38,8 @@ public class FindAllNewAppointmentsCommand implements Command {
 				request.setAttribute(ParameterAndAttribute.APPOINTMENTS_LIST, appointments);
 			} catch (ServiceException e) {
 				logger.log(Level.ERROR, "AppointmentServiceException in method execute" + e);
+				request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+				request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 				router.setPagePath(PagePath.ERROR);
 			} 
 			return router;

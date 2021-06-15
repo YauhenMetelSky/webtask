@@ -17,7 +17,6 @@ import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.command.Router.Type;
-import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.impl.AppointmentDaoImpl;
 import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
@@ -63,6 +62,9 @@ public class UpdateAppointmentCommand implements Command{
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
+			logger.log(Level.ERROR, "ServiceException in method execute");
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

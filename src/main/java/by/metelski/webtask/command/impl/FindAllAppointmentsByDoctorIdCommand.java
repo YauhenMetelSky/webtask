@@ -41,6 +41,8 @@ public class FindAllAppointmentsByDoctorIdCommand implements Command {
 			request.setAttribute(ParameterAndAttribute.APPOINTMENTS_LIST, appointments);
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "ScheduleServiceException in method execute");
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

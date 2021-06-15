@@ -43,7 +43,9 @@ public class UnblockUserCommand implements Command {
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
-			logger.log(Level.ERROR, "UserServiceException in method execute BlockUserCommand" + e);
+			logger.log(Level.ERROR, "UserServiceException in method execute UnblockUserCommand" + e);
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

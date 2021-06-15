@@ -22,6 +22,7 @@ import by.metelski.webtask.model.service.impl.UserServiceImpl;
 public class FindAllUsersCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserService userService = new UserServiceImpl(new UserDaoImpl());
+	private final int startRow=0;
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
@@ -31,8 +32,7 @@ public class FindAllUsersCommand implements Command {
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
 		try {
-//			users = userService.findAllUsers();
-			users=userService.findUsersFromRow(0);
+			users=userService.findUsersFromRow(startRow);
 			numberOfPages = userService.findNumberOfPages();
 			router.setPagePath(page);
 			request.setAttribute(ParameterAndAttribute.LIST, users);
@@ -40,6 +40,8 @@ public class FindAllUsersCommand implements Command {
 			session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL );
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

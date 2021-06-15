@@ -44,7 +44,6 @@ public class AddAppointmentCommand implements Command {
 		appointmentData.put(ParameterAndAttribute.USER_ID, userId);
 		appointmentData.put(ParameterAndAttribute.DOCTOR_ID, doctorId);
 		appointmentData.put(ParameterAndAttribute.PROCEDURE_ID, procedureId);
-//		appointmentData.put(ParameterAndAttribute.SCHEDULE_ID, scheduleId);
 		appointmentData.put(ParameterAndAttribute.START_TIME, time);
 		logger.log(Level.DEBUG, "data in map from request: " + appointmentData.toString());
 		try {
@@ -57,6 +56,9 @@ public class AddAppointmentCommand implements Command {
 				router.setType(Type.REDIRECT);
 			}
 		} catch (ServiceException e) {
+			logger.log(Level.ERROR, "ServiceException: " + e);
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

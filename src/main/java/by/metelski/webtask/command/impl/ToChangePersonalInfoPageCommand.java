@@ -25,10 +25,10 @@ import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
 public class ToChangePersonalInfoPageCommand  implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
-	UserService userService = new UserServiceImpl(new UserDaoImpl());
-	ProcedureService procedureService = new ProcedureServiceImpl(new ProcedureDaoImpl());
-	ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());
+//	AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
+//	UserService userService = new UserServiceImpl(new UserDaoImpl());
+//	ProcedureService procedureService = new ProcedureServiceImpl(new ProcedureDaoImpl());
+//	ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());FIXME delete
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {

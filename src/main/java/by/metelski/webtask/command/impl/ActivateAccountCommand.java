@@ -49,6 +49,8 @@ public class ActivateAccountCommand implements Command {
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute" + e);
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

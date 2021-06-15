@@ -22,7 +22,6 @@ public class RequestListener implements ServletRequestListener {
 		HttpSession session = request.getSession();
 		session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, null);
 		ServletRequestListener.super.requestDestroyed(sre);
-		//FIXME didn't work
 	}
 
 	@Override

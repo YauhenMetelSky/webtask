@@ -21,7 +21,6 @@ import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
 import by.metelski.webtask.command.async.FindAllActiveSchedulesByDoctorIdAsyncCommand;
 import by.metelski.webtask.command.async.FindAllAppointmentsByDoctorIDAndDateAsyncCommand;
-import by.metelski.webtask.command.async.FindAllSchedulesByUserIdAsyncCommand;
 import by.metelski.webtask.command.async.FindScheduleByIdAsyncCommand;
 import by.metelski.webtask.command.async.FindTimeIntervalsByScheduleIdAsyncCommand;
 import by.metelski.webtask.command.impl.ActivateAccountCommand;
@@ -49,12 +48,12 @@ import by.metelski.webtask.command.impl.FindAllSchedulesByDoctorCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByIdCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
+import by.metelski.webtask.command.impl.FindSchedulesPaginationCommand;
 import by.metelski.webtask.command.impl.FindAllNewAppointmentsCommand;
 import by.metelski.webtask.command.impl.FindAllAppointmentsByUserIdCommand;
 import by.metelski.webtask.command.impl.FindUserByEmailCommand;
 
 public enum CommandType {
-	// TODO Sort commands
 	ACTIVATE {
 		{
 			this.command = new ActivateAccountCommand();
@@ -178,16 +177,11 @@ public enum CommandType {
 	FIND_ALL_SCHEDULES_BY_DOCTOR {
 		{
 			this.command = new FindAllSchedulesByDoctorCommand();
-		}// FIXME can be one command findByID
+		}
 	},
 	FIND_ALL_SCHEDULES_BY_ID {
 		{
 			this.command = new FindAllSchedulesByIdCommand();
-		}
-	},
-	FIND_ALL_SCHEDULES_BY_USER_ID_ASYNC {
-		{
-			this.command = new FindAllSchedulesByUserIdAsyncCommand();
 		}
 	},
 	FIND_BY_EMAIL {
@@ -209,6 +203,11 @@ public enum CommandType {
 	FIND_SCHEDULE_BY_ID_ASYNC {
 		{
 			this.command = new FindScheduleByIdAsyncCommand();
+		}
+	},
+	FIND_SCHEDULES_PAGINATION{
+		{
+			this.command=new FindSchedulesPaginationCommand();
 		}
 	},
 	FIND_TIME_INTERVALS_BY_SCHEDULE_ID_ASYNC {

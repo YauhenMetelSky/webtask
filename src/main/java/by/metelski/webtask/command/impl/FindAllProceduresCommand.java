@@ -34,6 +34,8 @@ public class FindAllProceduresCommand implements Command {
 			request.setAttribute(ParameterAndAttribute.PROCEDURES_LIST,procedures );
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "ProcedureServiceException in method execute FindAllProcedure");
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}		
 		return router;

@@ -63,19 +63,19 @@ public class UserServiceImpl implements UserService {
 		}
 		return optionalUser;
 	}
-
-	@Override
-	public List<User> findAllUsers() throws ServiceException {
-		logger.log(Level.DEBUG, "findAllUsers()");
-		List<User> users = new ArrayList<>();
-		try {
-			users = userDao.findAll();
-		} catch (DaoException e) {
-			logger.log(Level.ERROR, "dao exception in method FindAllUsers");
-			throw new ServiceException(e);
-		}
-		return users;
-	}
+//FIXME delete
+//	@Override
+//	public List<User> findAllUsers() throws ServiceException {
+//		logger.log(Level.DEBUG, "findAllUsers()");
+//		List<User> users = new ArrayList<>();
+//		try {
+//			users = userDao.findAll();
+//		} catch (DaoException e) {
+//			logger.log(Level.ERROR, "dao exception in method FindAllUsers");
+//			throw new ServiceException(e);
+//		}
+//		return users;
+//	}
 
 	@Override
 	public List<User> findUsersByName(String userName) throws ServiceException {
@@ -156,14 +156,13 @@ public class UserServiceImpl implements UserService {
 			String message = Message.WELCOM + url;
 			try {
 				userAdded = userDao.addUser(user, encodedPassword);
-				MailSender.sendEmail(user.getEmail(), "Account confirmation", message);// TODO magic string
+				MailSender.sendEmail(user.getEmail(), Message.ACCOUNT_CONFIRMATION, message);
 			} catch (DaoException e) {
 				logger.log(Level.ERROR, "dao exception in method addUser" + e);
 				throw new ServiceException(e);
 			}
 		} else {
 			userAdded = false;
-
 		}
 		return userAdded;
 	}
@@ -215,15 +214,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean changePersonalInfo(User user, Map<String, String> userData) throws ServiceException {
 		logger.log(Level.DEBUG, "Change personal info user:" + user);
-		user.setName(userData.get(ParameterAndAttribute.USER_NAME));
-		user.setSurname(userData.get(ParameterAndAttribute.USER_SURNAME));
-		user.setPhone(userData.get(ParameterAndAttribute.USER_PHONE));
 		boolean isChanged = false;
-		try {
-			isChanged = userDao.changePersonalInfo(user);
-		} catch (DaoException e) {
-			logger.log(Level.ERROR, "dao exception in method changePersonalInfo" + e);
-			throw new ServiceException(e);
+		if (UserValidator.isValidName(userData.get(ParameterAndAttribute.USER_NAME))
+				&& UserValidator.isValidName(userData.get(ParameterAndAttribute.USER_SURNAME))) {
+			user.setName(userData.get(ParameterAndAttribute.USER_NAME));
+			user.setSurname(userData.get(ParameterAndAttribute.USER_SURNAME));
+			user.setPhone(userData.get(ParameterAndAttribute.USER_PHONE));
+			try {
+				isChanged = userDao.changePersonalInfo(user);
+			} catch (DaoException e) {
+				logger.log(Level.ERROR, "dao exception in method changePersonalInfo" + e);
+				throw new ServiceException(e);
+			}
 		}
 		return isChanged;
 	}
@@ -252,18 +254,17 @@ public class UserServiceImpl implements UserService {
 		logger.log(Level.DEBUG, "findUsersFromRow(), page number:" + pageNumber);
 		List<User> users = new ArrayList<>();
 		int fromRow;
-		if(pageNumber>1) {
-			fromRow=(pageNumber-1)*numberOfUsersInPage;
+		if (pageNumber > 1) {
+			fromRow = (pageNumber - 1) * numberOfUsersInPage;
 		} else {
-			fromRow=0;
-		}	
+			fromRow = 0;
+		}
 		try {
 			users = userDao.findUsersFromRow(fromRow, numberOfUsersInPage);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method findUsersFromRow" + e);
 			throw new ServiceException(e);
 		}
-
 		return users;
 	}
 }

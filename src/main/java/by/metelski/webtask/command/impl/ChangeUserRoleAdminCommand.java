@@ -45,6 +45,8 @@ public class ChangeUserRoleAdminCommand implements Command {
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute BlockUserCommand" + e);
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

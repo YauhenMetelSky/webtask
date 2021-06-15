@@ -34,7 +34,6 @@ public class UserValidator {
 		return isValid;
 	}
 	public static boolean isValidPassword(String password) {
-		logger.log(Level.DEBUG, "password: " + password);//TODO don't show password
 		if(password==null||password.isBlank()) {
 			return false;
 		}

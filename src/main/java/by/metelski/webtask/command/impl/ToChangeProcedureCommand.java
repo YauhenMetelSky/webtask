@@ -39,10 +39,14 @@ public class ToChangeProcedureCommand implements Command {
 				request.setAttribute(ParameterAndAttribute.PROCEDURE, optional.get());
 				router.setPagePath(PagePath.CHANGE_PROCEDURE);
 			}else {
-				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.NOTHING_FOUNDED);
+				logger.log(Level.ERROR, "Nothing founded");
+				request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, Message.UNKNOWN_PROBLEM);
+				router.setPagePath(PagePath.ERROR);
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "ProcedureServiceException in method execute");
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}				
 		return router;

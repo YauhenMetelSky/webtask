@@ -33,6 +33,8 @@ public class ToMainCommand implements Command{
 			session.setAttribute(ParameterAndAttribute.ACTIVE_PROCEDURES_LIST, procedures);
 			router.setPagePath(PagePath.MAIN);	
 		} catch (ServiceException e) {
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			logger.log(Level.ERROR, "ProcedureServiceException in method execute FindAllActive");
 			router.setPagePath(PagePath.ERROR);
 		}

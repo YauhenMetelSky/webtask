@@ -43,6 +43,8 @@ public class FindUsersBySurnameCommand implements Command {
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "UserServiceException in method execute");
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

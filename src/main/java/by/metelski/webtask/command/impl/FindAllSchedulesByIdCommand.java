@@ -29,12 +29,14 @@ public class FindAllSchedulesByIdCommand implements Command{
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
 		Long userId = Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_ID));
-		try {//FIXME look to the FindAllSchedulesByDoctorCommand 
+		try {
 			schedules = service.findAllSchedulesByDoctorId(userId);
 			router.setPagePath(page);
 			request.setAttribute(ParameterAndAttribute.DOCTOR_SCHEDULES_LIST, schedules);
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "ScheduleServiceException in method execute");
+			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
+			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

@@ -143,7 +143,7 @@ public class UserDaoImpl implements UserDao {
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				User user = createUser(resultSet);
-				optionalUser = Optional.of(user);// TODO invoke method in parameter
+				optionalUser = Optional.of(user);
 			} else {
 				logger.log(Level.INFO, "didn't find user with login:" + email);
 				optionalUser = Optional.empty();
@@ -276,7 +276,7 @@ public class UserDaoImpl implements UserDao {
 		String userEmail = resultSet.getString(USER_EMAIL);
 		String phone = resultSet.getString(USER_PHONE);
 		boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-		Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());// FIXME delete toUpperCase
+		Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
 		User user = new User.Builder().setUserID(userId).setName(name).setSurname(surname).setEmail(userEmail)
 				.setPhone(phone).setIsBlocked(isBlocked).setRole(role).build();
 		logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);

@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.CommandProvider;
+import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.command.Command;
@@ -48,6 +49,9 @@ public class Controller extends HttpServlet {
 			response.sendRedirect(router.getPagePath());
 			logger.log(Level.DEBUG, "redirect");
 			break;
+			default:
+				logger.log(Level.ERROR, "Incorrect router type:" + router.getType());
+				response.sendRedirect(PagePath.MAIN);
 		}
 	}
 

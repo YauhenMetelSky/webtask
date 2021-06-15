@@ -20,6 +20,7 @@ import by.metelski.webtask.model.service.ScheduleService;
 public class ScheduleServiceImpl implements ScheduleService {
 	private static final Logger logger = LogManager.getLogger();
 	private final ScheduleDao dao;
+	private final int numberOfSchedulesInPage = 10;
 
 	public ScheduleServiceImpl(ScheduleDao dao) {
 		this.dao = dao;
@@ -30,25 +31,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 		logger.log(Level.DEBUG, "add shedule data: " + data);
 		boolean isAdd = true;
 		Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
-		Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));		
-		if(startTime.before(endTime)) {
-		User user = new User.Builder()
-				.setUserID(Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID)))
-				.build();
-		Date date = Date.valueOf(data.get(ParameterAndAttribute.DATE));
-		DoctorSchedule schedule = new DoctorSchedule.Builder()
-				.setDoctor(user)
-				.setStartTime(startTime)
-				.setEndTime(endTime)
-				.setDate(date)
-				.build();
-		try {
-			isAdd = dao.addDoctorSchedule(schedule);
-		} catch (DaoException e) {
-			logger.log(Level.ERROR, "dao exception in method addSchedule" + e);
-			throw new ServiceException(e);
+		Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));
+		if (startTime.before(endTime)) {
+			User user = new User.Builder().setUserID(Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID))).build();
+			Date date = Date.valueOf(data.get(ParameterAndAttribute.DATE));
+			DoctorSchedule schedule = new DoctorSchedule.Builder().setDoctor(user).setStartTime(startTime)
+					.setEndTime(endTime).setDate(date).build();
+			try {
+				isAdd = dao.addDoctorSchedule(schedule);
+			} catch (DaoException e) {
+				logger.log(Level.ERROR, "dao exception in method addSchedule" + e);
+				throw new ServiceException(e);
+			}
 		}
-		} 
 		return isAdd;
 	}
 
@@ -56,9 +51,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<DoctorSchedule> findAllSchedulesByDoctorId(long userId) throws ServiceException {
 		logger.log(Level.DEBUG, "findAllSchedulesByDoctor. Id:" + userId);
 		List<DoctorSchedule> schedules = new ArrayList<>();
-		User user = new User.Builder()
-				.setUserID(userId)
-				.build();
+		User user = new User.Builder().setUserID(userId).build();
 		try {
 			schedules = dao.findAllSchedulesByDoctor(user);
 			logger.log(Level.DEBUG, "finded shedules:" + schedules);
@@ -68,13 +61,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 		return schedules;
 	}
+
 	@Override
 	public List<DoctorSchedule> findAllActiveSchedulesByDoctor(long userId) throws ServiceException {
 		logger.log(Level.DEBUG, "findAllActiveSchedulesByDoctor. Id:" + userId);
 		List<DoctorSchedule> schedules = new ArrayList<>();
-		User user = new User.Builder()
-				.setUserID(userId)
-				.build();
+		User user = new User.Builder().setUserID(userId).build();
 		try {
 			schedules = dao.findAllActiveSchedulesByDoctor(user);
 			logger.log(Level.DEBUG, "finded shedules:" + schedules);
@@ -101,13 +93,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public Optional<DoctorSchedule> findScheduleByDateAndDoctor(Date date, long doctorId) throws ServiceException {
-		logger.log(Level.DEBUG, "findScheduleByDateAndDoctor. date:" + date+", id:"+doctorId);
+		logger.log(Level.DEBUG, "findScheduleByDateAndDoctor. date:" + date + ", id:" + doctorId);
 		Optional<DoctorSchedule> schedule;
 		try {
 			schedule = dao.findScheduleByDateAndDoctor(date, doctorId);
 			logger.log(Level.DEBUG, "finded schedule:" + schedule);
 		} catch (DaoException e) {
-			logger.log(Level.ERROR, "dao exception in method findScheduleByDateAndDoctor, date: " + date+", id:"+doctorId);
+			logger.log(Level.ERROR,
+					"dao exception in method findScheduleByDateAndDoctor, date: " + date + ", id:" + doctorId);
 			throw new ServiceException(e);
 		}
 		return schedule;
@@ -120,19 +113,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 		boolean isChanged = false;
 		try {
 			long id = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_SCHEDULE_ID));
-		    Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
-		    Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));
+			Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
+			Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));
 			Date date = Date.valueOf(data.get(ParameterAndAttribute.DATE));
-             DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
-            		 .setId(id)
-            		 .setStartTime(startTime)
-            		 .setEndTime(endTime)
-            		 .setDate(date)
-            		 .build();
+			DoctorSchedule doctorSchedule = new DoctorSchedule.Builder().setId(id).setStartTime(startTime)
+					.setEndTime(endTime).setDate(date).build();
 			isChanged = dao.changeDoctorSchedule(doctorSchedule);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
-					"dao exception in method changeDoctorSchedule, when we try change schedule,schedule data:" + data + ". " + e);
+					"dao exception in method changeDoctorSchedule, when we try change schedule,schedule data:" + data
+							+ ". " + e);
 			throw new ServiceException(e);
 		}
 		return isChanged;
@@ -140,27 +130,65 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public boolean changeFieldIsActive(long scheduleId, boolean isActive) throws ServiceException {
-		logger.log(Level.DEBUG, "Change schedule is_active field for:"+isActive+"; schedule id:" +scheduleId );
+		logger.log(Level.DEBUG, "Change schedule is_active field for:" + isActive + "; schedule id:" + scheduleId);
 		boolean isChanged = false;
 		try {
-				isChanged = dao.changeFieldIsActive(scheduleId,isActive);
+			isChanged = dao.changeFieldIsActive(scheduleId, isActive);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
-					"dao exception in method changeFieldIsActive, when we try change schedule,schedule id:" + scheduleId+ ". " + e);
+					"dao exception in method changeFieldIsActive, when we try change schedule,schedule id:" + scheduleId
+							+ ". " + e);
 			throw new ServiceException(e);
 		}
 		return isChanged;
 	}
-
+@Deprecated
 	@Override
 	public List<DoctorSchedule> findAllSchedules() throws ServiceException {
 		List<DoctorSchedule> schedules = new ArrayList<>();
 		try {
-			schedules=dao.findAllSchedules();
+			schedules = dao.findAllSchedules();
 		} catch (DaoException e) {
-			logger.log(Level.ERROR,	"dao exception in method findAllSchedules." + e);
+			logger.log(Level.ERROR, "dao exception in method findAllSchedules." + e);
+			throw new ServiceException(e);
+		}
+		return schedules;
+	}
+
+	@Override
+	public List<DoctorSchedule> findAllSchedulesFromRow(int pageNumber) throws ServiceException {
+		logger.log(Level.DEBUG, "findAllSchedulesFromRow(), row:" + pageNumber);
+		List<DoctorSchedule> schedules = new ArrayList<>();
+		int fromRow;
+		if (pageNumber > 1) {
+			fromRow = (pageNumber - 1) * numberOfSchedulesInPage;
+		} else {
+			fromRow = 0;
+		}
+		try {
+			schedules = dao.findAllSchedulesFromRow(fromRow, numberOfSchedulesInPage);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findAllSchedulesFromRow." + e);
+			throw new ServiceException(e);
+		}
+		return schedules;
+	}
+
+	@Override
+	public int findNumberOfPages() throws ServiceException {
+		int numberOfPages;
+		int numberOfSchedules;
+		try {
+			numberOfSchedules = dao.findNumberOfRows();
+			if(numberOfSchedules>numberOfSchedulesInPage) {
+				numberOfPages=(int)Math.ceil((double)numberOfSchedules/numberOfSchedulesInPage);
+			} else {
+				numberOfPages=1;
+			}
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findNumberOfPages." + e);
 			throw new ServiceException(e);
 		}	
-		return schedules;
+		return numberOfPages;
 	}
 }
