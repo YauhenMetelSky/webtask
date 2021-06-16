@@ -22,27 +22,24 @@ import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
 import by.metelski.webtask.model.service.ScheduleService;
 import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 
-public class FindAllSchedulesByDoctorCommand implements Command {
+public class FindSchedulesByDoctorPaginationCommand implements Command{
 	private static final Logger logger = LogManager.getLogger();
 	private ScheduleService service = new ScheduleServiceImpl(new ScheduleDaoImpl());
-	private final int startRow=0;
 
 	@Override
 	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-		logger.log(Level.DEBUG, "FindAllSchedulesByDoctorCommand");
-		int numberOfPages;
+		logger.log(Level.DEBUG, "FindSchedulesByDoctorPaginationCommand");
 		List<DoctorSchedule> schedules;
 		Router router = new Router();
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
-		User user = (User) session.getAttribute(ParameterAndAttribute.USER);
-		Long userId = user.getUserId();
+		User doctor = (User)session.getAttribute(ParameterAndAttribute.USER);
+		long doctorId = doctor.getUserId();
+	     int pageNumber = Integer.parseInt(request.getParameter(ParameterAndAttribute.START_FROM));
 		try {
-			schedules = service.findAllSchedulesByDoctorIdFromRow(userId, startRow);
-			numberOfPages=service.findNumberOfPagesDoctorsShedules(userId);
+			schedules = service.findAllSchedulesByDoctorIdFromRow(doctorId, pageNumber);
 			router.setPagePath(page);
 			request.setAttribute(ParameterAndAttribute.DOCTOR_SCHEDULES_LIST, schedules);
-			session.setAttribute(ParameterAndAttribute.NUMBER_OF_PAGES, numberOfPages);
 			session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL );
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "ScheduleServiceException in method execute");

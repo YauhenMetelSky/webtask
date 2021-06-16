@@ -24,7 +24,8 @@
 </head>
 <body>
 	<c:import url="header.jsp" />
-	<section class="container-fluid bg">
+	<img alt="" src="images/extra.jpg">
+	
 		<div class="form-container">
 			<form action="controller" method="POST">
 				<div class="mb-3">
@@ -50,7 +51,7 @@
 					value="to_sign_up">
 			</form>
 		</div>
-	</section>
+
 	<c:import url="footer.jsp" />
 </body>
 </html>

@@ -48,6 +48,7 @@ import by.metelski.webtask.command.impl.FindAllSchedulesByDoctorCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByIdCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
+import by.metelski.webtask.command.impl.FindSchedulesByDoctorPaginationCommand;
 import by.metelski.webtask.command.impl.FindSchedulesPaginationCommand;
 import by.metelski.webtask.command.impl.FindAllNewAppointmentsCommand;
 import by.metelski.webtask.command.impl.FindAllAppointmentsByUserIdCommand;
@@ -198,6 +199,11 @@ public enum CommandType {
 	FIND_BY_SURNAME{
 		{
 			this.command = new FindUsersBySurnameCommand();
+		}
+	},
+	FIND_SCHEDULES_BY_DOCTOR_PAGINATION{
+		{
+			this.command=new FindSchedulesByDoctorPaginationCommand();
 		}
 	},
 	FIND_SCHEDULE_BY_ID_ASYNC {

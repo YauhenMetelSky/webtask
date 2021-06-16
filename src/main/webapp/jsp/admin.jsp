@@ -31,7 +31,6 @@
 		<div class="row">
 			<!--  <div class="form-group"> -->
 			<div class="col">
-				<!-- <h1>Find by name</h1> -->
 				<div class="form-inline">
 					<form action="controller" method="POST">
 						<input type="text" name="name" value="" class="form-control"
@@ -56,7 +55,6 @@
 				</div>
 				<br />
 
-				<!--<h1>Send email</h1> -->
 				<div class="form-inline">
 					<form action="controller" method="POST">
 						<input type="text" class="form-control" name="email_to"
@@ -70,7 +68,6 @@
 				<br />
 
 				<p>${message}</p>
-				<!-- 	<br /> -->
 				<!-- <h1>Add procedure</h1> -->
 				<div>
 					<form action="controller" method="POST">
@@ -89,7 +86,6 @@
 						<input type="hidden" name="command" value="find_all_procedures">
 					</form>
 				</div>
-				<%-- <p>${message}</p> --%>
 				<br />
 				<div>
 					<form action="controller" method="POST">
@@ -99,9 +95,7 @@
 						<input type="hidden" name="command" value="find_all_schedules">
 					</form>
 				</div>
-				<%-- <p>${message}</p> --%>
-				<br />
-				<!-- 	<h1>Find all users</h1> -->
+				<br />>
 				<div>
 					<form action="controller" method="POST">
 						<button type="submit" class="btn btn-primary btn-block">
@@ -111,7 +105,6 @@
 					</form>
 				</div>
 				<br />
-
 				<!-- <h1>Show all new appointments</h1> -->
 				<div>
 					<form action="controller" method="POST">
@@ -124,13 +117,27 @@
 				</div>
 			</div>
 			<div class="col">
+				<h4>Name: ${user.name }</h4>
+				<h4>Surname: ${user.surname }</h4>
+				<h4>Phone number: ${user.phone }</h4>
+				<h4>Email: ${user.email }</h4>
+				<div>
+					<form action="controller" method="POST">
+						<button type="submit" class="btn btn-primary">
+							<fmt:message key="label.change" />
+						</button>
+						<input type="hidden" name="command"
+							value="to_change_personal_info">
+					</form>
+				</div>
+				<!-- <div class="scroll"> -->
+				<div style="width:100%; height:250px;overflow:scroll">
 				<table class="table table-striped" id="app_table">
 				</table>
-
+				</div>
 			</div>
 		</div>
-		<!-- End row -->
-		<!-- 	</div> -->
+
 		<br />
 		<div class="col">
 			<table class="table table-striped">
@@ -157,18 +164,19 @@
 						<td><c:out value="${elem.date }" /></td>
 						<td><c:out value="${elem.startTime }" /></td>
 						<td><c:out value="${elem.endTime }" /></td>
-						<td><button class="btn btn-link" id="button_doctor"
+						<td>
+						<button class="btn btn-link" id="button_doctor"
 								value="${elem.doctor.userId}:${elem.date}">
 								<c:out value="${elem.doctor.name }" />
 								<c:out value=" " />
 								<c:out value="${elem.doctor.surname} " />
-							</button></td>
+							</button>
+							</td>
 						<td><c:out value="${elem.procedure.name }" /></td>
 						<td><c:out value="${elem.user.name }" /> <c:out value=" " />
 							<c:out value="${elem.user.surname} " /></td>
 						<td><c:out value="${elem.user.phone }" /></td>
 						<td>
-
 							<form action="controller" method="POST">
 								<button type="submit" class="btn btn-success">
 									<fmt:message key="label.confirm" />
@@ -212,7 +220,6 @@
 						<th><fmt:message key="label.blocked" /></th>
 						<th><fmt:message key="label.change_role" /></th>
 						<th><fmt:message key="label.action" /></th>
-
 					</tr>
 
 					<c:forEach var="elem" items="${result_list}" varStatus="status">
@@ -273,7 +280,6 @@
 						<th><fmt:message key="label.blocked" /></th>
 						<th><fmt:message key="label.change_role" /></th>
 						<th><fmt:message key="label.action" /></th>
-
 					</tr>
 
 					<c:forEach var="elem" items="${list}" varStatus="status">
@@ -457,9 +463,8 @@
 							</c:forEach>
 						</ul>
 					</nav>
+				</c:if>
 			</table>
-
-			</c:if>
 		</div>
 	</div>
 

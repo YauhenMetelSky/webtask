@@ -13,10 +13,12 @@ public interface ScheduleService {
 	boolean changeDoctorSchedule(Map<String,String> data) throws ServiceException ;
 	boolean changeFieldIsActive(long scheduleId, boolean isActive) throws ServiceException;
 	List<DoctorSchedule> findAllSchedules() throws ServiceException;
-	List<DoctorSchedule> findAllSchedulesFromRow(int row) throws ServiceException;
+	List<DoctorSchedule> findAllSchedulesFromRow(int pageNumber) throws ServiceException;
 	List<DoctorSchedule> findAllActiveSchedulesByDoctor(long userId) throws ServiceException;
 	List<DoctorSchedule> findAllSchedulesByDoctorId(long userId) throws ServiceException;
+	List<DoctorSchedule> findAllSchedulesByDoctorIdFromRow(long userId, int pageNumber) throws ServiceException;
 	int findNumberOfPages()throws ServiceException;
+	int findNumberOfPagesDoctorsShedules(long doctorId)throws ServiceException;
 	Optional<DoctorSchedule> findScheduleById(long id) throws ServiceException;
 	Optional<DoctorSchedule> findScheduleByDateAndDoctor(Date date,long doctorId) throws ServiceException;
 }

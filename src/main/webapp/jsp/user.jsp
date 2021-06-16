@@ -27,19 +27,23 @@
 </head>
 <body>
 	<c:import url="header.jsp" />
-	<div class="container-fluid bg">
-		<h1>User page content</h1>
-		<h1>will be here</h1>
-		<h1>soon</h1>
+	<div class="bgfix">
+		<h1>User page </h1>
+
 		<div class="row">
 			<div class="col">
-				<h1>Our clinic is the best of the best</h1>
-				<br>
-				<p>We are waiting for you</p>
-			</div>
-
-			<div class="col">
-				<h1>
+					
+		<div>
+		<h6>Show me all appointments</h6>
+			<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.find_all" />
+				</button>
+				<input type="hidden" name="command" value="find_all_appointments_by_user_id">
+			</form>
+		</div>
+		
+		<h1>
 					<fmt:message key="label.appointment" />
 				</h1>
 				 <form action="controller" method="POST" class="form-container">
@@ -96,31 +100,26 @@
 						</button>
 					</div>
 				</form>
+
 			</div>
-		</div>
-	</div>
-	
-	<h1>Change my personal info</h1>
-		<div>
+
+			<div class="col">
+				<h4>Name: ${user.name }</h4>	
+				<h4>Surname: ${user.surname }</h4>	
+				<h4>Phone number: ${user.phone }</h4>	
+				<h4>Email: ${user.email }</h4>			
+				<div>
 			<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">Change info
-					<%-- <fmt:message key="label.find_all" /> --%>
+				<button type="submit" class="btn btn-primary"><fmt:message key="label.change" />
 				</button>
 				<input type="hidden" name="command" value="to_change_personal_info">
 			</form>
 		</div>
-	
-	
-		<h1>Show all my appointments</h1>
-		<div>
-			<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.find_all" />
-				</button>
-				<input type="hidden" name="command" value="find_all_appointments_by_user_id">
-			</form>
+			</div>
 		</div>
-		
+	</div>
+	
+	
 		<table class="table table-striped">
 		<c:if test="${appointments_list ne null}">
 			<tr>

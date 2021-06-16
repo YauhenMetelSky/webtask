@@ -191,4 +191,41 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}	
 		return numberOfPages;
 	}
+	@Override
+	public int findNumberOfPagesDoctorsShedules(long doctorId) throws ServiceException {
+		int numberOfPages;
+		int numberOfSchedules;
+		try {
+			numberOfSchedules = dao.findNumberOfRowsDoctorsSchedule(doctorId);
+			//FIXME private method calculate
+			if(numberOfSchedules>numberOfSchedulesInPage) {
+				numberOfPages=(int)Math.ceil((double)numberOfSchedules/numberOfSchedulesInPage);
+			} else {
+				numberOfPages=1;
+			}
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findNumberOfPages." + e);
+			throw new ServiceException(e);
+		}	
+		return numberOfPages;
+	}
+
+	@Override
+	public List<DoctorSchedule> findAllSchedulesByDoctorIdFromRow(long userId, int pageNumber) throws ServiceException {
+		logger.log(Level.DEBUG, "findAllSchedulesFromRow(), row:" + pageNumber);
+		List<DoctorSchedule> schedules = new ArrayList<>();
+		int fromRow;
+		if (pageNumber > 1) {
+			fromRow = (pageNumber - 1) * numberOfSchedulesInPage;
+		} else {
+			fromRow = 0;
+		}
+		try {
+			schedules = dao.findAllSchedulesFromRow(fromRow, numberOfSchedulesInPage);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findAllSchedulesFromRow." + e);
+			throw new ServiceException(e);
+		}
+		return schedules;
+	}
 }

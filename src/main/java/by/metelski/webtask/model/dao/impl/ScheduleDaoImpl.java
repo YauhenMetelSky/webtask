@@ -29,8 +29,10 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	private static final String SQL_CHANGE_DOCTOR_SCHEDULE = "UPDATE doctor_schedules SET start_time=?,end_time=?,date=? WHERE id_doctor_schedule=?";
 	private static final String SQL_CHANGE_DOCTOR_SCHEDULE_IS_ACTIVE = "UPDATE doctor_schedules SET is_active=? WHERE id_doctor_schedule=?";
 	private static final String SQL_COUNT_ALL_SCHEDULES = "SELECT COUNT(*) FROM doctor_schedules";
+	private static final String SQL_COUNT_ALL_DOCTORS_SCHEDULES = "SELECT COUNT(*) FROM doctor_schedules WHERE doctor_id=?";
+	private static final String SQL_FIND_ALL_DOCTORS_SCHEDULES_FROM_ROW = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id WHERE doctor_id=? ORDER BY ds.date DESC LIMIT ?,?";
 	private static final String SQL_FIND_ALL_SCHEDULES = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id ORDER BY ds.date DESC";
-	private static final String SQL_FIND_ALL_SCHEDULES_FROM_ROW = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id ORDER BY ds.date DESC LIMIT ?,?";
+	private static final String SQL_FIND_ALL_SCHEDULES_FROM_ROW = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id ORDER BY ds.date DESC LIMIT ?,?";	
 	private static final String SQL_FIND_SCHEDULES_BY_DOCTOR_ID = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id WHERE doctor_id=? ORDER BY ds.date DESC";
 	private static final String SQL_FIND_ACTIVE_SCHEDULES_BY_DOCTOR_ID = "SELECT ds.id_doctor_schedule,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users d ON doctor_id=user_id WHERE doctor_id=? AND date>=? AND ds.is_active=true ORDER BY ds.date DESC";
 	private static final String SQL_FIND_SCHEDULE_BY_ID = "SELECT ds.id_doctor_schedule,user_id,name,surname,email,phone,is_blocked,role, ds.start_time,ds.end_time,ds.date,ds.is_active FROM doctor_schedules ds JOIN users ON doctor_id=user_id WHERE ds.id_doctor_schedule=?";
@@ -257,6 +259,23 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		}
 		return numberOfRows;
 	}
+	@Override
+	public int findNumberOfRowsDoctorsSchedule(long doctorId) throws DaoException {
+		logger.log(Level.INFO, "findNumberOfRows");
+		int numberOfRows=0;
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_COUNT_ALL_DOCTORS_SCHEDULES)){
+			statement.setLong(1, doctorId);
+			ResultSet resultSet= statement.executeQuery();
+			if(resultSet.next()) {
+				numberOfRows=resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
+			throw new DaoException("Dao exception", e);
+		}
+		return numberOfRows;
+	}
 
 	private DoctorSchedule createSchedule(ResultSet resultSet) throws SQLException {
 		long doctorScheduleId = resultSet.getLong(ID_DOCTOR_SCHEDULE);
@@ -292,4 +311,24 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		return doctorSchedule;
 	}
 
+	@Override
+	public List<DoctorSchedule> findAllDoctorSchedulesFromRow(int fromRow, int numberOfSchedulesInPage, long doctorId) throws DaoException {
+	logger.log(Level.INFO, "findAllDoctorSchedulesFromRow");
+	List<DoctorSchedule> schedules = new ArrayList<>();
+	try(Connection connection = connectionPool.getConnection();
+			PreparedStatement statement = connection.prepareStatement(SQL_FIND_ALL_DOCTORS_SCHEDULES_FROM_ROW)){
+		statement.setLong(1, doctorId);
+		statement.setInt(2, fromRow);
+		statement.setInt(3, numberOfSchedulesInPage);
+		ResultSet resultSet= statement.executeQuery();
+		while(resultSet.next()) {
+			DoctorSchedule schedule = createSchedule(resultSet);
+			schedules.add(schedule);
+		}
+	}catch(SQLException e) {
+		logger.log(Level.ERROR, "SQLException in findAllDoctorSchedulesFromRow(): " + e.getMessage() + " : " + e.getErrorCode());
+		throw new DaoException("Dao exception", e);
+	}
+	return schedules;
+	}
 }

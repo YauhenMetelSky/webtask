@@ -25,11 +25,13 @@
 </head>
 <body>
 	<c:import url="header.jsp" />
-	<div class="container-fluid bg">
-		<h1>Doctor page content</h1>
-		<h1>Show all my schedules</h1>
-	
+	<div class="container-fluid bgfix">
+		<h1>Doctor page</h1>
+		<div class="row">
+			<!--  <div class="form-group"> -->
+			<div class="col">
 			<div>
+		<h6>Show all my schedules</h6>
 			<form action="controller" method="POST">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.my_schedules" />
@@ -37,6 +39,57 @@
 				<input type="hidden" name="command" value="find_all_schedules_by_doctor">
 			</form>
 			</div>
+					
+		<div>
+		<h6>Show me actual schedule</h6>
+			<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.my_active_schedules" />
+				</button>
+				<input type="hidden" name="command" value="find_all_active_schedules_by_doctor">
+			</form>
+			</div>
+			<div>
+			<h6>Show appointments to me</h6>
+			<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.appointments_to_me" />
+				</button>
+				<input type="hidden" name="command" value="find_all_appointments_by_doctor_id">
+			</form>
+			</div>
+			<h6>Add schedule</h6>
+			<div class="form-inline">
+			<form action="controller" method="POST">
+				<input type="date" min="2021-05-16" name="date" value="" required class="form-control"
+					placeholder=<fmt:message key="label.date"/>> 
+				<input type="time" min="09:00" max="21:00" step="2" name="start_time" value="09:00:00" required class="form-control"
+					placeholder=<fmt:message key="label.start_time"/>> 
+				<input	type="time" name="end_time" min="09:00" max="21:00" step="2" value="21:00:00" required class="form-control"
+					placeholder=<fmt:message key="label.end_time"/>> <input
+					type="hidden" name="command" value="add_doctor_schedule">
+				<button type="submit" class="btn btn-primary">
+					<fmt:message key="label.submit" />
+				</button>
+			</form>
+		</div>
+		</div>
+		<div class="col">
+				<h4>Name: ${user.name }</h4>	
+				<h4>Surname: ${user.surname }</h4>	
+				<h4>Phone number: ${user.phone }</h4>	
+				<h4>Email: ${user.email }</h4>			
+					<div>
+			<form action="controller" method="POST">
+				<button type="submit" class="btn btn-primary"><fmt:message key="label.change" />
+				</button>
+				<input type="hidden" name="command" value="to_change_personal_info">
+			</form>
+		</div>
+			</div>
+		</div>
+		</div>
+		
 			<div>
 			<table class="table table-striped">	
 		<c:if test="${doctor_schedules_list ne null}">
@@ -55,16 +108,23 @@
 			</tr>
 		</c:forEach>
 			</table>
+			<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<c:forEach begin="1" end="${number_of_pages }" var="i">
+								<li class="page-item">
+									<form action="controller" method="POST">
+										<button type="submit" class="page-link" value="${i }">
+											<c:out value="${i }" />
+										</button>
+										<input type="hidden" name="start_from" value="${i}"> <input
+											type="hidden" name="command" value="find_schedules_by_doctor_pagination">
+									</form>
+								</li>
+							</c:forEach>
+						</ul>
+					</nav>
 		</div> 
 		
-			<div>
-			<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.my_active_schedules" />
-				</button>
-				<input type="hidden" name="command" value="find_all_active_schedules_by_doctor">
-			</form>
-			</div>
 			<div>
 			<table class="table table-striped">	
 		<c:if test="${doctor_active_schedules_list ne null}">
@@ -96,12 +156,7 @@
 		</div> 
 		
 		 <div>
-			<form action="controller" method="POST">
-				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.appointments_to_me" />
-				</button>
-				<input type="hidden" name="command" value="find_all_appointments_by_doctor_id">
-			</form>
+			
 		<table class="table table-striped">
 		<c:if test="${appointments_list ne null}">
 			<tr>
@@ -123,26 +178,9 @@
 		</tr>
 		</c:forEach>
 		</table>
-		</div> 
+		</div> 	
 		
-		
-		
-		
-		<div class="form-inline">
-			<form action="controller" method="POST">
-				<input type="date" min="2021-05-16" name="date" value="" required class="form-control"
-					placeholder=<fmt:message key="label.date"/>> 
-				<input type="time" min="09:00" max="21:00" step="2" name="start_time" value="09:00:00" required class="form-control"
-					placeholder=<fmt:message key="label.start_time"/>> 
-				<input	type="time" name="end_time" min="09:00" max="21:00" step="2" value="21:00:00" required class="form-control"
-					placeholder=<fmt:message key="label.end_time"/>> <input
-					type="hidden" name="command" value="add_doctor_schedule">
-				<button type="submit" class="btn btn-primary">
-					<fmt:message key="label.submit" />
-				</button>
-			</form>
-		</div>
-	</div>
+	
 	<c:import url="footer.jsp" />
 </body>
 </html>
