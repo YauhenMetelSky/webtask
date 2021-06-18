@@ -19,10 +19,6 @@ import by.metelski.webtask.command.impl.ToMainCommand;
 import by.metelski.webtask.command.impl.ToPersonalPageCommand;
 import by.metelski.webtask.command.impl.ToServicesCommand;
 import by.metelski.webtask.command.impl.ToSignInCommand;
-import by.metelski.webtask.command.async.FindAllActiveSchedulesByDoctorIdAsyncCommand;
-import by.metelski.webtask.command.async.FindAllAppointmentsByDoctorIDAndDateAsyncCommand;
-import by.metelski.webtask.command.async.FindScheduleByIdAsyncCommand;
-import by.metelski.webtask.command.async.FindTimeIntervalsByScheduleIdAsyncCommand;
 import by.metelski.webtask.command.impl.ActivateAccountCommand;
 import by.metelski.webtask.command.impl.ActivateProcedureCommand;
 import by.metelski.webtask.command.impl.AddAppointmentCommand;
@@ -54,6 +50,11 @@ import by.metelski.webtask.command.impl.FindAllNewAppointmentsCommand;
 import by.metelski.webtask.command.impl.FindAllAppointmentsByUserIdCommand;
 import by.metelski.webtask.command.impl.FindUserByEmailCommand;
 
+/**
+ * Enum contains all types of commands
+ * @author Yauhen Metelski
+ *
+ */
 public enum CommandType {
 	ACTIVATE {
 		{
@@ -160,16 +161,6 @@ public enum CommandType {
 			this.command = new FindAllAppointmentsByUserIdCommand();
 		}
 	},
-	FIND_ALL_APPOINTMENTS_BY_DOCTOR_AND_DATE_ASYNC{
-		{
-			this.command=new FindAllAppointmentsByDoctorIDAndDateAsyncCommand();
-		}
-	},
-	FIND_ALL_ACTIVE_SCHEDULES_BY_DOCTOR_ASYNC{
-		{
-			this.command= new FindAllActiveSchedulesByDoctorIdAsyncCommand();
-		}
-	},
 	FIND_ALL_ACTIVE_SCHEDULES_BY_DOCTOR{
 		{
 			this.command= new FindAllActiveSchedulesByDoctorCommand();
@@ -206,19 +197,9 @@ public enum CommandType {
 			this.command=new FindSchedulesByDoctorPaginationCommand();
 		}
 	},
-	FIND_SCHEDULE_BY_ID_ASYNC {
-		{
-			this.command = new FindScheduleByIdAsyncCommand();
-		}
-	},
 	FIND_SCHEDULES_PAGINATION{
 		{
 			this.command=new FindSchedulesPaginationCommand();
-		}
-	},
-	FIND_TIME_INTERVALS_BY_SCHEDULE_ID_ASYNC {
-		{
-			this.command = new FindTimeIntervalsByScheduleIdAsyncCommand();
 		}
 	},
 	FIND_USERS_PAGINATION{
@@ -324,6 +305,9 @@ public enum CommandType {
 
 	Command command;
 
+	/**
+	 * @return {@link Command}
+	 */
 	public Command getCurrentCommand() {
 		return command;
 	}

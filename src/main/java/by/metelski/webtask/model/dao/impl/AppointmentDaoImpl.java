@@ -101,6 +101,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 		boolean isChanged = false;
 		try (Connection connection = connectionPool.getConnection();
 				PreparedStatement statement = connection.prepareStatement(SQL_CHANGE_APPOINTMENT)) {
+			logger.log(Level.INFO, "Appointment to changing" + appointment);
 			statement.setLong(1, appointment.getUser().getUserId());
 			statement.setLong(2, appointment.getDoctor().getUserId());
 			statement.setDate(3, appointment.getDate());

@@ -21,7 +21,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import by.metelski.webtask.command.Command;
+import by.metelski.webtask.command.CommandAsync;
 import by.metelski.webtask.command.CommandProvider;
+import by.metelski.webtask.command.CommandProviderAsync;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.DoctorSchedule;
 
@@ -49,9 +51,10 @@ public class AjaxController extends HttpServlet {
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		logger.log(Level.DEBUG, "processRequest");
-		Command command = CommandProvider.defineCommand(request);
+		String commandFromPage = request.getParameter(ParameterAndAttribute.COMMAND); 
+		CommandAsync command = CommandProviderAsync.defineCommand(commandFromPage);
 		logger.log(Level.DEBUG, "command from request: " + command);
-		command.execute(request, response);		
+		command.execute(request,response);		
 	}
 	public void destroy() {
 	}

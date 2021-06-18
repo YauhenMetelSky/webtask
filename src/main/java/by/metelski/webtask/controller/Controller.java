@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.CommandProvider;
 import by.metelski.webtask.command.PagePath;
+import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.command.Command;
@@ -35,8 +36,9 @@ public class Controller extends HttpServlet {
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Command command = CommandProvider.defineCommand(request);
-		Router router = command.execute(request, null);
+		String commandFromPage = request.getParameter(ParameterAndAttribute.COMMAND); 
+		Command command = CommandProvider.defineCommand(commandFromPage);
+		Router router = command.execute(request);
 		logger.log(Level.DEBUG, "page from command " + router.getPagePath());
 		logger.log(Level.DEBUG, "is wrong: " + request.getAttribute("wrong"));
 		switch (router.getType()) {

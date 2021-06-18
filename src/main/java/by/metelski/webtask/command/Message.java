@@ -1,5 +1,10 @@
 package by.metelski.webtask.command;
 
+/**
+ * Contains all types of messages used in system
+ * @author Yauhen Metelski
+ *
+ */
 public final class Message {
 	public static final String ACCOUNT_IS_ACTIVE="Congrats, your account is active.";
 	public static final String ACCOUNT_CONFIRMATION="Account confirmation.";
@@ -21,5 +26,4 @@ public final class Message {
 	private Message() {
 		
 	}
-
 }

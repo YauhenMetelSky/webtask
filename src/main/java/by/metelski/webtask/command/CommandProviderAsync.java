@@ -1,39 +1,37 @@
 package by.metelski.webtask.command;
 
-import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import by.metelski.webtask.command.impl.UnknownCommand;
-
+import by.metelski.webtask.command.async.UnknownCommandAsync;
 
 /**
- * CommandProvider class
+ * CommandProviderAsync class. For asynchronous commands.
  * @author Yauhen Metelski
  *
  */
-public class CommandProvider {
+public class CommandProviderAsync {
 	private static final Logger logger = LogManager.getLogger();
 
 	/**
 	 * Defines command
 	 * @param command(command name)
-	 * @return {@link Command}
+	 * @return {@link CommandAsync}
 	 */
-	public static Command defineCommand(String command) {
-		Command current = null;
-		logger.log(Level.INFO, "command: " + command);
+	public static CommandAsync defineCommand(String command) {
+		CommandAsync current = null;
+		logger.log(Level.INFO, "definded command: " + command);
 		if (command == null || command.isEmpty()) {
 			logger.log(Level.INFO, "empty command ");
-			return new UnknownCommand();
+			return new UnknownCommandAsync();
 		}
 		try {
-			CommandType currentType = CommandType.valueOf(command.toUpperCase());		
+			CommandTypeAsync currentType = CommandTypeAsync.valueOf(command.toUpperCase());
 			current = currentType.getCurrentCommand();
 		} catch (IllegalArgumentException e) {
 			logger.log(Level.ERROR, "empty command from catch ");
-			current = new UnknownCommand();
+			current = new UnknownCommandAsync();
 		}
 		return current;
 	}

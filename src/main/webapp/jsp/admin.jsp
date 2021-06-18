@@ -219,6 +219,7 @@
 						<th><fmt:message key="label.phone" /></th>
 						<th><fmt:message key="label.blocked" /></th>
 						<th><fmt:message key="label.change_role" /></th>
+						<th><fmt:message key="label.change_role" /></th>
 						<th><fmt:message key="label.action" /></th>
 					</tr>
 
@@ -231,6 +232,16 @@
 							<td><c:out value="${elem.email }" /></td>
 							<td><c:out value="${elem.phone }" /></td>
 							<td><c:out value="${elem.blocked }" /></td>
+							<td>
+								<form action="controller" method="POST">
+									<button type="submit" class="btn btn-danger">
+										<fmt:message key="label.change_role_to_admin" />
+									</button>
+									<input type="hidden" name="id" value="${elem.userId}">
+									<input type="hidden" name="command"
+										value="change_user_role_admin">
+								</form>
+							</td>
 							<td>
 								<form action="controller" method="POST">
 									<button type="submit" class="btn btn-danger">
@@ -489,12 +500,15 @@
 										success : function(result) {
 											console.log(result);
 											console.log(result.length);
+											console.log(result.length);
 											$("#app_table").empty();
 											$("#app_table")
 													.append(
 															"<tr><th>Client</th><th>Start time</th><th>End time</th><th>Procedure</th></tr>");
 											for (var i = 0; i < result.length; i++) {
-												console.log(result[i]);
+												console.log("**************");
+												console.log((typeof result[i])=='object');
+							                    if((typeof result[i]=='object')){
 												$("#app_table")
 														.append(
 																"<tr><td>"
@@ -506,6 +520,10 @@
 																		+ "</td><td>"
 																		+ result[i].procedure.name
 																		+ "</td></tr>");
+											} else {
+												$("#app_table").append("<tr><td>"+result+"</td></tr>")
+												break;
+											}
 											}
 										}
 									});

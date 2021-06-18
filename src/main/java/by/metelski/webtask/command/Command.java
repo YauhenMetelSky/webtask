@@ -1,8 +1,19 @@
 package by.metelski.webtask.command;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+/**
+ * The interface for different commands
+ * @author Yauhen Metelski
+ *
+ */
 
 public interface Command {
-	Router execute(HttpServletRequest request, HttpServletResponse response);
+	
+	/**
+	 * Executes command
+	 * @param request{{@link HttpServletRequest}
+	 * @return {@link Router}
+	 */
+	Router execute(HttpServletRequest request);
 }

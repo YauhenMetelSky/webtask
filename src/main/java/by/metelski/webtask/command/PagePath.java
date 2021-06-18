@@ -1,5 +1,10 @@
 package by.metelski.webtask.command;
 
+/**
+ * Contain all page paths
+ * @author Yauhen Metelski
+ *
+ */
 public final class PagePath {
 	public static final String ABOUT = "/jsp/about.jsp";
 	public static final String ADD_PROCEDURE = "/jsp/addprocedure.jsp";

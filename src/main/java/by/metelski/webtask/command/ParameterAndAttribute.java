@@ -1,5 +1,10 @@
 package by.metelski.webtask.command;
 
+/**
+ * Contain all parameters and attributes used in system
+ * @author Yauhen Metelski
+ *
+ */
 public final class ParameterAndAttribute {
 	public static final String ACTIVE_PROCEDURES_LIST = "active_procedures_list";
 	public static final String APPOINTMENT = "appointment";

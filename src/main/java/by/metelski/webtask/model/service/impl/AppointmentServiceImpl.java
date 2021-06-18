@@ -19,8 +19,6 @@ import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.AppointmentDao;
 import by.metelski.webtask.model.dao.ProcedureDao;
-import by.metelski.webtask.model.dao.impl.AppointmentDaoImpl;
-import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.service.AppointmentService;
 
 public class AppointmentServiceImpl implements AppointmentService {
@@ -107,6 +105,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 					.setProcedure(procedure)
 					.setStartTime(startTime)
 					.setEndTime(endTime)
+					.setStatus(Status.CLAIMED)
 					.setDate(date)
 					.build();
 			isChanged = appointmentDao.changeAppointment(appointment);
