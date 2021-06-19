@@ -125,11 +125,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
 		return isChanged;
 	}
 
-	@Override
-	public List<Appointment> findAll() throws DaoException {
-		// FIXME realization
-		return null;
-	}
 
 	@Override
 	public Optional<Appointment> findById(long id) throws DaoException {

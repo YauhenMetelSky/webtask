@@ -1,12 +1,10 @@
 package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
@@ -19,23 +17,28 @@ import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.service.AppointmentService;
 import by.metelski.webtask.model.service.impl.AppointmentServiceImpl;
 
+/**
+ * The command cancel appointment
+ * @author Yauhen Metelski
+ *
+ */
 public class CancelAppointmentCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	private AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
+	private AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(), new ProcedureDaoImpl());
 
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
+	public Router execute(HttpServletRequest request) {
 		logger.log(Level.DEBUG, "CancelAppointmentCommand");
 		Router router = new Router();
-		long appointmentId =Long.parseLong(request.getParameter(ParameterAndAttribute.APPOINTMENT_ID));
+		long appointmentId = Long.parseLong(request.getParameter(ParameterAndAttribute.APPOINTMENT_ID));
 		try {
-			if(service.changeStatus(appointmentId, Status.CANCELED)) {
-			String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
-			router.setPagePath(page);
-			router.setType(Type.REDIRECT);
+			if (service.changeStatus(appointmentId, Status.CANCELED)) {
+				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
+				router.setPagePath(page);
+				router.setType(Type.REDIRECT);
 			}
 		} catch (ServiceException e) {
-			logger.log(Level.ERROR, "AppointmentServiceException in method execute",e);
+			logger.log(Level.ERROR, "AppointmentServiceException in method execute", e);
 			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
 			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);

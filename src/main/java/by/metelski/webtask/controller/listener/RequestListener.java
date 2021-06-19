@@ -5,12 +5,16 @@ import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.command.ParameterAndAttribute;
+
+/**
+ * Request listener
+ * @author Yauhen Metelski
+ *
+ */
 @WebListener
 public class RequestListener implements ServletRequestListener {
 	private static final Logger logger = LogManager.getLogger();
@@ -18,7 +22,7 @@ public class RequestListener implements ServletRequestListener {
 	@Override
 	public void requestDestroyed(ServletRequestEvent sre) {
 		logger.log(Level.DEBUG, "RequestDestroyedIvent");
-		HttpServletRequest request = (HttpServletRequest)sre.getServletRequest();
+		HttpServletRequest request = (HttpServletRequest) sre.getServletRequest();
 		HttpSession session = request.getSession();
 		session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, null);
 		ServletRequestListener.super.requestDestroyed(sre);

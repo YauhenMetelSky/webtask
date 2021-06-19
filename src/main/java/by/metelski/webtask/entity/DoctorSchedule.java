@@ -2,8 +2,12 @@ package by.metelski.webtask.entity;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.util.SortedMap;
 
+/**
+ * Entity class DoctorSchedule
+ * @author Yauhen Metelski
+ *
+ */
 public class DoctorSchedule {
 	private long id;
 	private User doctor;
@@ -11,10 +15,10 @@ public class DoctorSchedule {
 	private Time endTime;
 	private Date date;
 	boolean isActive;
-	
+
 	private DoctorSchedule() {
-		
-	}	
+
+	}
 
 	public User getDoctor() {
 		return doctor;
@@ -43,7 +47,6 @@ public class DoctorSchedule {
 	public long getId() {
 		return id;
 	}
-	
 
 	public Date getDate() {
 		return date;
@@ -52,7 +55,6 @@ public class DoctorSchedule {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
 
 	public boolean isActive() {
 		return isActive;
@@ -130,40 +132,45 @@ public class DoctorSchedule {
 		return builder2.toString();
 	}
 
-
-	public static class Builder{
+	public static class Builder {
 		private DoctorSchedule newDoctorSchedule;
-		
+
 		public Builder() {
 			newDoctorSchedule = new DoctorSchedule();
 		}
+
 		public Builder setId(long id) {
-			newDoctorSchedule.id=id;
+			newDoctorSchedule.id = id;
 			return this;
 		}
+
 		public Builder setDoctor(User doctor) {
-			newDoctorSchedule.doctor=doctor;
+			newDoctorSchedule.doctor = doctor;
 			return this;
 		}
+
 		public Builder setStartTime(Time startTime) {
-			newDoctorSchedule.startTime=startTime;
+			newDoctorSchedule.startTime = startTime;
 			return this;
 		}
+
 		public Builder setEndTime(Time endTime) {
-			newDoctorSchedule.endTime=endTime;
+			newDoctorSchedule.endTime = endTime;
 			return this;
 		}
+
 		public Builder setDate(Date date) {
-			newDoctorSchedule.date=date;
+			newDoctorSchedule.date = date;
 			return this;
 		}
+
 		public Builder setIsActive(boolean isActive) {
-			newDoctorSchedule.isActive=isActive;
+			newDoctorSchedule.isActive = isActive;
 			return this;
 		}
+
 		public DoctorSchedule build() {
 			return newDoctorSchedule;
 		}
-		
 	}
 }

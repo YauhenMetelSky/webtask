@@ -3,54 +3,71 @@ package by.metelski.webtask.entity;
 import java.math.BigDecimal;
 import java.time.Duration;
 
+/**
+ * Entity class Procedure
+ * @author Yauhen Metelski
+ *
+ */
 public class Procedure {
 	private long procedureId;
 	private String name;
 	private String imageName;
 	private BigDecimal price;
 	private boolean isActive;
-	private String description; 
+	private String description;
 	private Duration duration;
-	
+
 	private Procedure() {
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String Name) {
 		this.name = Name;
 	}
+
 	public String getImageName() {
 		return imageName;
 	}
+
 	public void setImageName(String imageName) {
 		this.imageName = imageName;
 	}
+
 	public BigDecimal getPrice() {
 		return price;
 	}
+
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
+
 	public long getProcedureId() {
 		return procedureId;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public boolean isActive() {
 		return isActive;
 	}
-	
+
 	public Duration getDuration() {
 		return duration;
 	}
+
 	public void setDuration(Duration duration) {
 		this.duration = duration;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -64,6 +81,7 @@ public class Procedure {
 		result = prime * result + (int) (procedureId ^ (procedureId >>> 32));
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -104,6 +122,7 @@ public class Procedure {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -124,44 +143,51 @@ public class Procedure {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 	public static class Builder {
 		private Procedure newProcedure;
-		
+
 		public Builder() {
 			newProcedure = new Procedure();
 		}
+
 		public Builder setProcedureId(long procedureId) {
-			newProcedure.procedureId=procedureId;
+			newProcedure.procedureId = procedureId;
 			return this;
 		}
+
 		public Builder setName(String name) {
 			newProcedure.name = name;
 			return this;
 		}
+
 		public Builder setImageName(String imageName) {
-			newProcedure.imageName=imageName;
+			newProcedure.imageName = imageName;
 			return this;
 		}
+
 		public Builder setPrice(BigDecimal price) {
-			newProcedure.price=price;
+			newProcedure.price = price;
 			return this;
 		}
+
 		public Builder setIsActive(boolean isActive) {
-			newProcedure.isActive=isActive;
+			newProcedure.isActive = isActive;
 			return this;
 		}
+
 		public Builder setDescription(String description) {
-			newProcedure.description=description;
+			newProcedure.description = description;
 			return this;
 		}
+
 		public Builder setDuration(Duration duration) {
-			newProcedure.duration=duration;
+			newProcedure.duration = duration;
 			return this;
 		}
+
 		public Procedure build() {
 			return newProcedure;
 		}
 	}
 }
-

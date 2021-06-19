@@ -2,7 +2,6 @@ package by.metelski.webtask.command.impl;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -19,12 +18,17 @@ import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.service.AppointmentService;
 import by.metelski.webtask.model.service.impl.AppointmentServiceImpl;
 
+/**
+ * The command find all appointments made by user using user id.
+ * @author Yauhen Metelski
+ *
+ */
 public class FindAllAppointmentsByUserIdCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	private AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
+	private AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(), new ProcedureDaoImpl());
 
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
+	public Router execute(HttpServletRequest request) {
 		logger.log(Level.DEBUG, "FindAllAppointmentsByIdCommand");
 		List<Appointment> appointments;
 		Router router = new Router();

@@ -3,7 +3,6 @@ package by.metelski.webtask.command.impl;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -24,13 +23,18 @@ import by.metelski.webtask.model.service.ScheduleService;
 import by.metelski.webtask.model.service.impl.AppointmentServiceImpl;
 import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 
+/**
+ * The command add new Appointment
+ * @author Yauhen Metelski
+ *
+ */
 public class AddAppointmentCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
 	ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());
 
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
+	public Router execute(HttpServletRequest request) {
 		logger.log(Level.DEBUG, "execute method AddProcedureCommand");
 		Router router = new Router();
 		HttpSession session = request.getSession();

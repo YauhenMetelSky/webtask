@@ -2,9 +2,7 @@ package by.metelski.webtask.command.impl;
 
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,17 +17,22 @@ import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
+/**
+ * Log in command
+ * @author Yauhen Metelski
+ *
+ */
 public class LogInCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserService userService = new UserServiceImpl(new UserDaoImpl());
 
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-	    Router router = new Router();
-	    HttpSession session = request.getSession();
-	    logger.log(Level.DEBUG, "execute method logIn");
-	    String page = request.getContextPath() + PagePath.SIGN_IN;
-	    logger.log(Level.DEBUG, "page path=" + page);
+	public Router execute(HttpServletRequest request) {
+		Router router = new Router();
+		HttpSession session = request.getSession();
+		logger.log(Level.DEBUG, "execute method logIn");
+		String page = request.getContextPath() + PagePath.SIGN_IN;
+		logger.log(Level.DEBUG, "page path=" + page);
 		User user;
 		String email = request.getParameter(ParameterAndAttribute.USER_EMAIL);
 		String password = request.getParameter(ParameterAndAttribute.USER_PASSWORD);

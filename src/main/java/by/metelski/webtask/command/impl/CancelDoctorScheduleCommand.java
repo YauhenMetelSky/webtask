@@ -1,7 +1,6 @@
 package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,23 +14,28 @@ import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
 import by.metelski.webtask.model.service.ScheduleService;
 import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 
-public class CancelDoctorScheduleCommand  implements Command {
+/**
+ * The command cancel doctor schedule
+ * @author Yauhen Metelski
+ *
+ */
+public class CancelDoctorScheduleCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());
 
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
+	public Router execute(HttpServletRequest request) {
 		logger.log(Level.DEBUG, "CancelDoctorScheduleCommand");
 		Router router = new Router();
-		long scheduleId =Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_SCHEDULE_ID));
+		long scheduleId = Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_SCHEDULE_ID));
 		try {
-			if(scheduleService.changeFieldIsActive(scheduleId, false)) {
-			String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
-			router.setPagePath(page);
-			router.setType(Type.REDIRECT);
+			if (scheduleService.changeFieldIsActive(scheduleId, false)) {
+				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
+				router.setPagePath(page);
+				router.setType(Type.REDIRECT);
 			}
 		} catch (ServiceException e) {
-			logger.log(Level.ERROR, "ScheduleServiceException in method execute",e);
+			logger.log(Level.ERROR, "ScheduleServiceException in method execute", e);
 			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
 			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);

@@ -12,6 +12,12 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Custom connection pool.Realization with two blocking queue for given away and ready to given away connections.
+ * Singleton.
+ * @author Yauhen Metelski
+ *
+ */
 public class ConnectionPool {
 	public static final Logger logger = LogManager.getLogger();
 	private static AtomicBoolean isCreated = new AtomicBoolean();
@@ -80,11 +86,11 @@ public class ConnectionPool {
 
 	public void destroyPool() {
 		for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-				closeAnyConnection();
+			closeAnyConnection();
 		}
 		deregisterDrivers();
 	}
-	
+
 	private void closeAnyConnection() {
 		try {
 			freeConnection.take().reallyClose();

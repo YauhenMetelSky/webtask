@@ -13,6 +13,5 @@ public interface ProcedureService {
 	boolean changeProcedure(Map<String,String> procedureData) throws ServiceException;
 	List<Procedure> findAll() throws ServiceException;
 	List<Procedure> findAllActive() throws ServiceException;
-	Optional<Procedure> findByName() throws ServiceException;
 	Optional<Procedure> findById(long id) throws ServiceException;
 }

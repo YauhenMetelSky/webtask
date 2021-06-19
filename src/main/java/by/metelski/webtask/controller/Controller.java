@@ -15,6 +15,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.*;
 
+/**
+ * Controller for queries from client
+ * @author Yauhen Metelski
+ *
+ */
 @WebServlet(name = "controller", urlPatterns = { "/controller" })
 public class Controller extends HttpServlet {
 	private static final Logger logger = LogManager.getLogger();
@@ -31,12 +36,12 @@ public class Controller extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-			processRequest(request, response);
+		processRequest(request, response);
 	}
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String commandFromPage = request.getParameter(ParameterAndAttribute.COMMAND); 
+		String commandFromPage = request.getParameter(ParameterAndAttribute.COMMAND);
 		Command command = CommandProvider.defineCommand(commandFromPage);
 		Router router = command.execute(request);
 		logger.log(Level.DEBUG, "page from command " + router.getPagePath());
@@ -51,9 +56,9 @@ public class Controller extends HttpServlet {
 			response.sendRedirect(router.getPagePath());
 			logger.log(Level.DEBUG, "redirect");
 			break;
-			default:
-				logger.log(Level.ERROR, "Incorrect router type:" + router.getType());
-				response.sendRedirect(PagePath.MAIN);
+		default:
+			logger.log(Level.ERROR, "Incorrect router type:" + router.getType());
+			response.sendRedirect(PagePath.MAIN);
 		}
 	}
 

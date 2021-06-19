@@ -3,9 +3,7 @@ package by.metelski.webtask.command.impl;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,12 +18,17 @@ import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.service.ProcedureService;
 import by.metelski.webtask.model.service.impl.ProcedureServiceImpl;
 
+/**
+ * The command add new procedure
+ * @author Yauhen Metelski
+ *
+ */
 public class AddProcedureCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	ProcedureService procedureService = new ProcedureServiceImpl(new ProcedureDaoImpl());
-	
+
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
+	public Router execute(HttpServletRequest request) {
 		logger.log(Level.DEBUG, "execute method AddProcedureCommand");
 		Router router = new Router();
 		HttpSession session = request.getSession();
@@ -42,8 +45,8 @@ public class AddProcedureCommand implements Command {
 		procedureData.put(ParameterAndAttribute.DURATION, procedureDuration);
 		logger.log(Level.DEBUG, "data in map from request: " + procedureData.toString());
 		try {
-			if(procedureService.add(procedureData)) {
-				String page = request.getContextPath() +PagePath.TO_PERSONAL_PAGE;
+			if (procedureService.add(procedureData)) {
+				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
@@ -53,7 +56,7 @@ public class AddProcedureCommand implements Command {
 			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
 			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
-		}		
+		}
 		return router;
 	}
 }

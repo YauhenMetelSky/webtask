@@ -1,9 +1,7 @@
 package by.metelski.webtask.command.impl;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,31 +16,37 @@ import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
+/**
+ * The command changes column is_active in the database, if user click the link sent by email.
+ * 
+ * @author Yauhen Metelski
+ *
+ */
 public class ActivateAccountCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserService userService = new UserServiceImpl(new UserDaoImpl());
 
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
-	    Router router = new Router();
-	    HttpSession session = request.getSession();
-	    boolean isActive = false;
-	    logger.log(Level.DEBUG, "execute method ActivateAccountCommand");
+	public Router execute(HttpServletRequest request) {
+		Router router = new Router();
+		HttpSession session = request.getSession();
+		boolean isActive = false;
+		logger.log(Level.DEBUG, "execute method ActivateAccountCommand");
 		String email = request.getParameter(ParameterAndAttribute.USER_EMAIL);
 		String token = request.getParameter(ParameterAndAttribute.TOKEN);
 		logger.log(Level.DEBUG, "email: " + email + " token: " + token);
 		try {
-			isActive = userService.activateAccount(token,email);
+			isActive = userService.activateAccount(token, email);
 			String page = request.getContextPath() + PagePath.TO_MAIN_PAGE;
 			if (isActive) {
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.ACCOUNT_IS_ACTIVE);
-				logger.log(Level.DEBUG,session.getAttribute(ParameterAndAttribute.MESSAGE_FOR_USER));
+				logger.log(Level.DEBUG, session.getAttribute(ParameterAndAttribute.MESSAGE_FOR_USER));
 				router.setPagePath(page);
-				router.setType(Type.REDIRECT);			
+				router.setType(Type.REDIRECT);
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 			} else {
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.CANT_ACTIVATE);
-				logger.log(Level.DEBUG,session.getAttribute(ParameterAndAttribute.MESSAGE_FOR_USER));
+				logger.log(Level.DEBUG, session.getAttribute(ParameterAndAttribute.MESSAGE_FOR_USER));
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);

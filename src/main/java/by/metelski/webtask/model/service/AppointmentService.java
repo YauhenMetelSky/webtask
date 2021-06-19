@@ -13,7 +13,6 @@ public interface AppointmentService {
 	boolean add(Map<String,String> data) throws ServiceException;
 	boolean changeStatus(long id,Status status) throws ServiceException;
 	boolean change(Map<String,String> data) throws ServiceException;
-	List<Appointment> findAll() throws ServiceException;
 	List<Appointment> findAllByStatus(Status status) throws ServiceException;
 	List<Appointment> findAllByUserId(long userId) throws ServiceException;
 	List<Appointment> findAllByDoctorId(long doctorId) throws ServiceException;

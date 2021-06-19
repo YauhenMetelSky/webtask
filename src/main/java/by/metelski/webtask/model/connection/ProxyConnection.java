@@ -20,6 +20,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * ProxyConnection it is wrapper for Connection class, 
+ * using for control creating and closing connections.
+ * @author Yauhen Metelski
+ *
+ */
 public class ProxyConnection implements Connection {
 	private Connection connection;
 

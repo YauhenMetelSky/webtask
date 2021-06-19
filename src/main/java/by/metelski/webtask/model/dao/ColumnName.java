@@ -1,5 +1,10 @@
 package by.metelski.webtask.model.dao;
 
+/**
+ * Column names in database
+ * @author Yauhen Metelski
+ *
+ */
 public final class ColumnName {
 	public static final String APPOINTMENT_ID = "id_appointment";
 	public static final String CLIENT_EMAIL = "client_email";
@@ -40,7 +45,6 @@ public final class ColumnName {
 	public static final String USER_SURNAME = "surname";
 	public static final String USER_EMAIL = "email";
 	public static final String USER_PHONE = "phone";
-	
 
 	private ColumnName() {
 	}

@@ -91,13 +91,6 @@ public class ProcedureDaoImpl implements ProcedureDao {
 	}
 
 	@Override
-	public Optional<Procedure> findByName() throws DaoException {
-		// FIXME realization
-		return null;
-	}
-
-
-	@Override
 	public Optional<Duration> findDuration(long procedureId) throws DaoException {
 		Optional<Duration> duration;
 		logger.log(Level.INFO, "Find duration by procedure, ID: " + procedureId);

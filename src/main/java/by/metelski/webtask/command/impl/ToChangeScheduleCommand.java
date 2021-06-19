@@ -1,14 +1,10 @@
 package by.metelski.webtask.command.impl;
 
 import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
@@ -29,29 +25,34 @@ import by.metelski.webtask.model.service.impl.ProcedureServiceImpl;
 import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
-public class ToChangeScheduleCommand  implements Command {
+/**
+ *  Go to changeschedule page command
+ * @author Yauhen Metelski
+ *
+ */
+public class ToChangeScheduleCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
-	AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(),new ProcedureDaoImpl());
+	AppointmentService service = new AppointmentServiceImpl(new AppointmentDaoImpl(), new ProcedureDaoImpl());
 	UserService userService = new UserServiceImpl(new UserDaoImpl());
 	ProcedureService procedureService = new ProcedureServiceImpl(new ProcedureDaoImpl());
 	ScheduleService scheduleService = new ScheduleServiceImpl(new ScheduleDaoImpl());
 
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
+	public Router execute(HttpServletRequest request) {
 		logger.log(Level.DEBUG, "execute method ToChangeScheduleCommand");
 		Router router = new Router();
 		logger.log(Level.DEBUG, "cheduleId from request:" + request.getParameter(ParameterAndAttribute.SCHEDULE_ID));
-		long scheduleId =Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_SCHEDULE_ID));
-		logger.log(Level.DEBUG, "scheduleId:" +scheduleId);
+		long scheduleId = Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_SCHEDULE_ID));
+		logger.log(Level.DEBUG, "scheduleId:" + scheduleId);
 		try {
 			Optional<DoctorSchedule> optional = scheduleService.findScheduleById(scheduleId);
-			logger.log(Level.DEBUG, "schedule:" +optional.get());
-			if(optional.isPresent()) {
+			logger.log(Level.DEBUG, "schedule:" + optional.get());
+			if (optional.isPresent()) {
 				DoctorSchedule schedule = optional.get();
-				request.setAttribute(ParameterAndAttribute.SCHEDULE,schedule);
+				request.setAttribute(ParameterAndAttribute.SCHEDULE, schedule);
 				logger.log(Level.DEBUG, "doctor schedule: " + schedule);
 				router.setPagePath(PagePath.CHANGE_SCHEDULE);
-			}else {
+			} else {
 				logger.log(Level.ERROR, "Nothing founded");
 				request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, Message.UNKNOWN_PROBLEM);
 				router.setPagePath(PagePath.ERROR);
@@ -61,8 +62,7 @@ public class ToChangeScheduleCommand  implements Command {
 			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
 			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
-		}				
+		}
 		return router;
 	}
 }
-

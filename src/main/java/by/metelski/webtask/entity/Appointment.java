@@ -3,6 +3,11 @@ package by.metelski.webtask.entity;
 import java.sql.Date;
 import java.sql.Time;
 
+/**
+ * Entity class Appointment
+ * @author Yauhen Metelski
+ *
+ */
 public class Appointment {
 	private long id;
 	private User user;
@@ -12,60 +17,75 @@ public class Appointment {
 	private Time endTime;
 	private Date date;
 	private Status status;
-	
-	public enum Status{
-		CLAIMED,CONFIRMED,CANCELED,ENDED
+
+	public enum Status {
+		CLAIMED, CONFIRMED, CANCELED, ENDED
 	}
-	
+
 	private Appointment() {
-		
+
 	}
 
 	public User getUser() {
 		return user;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 	public User getDoctor() {
 		return doctor;
 	}
+
 	public void setDoctor(User doctor) {
 		this.doctor = doctor;
 	}
+
 	public Procedure getProcedure() {
 		return procedure;
 	}
+
 	public void setProcedure(Procedure procedure) {
 		this.procedure = procedure;
 	}
+
 	public Time getStartTime() {
 		return startTime;
 	}
+
 	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
+
 	public Time getEndTime() {
 		return endTime;
 	}
+
 	public void setEndTime(Time endTime) {
 		this.endTime = endTime;
 	}
+
 	public Date getDate() {
 		return date;
 	}
+
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
 	public Status getStatus() {
 		return status;
 	}
+
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+
 	public long getId() {
 		return id;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -80,6 +100,7 @@ public class Appointment {
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -125,6 +146,7 @@ public class Appointment {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -146,45 +168,55 @@ public class Appointment {
 		builder.append(status);
 		builder.append("]");
 		return builder.toString();
-	}	
-	public static class Builder{
+	}
+
+	public static class Builder {
 		private Appointment newAppointment;
-		
+
 		public Builder() {
-			newAppointment= new Appointment();
+			newAppointment = new Appointment();
 		}
+
 		public Builder setId(long id) {
-			newAppointment.id=id;
+			newAppointment.id = id;
 			return this;
 		}
+
 		public Builder setUser(User user) {
-			newAppointment.user=user;
+			newAppointment.user = user;
 			return this;
 		}
+
 		public Builder setDoctor(User doctor) {
-			newAppointment.doctor=doctor;
+			newAppointment.doctor = doctor;
 			return this;
 		}
+
 		public Builder setProcedure(Procedure procedure) {
-			newAppointment.procedure=procedure;
+			newAppointment.procedure = procedure;
 			return this;
 		}
+
 		public Builder setStartTime(Time startTime) {
-			newAppointment.startTime=startTime;
+			newAppointment.startTime = startTime;
 			return this;
 		}
+
 		public Builder setEndTime(Time enTime) {
-			newAppointment.endTime=enTime;
+			newAppointment.endTime = enTime;
 			return this;
 		}
+
 		public Builder setDate(Date date) {
-			newAppointment.date=date;
+			newAppointment.date = date;
 			return this;
 		}
+
 		public Builder setStatus(Status status) {
-			newAppointment.status=status;
+			newAppointment.status = status;
 			return this;
 		}
+
 		public Appointment build() {
 			return newAppointment;
 		}

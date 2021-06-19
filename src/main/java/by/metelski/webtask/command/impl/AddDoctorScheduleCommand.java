@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -21,12 +20,17 @@ import by.metelski.webtask.model.dao.impl.ScheduleDaoImpl;
 import by.metelski.webtask.model.service.ScheduleService;
 import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 
+/**
+ * The command add new doctor schedule
+ * @author Yauhen Metelski
+ *
+ */
 public class AddDoctorScheduleCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	ScheduleService service = new ScheduleServiceImpl(new ScheduleDaoImpl());
 
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
+	public Router execute(HttpServletRequest request) {
 		logger.log(Level.DEBUG, "execute method AddDoctorScheduleCommand");
 		Router router = new Router();
 		HttpSession session = request.getSession();

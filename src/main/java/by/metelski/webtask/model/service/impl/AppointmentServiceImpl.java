@@ -118,12 +118,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public List<Appointment> findAll() throws ServiceException {
-		// FIXME realization
-		return null;
-	}
-
-	@Override
 	public Optional<Appointment> findById(long id) throws ServiceException {
 		Optional<Appointment> appointment = null;
 		try {

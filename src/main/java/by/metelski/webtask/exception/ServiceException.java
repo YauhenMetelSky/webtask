@@ -1,5 +1,9 @@
 package by.metelski.webtask.exception;
 
+/**
+ * @author Yauhen Metelski
+ *
+ */
 public class ServiceException extends Exception {
 
 	public ServiceException() {

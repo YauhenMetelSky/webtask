@@ -79,12 +79,6 @@ public class ProcedureServiceImpl implements ProcedureService {
 	}
 
 	@Override
-	public Optional<Procedure> findByName() throws ServiceException {
-		// FIXME realization
-		return null;
-	}
-
-	@Override
 	public Optional<Procedure> findById(long id) throws ServiceException {
 		logger.log(Level.DEBUG, "findBYId, procedure id:"+  id);
 		Optional<Procedure>procedure;

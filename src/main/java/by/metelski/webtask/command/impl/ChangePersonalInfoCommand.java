@@ -2,15 +2,11 @@ package by.metelski.webtask.command.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
@@ -23,18 +19,23 @@ import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
-
-public class ChangePersonalInfoCommand implements Command{
+/**
+ * The command changes user's personal info
+ * 
+ * @author Yauhen Metelski
+ *
+ */
+public class ChangePersonalInfoCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
-    UserService userService = new UserServiceImpl(new UserDaoImpl());
-	
+	UserService userService = new UserServiceImpl(new UserDaoImpl());
+
 	@Override
-	public Router execute(HttpServletRequest request, HttpServletResponse response) {
+	public Router execute(HttpServletRequest request) {
 		logger.log(Level.DEBUG, "execute method UpdateProcedureCommand");
 		Router router = new Router();
 		HttpSession session = request.getSession();
-		Map<String,String> userData = new HashMap<>();
-		User user = (User)session.getAttribute(ParameterAndAttribute.USER);
+		Map<String, String> userData = new HashMap<>();
+		User user = (User) session.getAttribute(ParameterAndAttribute.USER);
 		String name = request.getParameter(ParameterAndAttribute.USER_NAME);
 		logger.log(Level.DEBUG, "User name=" + name);
 		String surname = request.getParameter(ParameterAndAttribute.USER_SURNAME);
@@ -45,7 +46,7 @@ public class ChangePersonalInfoCommand implements Command{
 		userData.put(ParameterAndAttribute.USER_SURNAME, surname);
 		userData.put(ParameterAndAttribute.USER_PHONE, phone);
 		try {
-			if(userService.changePersonalInfo(user, userData)) {
+			if (userService.changePersonalInfo(user, userData)) {
 				String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
@@ -62,4 +63,3 @@ public class ChangePersonalInfoCommand implements Command{
 		return router;
 	}
 }
-

@@ -1,5 +1,10 @@
 package by.metelski.webtask.entity;
 
+/**
+ * Entity class User
+ * @author Yauhen Metelski
+ *
+ */
 public class User {
 	private long userId;
 	private String name;
@@ -9,12 +14,13 @@ public class User {
 	private boolean isBlocked;
 	private Role role;
 
-	public enum Role{
-		ADMIN,GUEST,USER,DOCTOR
+	public enum Role {
+		ADMIN, GUEST, USER, DOCTOR
 	}
+
 	private User() {
-		
-	}	
+
+	}
 
 	public String getName() {
 		return name;
@@ -53,12 +59,13 @@ public class User {
 	}
 
 	public void setBlocked(boolean isBlocked) {
-		this.isBlocked = isBlocked; 
+		this.isBlocked = isBlocked;
 	}
 
 	public long getUserId() {
 		return userId;
 	}
+
 	public Role getRole() {
 		return role;
 	}
@@ -66,7 +73,7 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-		
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -139,44 +146,51 @@ public class User {
 		builder.append("]");
 		return builder.toString();
 	}
-	
-	public static class Builder{
+
+	public static class Builder {
 		private User newUser;
-		
+
 		public Builder() {
 			newUser = new User();
 		}
-		
+
 		public Builder setUserID(long userId) {
-			newUser.userId =userId;
+			newUser.userId = userId;
 			return this;
 		}
+
 		public Builder setName(String name) {
-			newUser.name=name;
+			newUser.name = name;
 			return this;
 		}
+
 		public Builder setSurname(String surname) {
-			newUser.surname=surname;
+			newUser.surname = surname;
 			return this;
 		}
+
 		public Builder setEmail(String email) {
-			newUser.email=email;
+			newUser.email = email;
 			return this;
 		}
+
 		public Builder setPhone(String phone) {
-			newUser.phone=phone;
+			newUser.phone = phone;
 			return this;
 		}
+
 		public Builder setIsBlocked(boolean isBlocked) {
-			newUser.isBlocked=isBlocked;
+			newUser.isBlocked = isBlocked;
 			return this;
 		}
+
 		public Builder setRole(Role role) {
-			newUser.role=role;
+			newUser.role = role;
 			return this;
 		}
+
 		public User build() {
 			return newUser;
-		}		
+		}
 	}
 }
