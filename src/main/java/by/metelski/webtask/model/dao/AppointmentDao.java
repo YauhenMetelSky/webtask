@@ -12,10 +12,6 @@ import by.metelski.webtask.exception.DaoException;
  * @author Yauhen Metelski
  *
  */
-/**
- * @author Yauhen Metelski
- *
- */
 public interface AppointmentDao {
 	/**
 	 * Add appointment

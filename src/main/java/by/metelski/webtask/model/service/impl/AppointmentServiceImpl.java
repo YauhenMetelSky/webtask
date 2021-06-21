@@ -10,7 +10,6 @@ import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.Appointment;
 import by.metelski.webtask.entity.Appointment.Status;
 import by.metelski.webtask.entity.Procedure;
@@ -20,50 +19,40 @@ import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.AppointmentDao;
 import by.metelski.webtask.model.dao.ProcedureDao;
 import by.metelski.webtask.model.service.AppointmentService;
+import static by.metelski.webtask.command.ParameterAndAttribute.*;
 
+/**
+ * Class appointment service
+ * @author Yauhen Metelski
+ *
+ */
 public class AppointmentServiceImpl implements AppointmentService {
 	private static final Logger logger = LogManager.getLogger();
 	AppointmentDao appointmentDao;
 	ProcedureDao procedureDao;
-	
-	 public AppointmentServiceImpl(AppointmentDao appointmentDao,ProcedureDao procedureDao) {
-		this.appointmentDao=appointmentDao;
-		this.procedureDao=procedureDao;
+
+	public AppointmentServiceImpl(AppointmentDao appointmentDao, ProcedureDao procedureDao) {
+		this.appointmentDao = appointmentDao;
+		this.procedureDao = procedureDao;
 	}
 
 	@Override
 	public boolean add(Map<String, String> data) throws ServiceException {
 		logger.log(Level.DEBUG, "Add appointment; data" + data);
-		// TODO validate data
 		boolean isAdded = false;
-		try {
-			long id = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
-			long duration = procedureDao.findDuration(id).get().toMinutes();//FIXME pay attention return Optional
+		try { //FIXME validate data
+			long id = Long.parseLong(data.get(PROCEDURE_ID));
+			long duration = procedureDao.findDuration(id).get().toMinutes();// FIXME pay attention return Optional
 			logger.log(Level.DEBUG, "procedure duration" + duration);
-			Time endTime = calculateEndTime(data.get(ParameterAndAttribute.START_TIME), duration);
-			long userId = Long.parseLong(data.get(ParameterAndAttribute.USER_ID));
-			long doctorId = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID));
-			long procedureId = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
-			Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
-			Date date = Date.valueOf(data.get(ParameterAndAttribute.APPOINTMENT_DATE));
-			User client = new User.Builder()
-					.setUserID(userId)
-					.build();
-			User doctor = new User.Builder()
-					.setUserID(doctorId)
-					.build();
-			Procedure procedure = new Procedure.Builder()
-					.setProcedureId(procedureId)
-					.build();
-			Appointment appointment = new Appointment.Builder()
-					.setUser(client)
-					.setDoctor(doctor)
-					.setProcedure(procedure)
-					.setStartTime(startTime)
-					.setEndTime(endTime)
-					.setDate(date)
-					.setStatus(Status.CLAIMED)
-					.build();
+			Time endTime = calculateEndTime(data.get(START_TIME), duration);
+			Time startTime = Time.valueOf(data.get(START_TIME));
+			Date date = Date.valueOf(data.get(APPOINTMENT_DATE));
+			User client = createSimpleUser(data.get(USER_ID));
+			User doctor = createSimpleUser(data.get(DOCTOR_ID));
+			Procedure procedure = createSimpleProcedure(data.get(PROCEDURE_ID));
+			Appointment appointment = new Appointment.Builder().setUser(client).setDoctor(doctor)
+					.setProcedure(procedure).setStartTime(startTime).setEndTime(endTime).setDate(date)
+					.setStatus(Status.CLAIMED).build();
 			isAdded = appointmentDao.add(appointment);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
@@ -76,38 +65,22 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Override
 	public boolean change(Map<String, String> data) throws ServiceException {
 		logger.log(Level.DEBUG, "Change appointment; data" + data);
-		// TODO validate data
+		//FIXME validate data
 		boolean isChanged = false;
 		try {
-			long id = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
-			long duration = procedureDao.findDuration(id).get().toMinutes();//FIXME pay attention return Optional
+			long id = Long.parseLong(data.get(PROCEDURE_ID));
+			long duration = procedureDao.findDuration(id).get().toMinutes();// FIXME pay attention return Optional
 			logger.log(Level.DEBUG, "procedure duration" + duration);
-			Time endTime = calculateEndTime(data.get(ParameterAndAttribute.START_TIME), duration);
-			long appointmentId = Long.parseLong(data.get(ParameterAndAttribute.APPOINTMENT_ID));
-			long userId = Long.parseLong(data.get(ParameterAndAttribute.USER_ID));
-			long doctorId = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID));
-			long procedureId = Long.parseLong(data.get(ParameterAndAttribute.PROCEDURE_ID));
-			Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
-			Date date = Date.valueOf(data.get(ParameterAndAttribute.APPOINTMENT_DATE));
-			User client = new User.Builder()
-					.setUserID(userId)
-					.build();
-			User doctor = new User.Builder()
-					.setUserID(doctorId)
-					.build();
-			Procedure procedure = new Procedure.Builder()
-					.setProcedureId(procedureId)
-					.build();
-			Appointment appointment = new Appointment.Builder()
-					.setId(appointmentId)
-					.setUser(client)
-					.setDoctor(doctor)
-					.setProcedure(procedure)
-					.setStartTime(startTime)
-					.setEndTime(endTime)
-					.setStatus(Status.CLAIMED)
-					.setDate(date)
-					.build();
+			Time endTime = calculateEndTime(data.get(START_TIME), duration);
+			long appointmentId = Long.parseLong(data.get(APPOINTMENT_ID));
+			Time startTime = Time.valueOf(data.get(START_TIME));
+			Date date = Date.valueOf(data.get(APPOINTMENT_DATE));
+			User client = createSimpleUser(data.get(USER_ID));
+			User doctor = createSimpleUser(data.get(DOCTOR_ID));
+			Procedure procedure = createSimpleProcedure(data.get(PROCEDURE_ID));
+			Appointment appointment = new Appointment.Builder().setId(appointmentId).setUser(client).setDoctor(doctor)
+					.setProcedure(procedure).setStartTime(startTime).setEndTime(endTime).setStatus(Status.CLAIMED)
+					.setDate(date).build();
 			isChanged = appointmentDao.changeAppointment(appointment);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
@@ -139,7 +112,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 			logger.log(Level.ERROR, "dao exception in method findAllByStatus()" + e);
 			throw new ServiceException(e);
 		}
-
 		return appointments;
 	}
 
@@ -166,14 +138,14 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public boolean changeStatus(long id, Status status) throws ServiceException {
-		logger.log(Level.DEBUG, "changeStatus(), id:" + id+ ", status:" + status);
-		boolean changeStatusResult =false;
+		logger.log(Level.DEBUG, "changeStatus(), id:" + id + ", status:" + status);
+		boolean changeStatusResult = false;
 		try {
-			changeStatusResult=appointmentDao.changeStatus(id, status);
+			changeStatusResult = appointmentDao.changeStatus(id, status);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method changeStatus(), " + e);
 			throw new ServiceException(e);
-		}		
+		}
 		return changeStatusResult;
 	}
 
@@ -189,9 +161,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 		}
 		return appointments;
 	}
+
 	@Override
-	public List<Appointment> findAllByDoctorIdAndDate(long doctorId,Date date) throws ServiceException {
-		logger.log(Level.DEBUG, "findAllByDoctorIdAndDate, doctorId:" + doctorId+ ",Date:" + date);
+	public List<Appointment> findAllByDoctorIdAndDate(long doctorId, Date date) throws ServiceException {
+		logger.log(Level.DEBUG, "findAllByDoctorIdAndDate, doctorId:" + doctorId + ",Date:" + date);
 		List<Appointment> appointments = new ArrayList<>();
 		try {
 			appointments = appointmentDao.findAllByDoctorIdAndDate(doctorId, date);
@@ -200,5 +173,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 			throw new ServiceException(e);
 		}
 		return appointments;
+	}
+	private User createSimpleUser(String id) {
+		long userId = Long.parseLong(id);
+		User user = new User.Builder()
+				.setUserID(userId)
+				.build();
+		return user;
+	}
+	private Procedure createSimpleProcedure(String id) {
+		long procedureId = Long.parseLong(id);
+		Procedure procedure = new Procedure.Builder()
+				.setProcedureId(procedureId)
+				.build();
+		return procedure;
 	}
 }

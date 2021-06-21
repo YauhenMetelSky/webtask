@@ -43,7 +43,7 @@
 				</div>
 				<br />
 
-				<div class="form-inline">
+				<div class="form-inline"> 
 					<form action="controller" method="POST">
 						<input type="text" name="surname" value="" class="form-control"
 							placeholder=<fmt:message key="label.surname"/>> <input
@@ -59,6 +59,8 @@
 					<form action="controller" method="POST">
 						<input type="text" class="form-control" name="email_to"
 							placeholder=<fmt:message key="label.email"/> />
+							<input type="text" class="form-control" name="email_text"
+							placeholder=<fmt:message key="label.email_text"/> />
 						<button type="submit" class="btn btn-primary">
 							<fmt:message key="label.send_email" />
 						</button>
@@ -67,8 +69,6 @@
 				</div>
 				<br />
 
-				<p>${message}</p>
-				<!-- <h1>Add procedure</h1> -->
 				<div>
 					<form action="controller" method="POST">
 						<button type="submit" class="btn btn-primary btn-block">
@@ -95,7 +95,7 @@
 						<input type="hidden" name="command" value="find_all_schedules">
 					</form>
 				</div>
-				<br />>
+				<br />
 				<div>
 					<form action="controller" method="POST">
 						<button type="submit" class="btn btn-primary btn-block">
@@ -208,76 +208,6 @@
 				</c:forEach>
 			</table>
 			<br />
-			<table class="table table-striped">
-				<c:if test="${result_list ne null}">
-					<tr>
-						<th><fmt:message key="label.number" /></th>
-						<th><fmt:message key="label.id" /></th>
-						<th><fmt:message key="label.name" /></th>
-						<th><fmt:message key="label.surname" /></th>
-						<th><fmt:message key="label.email" /></th>
-						<th><fmt:message key="label.phone" /></th>
-						<th><fmt:message key="label.blocked" /></th>
-						<th><fmt:message key="label.change_role" /></th>
-						<th><fmt:message key="label.change_role" /></th>
-						<th><fmt:message key="label.action" /></th>
-					</tr>
-
-					<c:forEach var="elem" items="${result_list}" varStatus="status">
-						<tr>
-							<td><c:out value="${status.count }" /></td>
-							<td><c:out value="${elem.userId }" /></td>
-							<td><c:out value="${elem.name }" /></td>
-							<td><c:out value="${elem.surname }" /></td>
-							<td><c:out value="${elem.email }" /></td>
-							<td><c:out value="${elem.phone }" /></td>
-							<td><c:out value="${elem.blocked }" /></td>
-							<td>
-								<form action="controller" method="POST">
-									<button type="submit" class="btn btn-danger">
-										<fmt:message key="label.change_role_to_admin" />
-									</button>
-									<input type="hidden" name="id" value="${elem.userId}">
-									<input type="hidden" name="command"
-										value="change_user_role_admin">
-								</form>
-							</td>
-							<td>
-								<form action="controller" method="POST">
-									<button type="submit" class="btn btn-danger">
-										<fmt:message key="label.change_role_to_doctor" />
-									</button>
-									<input type="hidden" name="id" value="${elem.userId}">
-									<input type="hidden" name="command"
-										value="change_user_role_doctor">
-								</form>
-							</td>
-							<c:if test="${elem.blocked==false}">
-								<td>
-									<form action="controller" method="POST">
-										<button type="submit" class="btn btn-danger">
-											<fmt:message key="label.block_user" />
-										</button>
-										<input type="hidden" name="id" value="${elem.userId}">
-										<input type="hidden" name="command" value="block_user">
-									</form>
-								</td>
-							</c:if>
-							<c:if test="${elem.blocked==true}">
-								<td>
-									<form action="controller" method="POST">
-										<button type="submit" class="btn btn-success">
-											<fmt:message key="label.unblock_user" />
-										</button>
-										<input type="hidden" name="id" value="${elem.userId}">
-										<input type="hidden" name="command" value="unblock_user">
-									</form>
-								</td>
-							</c:if>
-						</tr>
-					</c:forEach>
-				</c:if>
-			</table>
 
 			<table class="table table-striped">
 				<c:if test="${list ne null}">
@@ -289,6 +219,7 @@
 						<th><fmt:message key="label.email" /></th>
 						<th><fmt:message key="label.phone" /></th>
 						<th><fmt:message key="label.blocked" /></th>
+						<th><fmt:message key="label.role" /></th>
 						<th><fmt:message key="label.change_role" /></th>
 						<th><fmt:message key="label.action" /></th>
 					</tr>
@@ -302,20 +233,30 @@
 							<td><c:out value="${elem.email }" /></td>
 							<td><c:out value="${elem.phone }" /></td>
 							<td><c:out value="${elem.blocked }" /></td>
+							<td><c:out value="${elem.role }" /></td>
 							<td>
 								<form action="controller" method="POST">
-									<button type="submit" class="btn btn-danger">
+									<button type="submit" class="btn btn-danger btn-sm">
 										<fmt:message key="label.change_role_to_doctor" />
 									</button>
 									<input type="hidden" name="id" value="${elem.userId}">
 									<input type="hidden" name="command"
 										value="change_user_role_doctor">
 								</form>
+								<p>
+								<form action="controller" method="POST">
+									<button type="submit" class="btn btn-danger btn-sm">
+										<fmt:message key="label.change_role_to_admin" />
+									</button>
+									<input type="hidden" name="id" value="${elem.userId}">
+									<input type="hidden" name="command"
+										value="change_user_role_admin">
+								</form>
 							</td>
 							<c:if test="${elem.blocked==false}">
 								<td>
 									<form action="controller" method="POST">
-										<button type="submit" class="btn btn-danger">
+										<button type="submit" class="btn btn-danger btn-sm" >
 											<fmt:message key="label.block_user" />
 										</button>
 										<input type="hidden" name="id" value="${elem.userId}">
@@ -326,7 +267,7 @@
 							<c:if test="${elem.blocked==true}">
 								<td>
 									<form action="controller" method="POST">
-										<button type="submit" class="btn btn-success">
+										<button type="submit" class="btn btn-success btn-sm">
 											<fmt:message key="label.unblock_user" />
 										</button>
 										<input type="hidden" name="id" value="${elem.userId}">

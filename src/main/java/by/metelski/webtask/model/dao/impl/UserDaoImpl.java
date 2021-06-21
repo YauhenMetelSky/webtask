@@ -16,9 +16,13 @@ import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.model.dao.UserDao;
-
 import static by.metelski.webtask.model.dao.ColumnName.*;
 
+/**
+ * Class user dao
+ * @author Yauhen Metelski
+ *
+ */
 public class UserDaoImpl implements UserDao {
 	private static final Logger logger = LogManager.getLogger();
 	private static final String SQL_COUNT_ALL_USERS = "SELECT COUNT(*) FROM users";
@@ -44,8 +48,7 @@ public class UserDaoImpl implements UserDao {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_USERS)) {
 			while (resultSet.next()) {
-				User user = createUser(resultSet);
-				users.add(user);
+				users.add(createUser(resultSet));
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
@@ -63,8 +66,7 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, userName);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				User user = createUser(resultSet);
-				users.add(user);
+				users.add(createUser(resultSet));
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Dao exception", e);
@@ -81,8 +83,7 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, userSurname);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				User user = createUser(resultSet);
-				users.add(user);
+				users.add(createUser(resultSet));
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Dao exception", e);
@@ -99,8 +100,7 @@ public class UserDaoImpl implements UserDao {
 			statement.setString(1, role.name());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				User user = createUser(resultSet);
-				users.add(user);
+				users.add(createUser(resultSet));
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Dao exception", e);
@@ -269,20 +269,6 @@ public class UserDaoImpl implements UserDao {
 		return isChanged;
 	}
 
-	private User createUser(ResultSet resultSet) throws SQLException {
-		long userId = resultSet.getLong(USER_ID);
-		String name = resultSet.getString(USER_NAME);
-		String surname = resultSet.getString(USER_SURNAME);
-		String userEmail = resultSet.getString(USER_EMAIL);
-		String phone = resultSet.getString(USER_PHONE);
-		boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
-		Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
-		User user = new User.Builder().setUserID(userId).setName(name).setSurname(surname).setEmail(userEmail)
-				.setPhone(phone).setIsBlocked(isBlocked).setRole(role).build();
-		logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
-		return user;
-	}
-
 	@Override
 	public int findNumberOfRows() throws DaoException {
 		logger.log(Level.INFO, "findNumberOfRows");
@@ -301,23 +287,46 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public List<User> findUsersFromRow(int fromRow,int numberOfUsersInPage) throws DaoException {
+	public List<User> findUsersFromRow(int fromRow, int numberOfUsersInPage) throws DaoException {
 		logger.log(Level.INFO, "Find all users");
 		List<User> users = new ArrayList<User>();
 		try (Connection connection = connectionPool.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_FROM_ROW))
-				{
-			statement.setInt(1,fromRow);
-			statement.setInt(2,numberOfUsersInPage);
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_USERS_FROM_ROW)) {
+			statement.setInt(1, fromRow);
+			statement.setInt(2, numberOfUsersInPage);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				User user = createUser(resultSet);
-				users.add(user);
+				users.add(createUser(resultSet));
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in findUsersFromRow(): " + e.getMessage() + " : " + e.getErrorCode());
 			throw new DaoException("Dao exception", e);
 		}
 		return users;
+	}
+	/**
+	 * @param resultSet
+	 * @return new User
+	 * @throws SQLException
+	 */
+	private User createUser(ResultSet resultSet) throws SQLException {
+		long userId = resultSet.getLong(USER_ID);
+		String name = resultSet.getString(USER_NAME);
+		String surname = resultSet.getString(USER_SURNAME);
+		String userEmail = resultSet.getString(USER_EMAIL);
+		String phone = resultSet.getString(USER_PHONE);
+		boolean isBlocked = resultSet.getBoolean(IS_BLOCKED);
+		Role role = Role.valueOf(resultSet.getString(ROLE).toUpperCase());
+		User user = new User.Builder()
+				.setUserID(userId)
+				.setName(name)
+				.setSurname(surname)
+				.setEmail(userEmail)
+				.setPhone(phone)
+				.setIsBlocked(isBlocked)
+				.setRole(role)
+				.build();
+		logger.log(Level.INFO, "finded user id:" + userId + "FIO: " + name + " " + surname);
+		return user;
 	}
 }

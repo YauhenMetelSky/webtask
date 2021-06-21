@@ -41,7 +41,7 @@ public interface ProcedureDao {
 	/**
 	 * Find duration of procedure
 	 * @param procedureId
-	 * @return Optional<Procedure>
+	 * @return Optional<Duration> procedure's duration
 	 * @throws DaoException
 	 */
 	Optional<Duration> findDuration(long procedureId) throws DaoException;

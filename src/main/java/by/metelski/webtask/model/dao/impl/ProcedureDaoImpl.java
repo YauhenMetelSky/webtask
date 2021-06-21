@@ -14,13 +14,16 @@ import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import by.metelski.webtask.entity.DoctorSchedule;
 import by.metelski.webtask.entity.Procedure;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.model.dao.ProcedureDao;
 
+/**
+ * Class procedure dao
+ * @author Yauhen Metelski
+ *
+ */
 public class ProcedureDaoImpl implements ProcedureDao {
 	private static final Logger logger = LogManager.getLogger();
 	private static final String SQL_ADD_PROCEDURE = "INSERT INTO procedures (name,image_name,price,description,duration) values(?,?,?,?,?)";
@@ -28,10 +31,10 @@ public class ProcedureDaoImpl implements ProcedureDao {
 	private static final String SQL_FIND_ALL_PROCEDURES = "SELECT procedure_id,name,image_name,is_active,price,description,duration FROM procedures";
 	private static final String SQL_FIND_ALL_ACTIVE_PROCEDURES = "SELECT procedure_id,name,image_name,is_active,price,description,duration FROM procedures WHERE is_active=true";
 	private static final String SQL_FIND_PROCEDURE_BY_ID = "SELECT procedure_id,name,image_name,is_active,price,description,duration FROM procedures WHERE procedure_id=?";
-	private static final String SQL_FIND_DURATION="SELECT duration FROM procedures WHERE procedure_id=?";
-	private static final String SQL_UPDATE_IS_ACTIVE="UPDATE procedures set is_active=? WHERE procedure_id=?";
+	private static final String SQL_FIND_DURATION = "SELECT duration FROM procedures WHERE procedure_id=?";
+	private static final String SQL_UPDATE_IS_ACTIVE = "UPDATE procedures set is_active=? WHERE procedure_id=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
-	
+
 	@Override
 	public boolean add(Procedure procedure) throws DaoException {
 		logger.log(Level.INFO, "try to add procedure: " + procedure);
@@ -46,7 +49,7 @@ public class ProcedureDaoImpl implements ProcedureDao {
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
 				isAdded = true;
-				logger.log(Level.INFO, "procedure:" + procedure +" added");
+				logger.log(Level.INFO, "procedure:" + procedure + " added");
 			} else {
 				logger.log(Level.ERROR, "procedure was not added");
 			}
@@ -65,7 +68,7 @@ public class ProcedureDaoImpl implements ProcedureDao {
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_PROCEDURES)) {
 			while (resultSet.next()) {
 				Procedure procedure = createProcedure(resultSet);
-				procedures.add(procedure);			
+				procedures.add(procedure);
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
@@ -73,6 +76,7 @@ public class ProcedureDaoImpl implements ProcedureDao {
 		}
 		return procedures;
 	}
+
 	@Override
 	public List<Procedure> findAllActive() throws DaoException {
 		List<Procedure> procedures = new ArrayList<>();
@@ -80,8 +84,8 @@ public class ProcedureDaoImpl implements ProcedureDao {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL_ACTIVE_PROCEDURES)) {
 			while (resultSet.next()) {
-	             Procedure procedure = createProcedure(resultSet);
-				procedures.add(procedure);			
+				Procedure procedure = createProcedure(resultSet);
+				procedures.add(procedure);
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
@@ -107,8 +111,8 @@ public class ProcedureDaoImpl implements ProcedureDao {
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
-			throw new DaoException(
-					"Dao exception in method finadDuration, procedure id:" + procedureId + " error code: " + e.getErrorCode(), e);
+			throw new DaoException("Dao exception in method finadDuration, procedure id:" + procedureId
+					+ " error code: " + e.getErrorCode(), e);
 		}
 		return duration;
 	}
@@ -138,23 +142,23 @@ public class ProcedureDaoImpl implements ProcedureDao {
 
 	@Override
 	public boolean setIsActive(long id, boolean isActive) throws DaoException {
-		logger.log(Level.INFO, "set procedure isActive, procedureId:" + id +", isActive:"+ isActive);
+		logger.log(Level.INFO, "set procedure isActive, procedureId:" + id + ", isActive:" + isActive);
 		boolean isChanged = false;
-		try(Connection connection = connectionPool.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_IS_ACTIVE)){
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_IS_ACTIVE)) {
 			statement.setBoolean(1, isActive);
 			statement.setLong(2, id);
 			int rowCount = statement.executeUpdate();
 			if (rowCount != 0) {
 				isChanged = true;
-				logger.log(Level.INFO, "procedureid:" + id +" isActive:" + isActive);
+				logger.log(Level.INFO, "procedureid:" + id + " isActive:" + isActive);
 			} else {
 				logger.log(Level.ERROR, "procedure isActive was not changed");
 			}
-			
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
-			throw new DaoException("exception in method when we try to setIsActive procedureId:" +id, e);
+			throw new DaoException("exception in method when we try to setIsActive procedureId:" + id, e);
 		}
 		return isChanged;
 	}
@@ -185,8 +189,14 @@ public class ProcedureDaoImpl implements ProcedureDao {
 		}
 		return isChanged;
 	}
+
+	/**
+	 * @param resultSet
+	 * @return new Procedure
+	 * @throws SQLException
+	 */
 	private Procedure createProcedure(ResultSet resultSet) throws SQLException {
-		long procedureId = (long)resultSet.getInt(PROCEDURE_ID);
+		long procedureId = (long) resultSet.getInt(PROCEDURE_ID);
 		String name = resultSet.getString(NAME);
 		String imageName = resultSet.getString(IMAGE_NAME);
 		boolean isActive = resultSet.getBoolean(IS_ACTIVE);
@@ -197,12 +207,12 @@ public class ProcedureDaoImpl implements ProcedureDao {
 		Procedure procedure = new Procedure.Builder()
 				.setProcedureId(procedureId)
 				.setName(name)
-			    .setImageName(imageName)
-			    .setPrice(price)
-			    .setIsActive(isActive)
-			    .setDescription(description)
-			    .setDuration(duration)
-			    .build();
+				.setImageName(imageName)
+				.setPrice(price)
+				.setIsActive(isActive)
+				.setDescription(description)
+				.setDuration(duration)
+				.build();
 		return procedure;
 	}
 }

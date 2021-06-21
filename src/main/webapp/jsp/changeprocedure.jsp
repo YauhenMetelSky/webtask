@@ -41,25 +41,48 @@
 		${file_name}
 		<hr/>		
 		</div>
-		<div class="form-inline">
+		<!-- <div class="form-inline"> -->
 			<form action="controller" method="POST">
-				<input type="text" name="procedure_name" value="${procedure.name}" pattern=".*[^<>]" class="form-control"
+		    <div class="form-row">
+
+		<%-- 	 <label for="procedure-name1"><fmt:message key="label.name"/></label> --%>
+		<div class="form-group col-md-3">
+		<label for="procedure_name"><fmt:message key="label.name"/></label>
+		<input type="text" name="procedure_name" value="${procedure.name}" pattern=".*[^<>]" class="form-control"
 					placeholder=<fmt:message key="label.name"/>> 
+		</div>
+				<%-- <input type="text" name="procedure_name" value="${procedure.name}" pattern=".*[^<>]" class="form-control"
+					placeholder=<fmt:message key="label.name"/>>  --%>
+					<div class="form-group col-md-3">
+					<label for="procedure_image"><fmt:message key="label.image"/></label>
 					<input type="text" name="procedure_image" value="${procedure.imageName }" pattern=".*[^<>]" class="form-control"
 					placeholder=<fmt:message key="label.image"/>>
+					</div>
+					<div class="form-group col-md-3">
+					<label for="procedure_price"><fmt:message key="label.price"/></label>
 					<input type="text" name="procedure_price" value="${procedure.price }" required pattern="\d+[.]\d+" class="form-control"
 					placeholder=<fmt:message key="label.price"/>>
+					</div>
+					</div>
+					<div class="form-row">
+					<div class="form-group col-md-3">
+					<label for="duration"><fmt:message key="label.duration"/></label>
 					<input type="text" name="duration" value="${procedure.duration.toMinutes()}" required pattern="\d+" class="form-control"
 					placeholder=<fmt:message key="label.duration"/>>
+					</div>
+					<div class="form-group col-md-3">
+					<label for="description"><fmt:message key="label.description"/></label>
 					<input type="text" name="description" value="${procedure.description }" required pattern=".*[^<>]" class="form-control"
 					placeholder=<fmt:message key="label.description"/>>
+					</div>
 					<input type="hidden" name="procedure_id" value="${procedure.procedureId }">
 					<input type="hidden" name="command" value="change_procedure">
+					</div>
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.change" />
 				</button>
 			</form>
-		</div>
+		
 			<p>${message}</p>
 	
 	</div>

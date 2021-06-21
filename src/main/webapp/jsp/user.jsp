@@ -190,56 +190,34 @@
 	<c:import url="footer.jsp" />
 
 	<script type="text/javascript">
-		$(document)
-				.ready(
-						function() {
-							$("#doctor_id")
-									.change(
-											function() {
-												var doctor_id = $('#doctor_id')
-														.val();
-												$
-														.ajax({
+		$(document).ready(function() {
+							$("#doctor_id").change(function() {
+												var doctor_id = $('#doctor_id').val();
+												$.ajax({
 															type : 'POST',
 															data : {
 																doctor_id : doctor_id,
 																command : 'find_all_active_schedules_by_doctor_async'
 															},
 															url : 'ajaxcontroller',
-															success : function(
-																	result) {
-																console
-																		.log(result);
-																console
-																		.log(result.length);
-																$("#date")
-																		.empty();
-																$("#date")
-																		.append(
-																				"<option value=''>select date</option>");
+															success : function(result) {
+																console.log(result);
+																console.log(result.length);
+																$("#date").empty();
+																if (typeof result == 'object') {
+																$("#date").append("<option value=''>select date</option>");
+																	console.log("if block");
 																for (var i = 0; i < result.length; i++) {
-																	if ((typeof result[i] == 'object')) {
-																		console
-																				.log(result[i]);
-																		console
-																				.log(result[i].id);
-																		console
-																				.log(result[i].date);
-																		$(
-																				"#date")
-																				.append(
-																						"<option value='"+result[i].id+"'>"
+																		console.log(result[i]);
+																		console.log(result[i].id);
+																		console.log(result[i].date);
+																		$("#date").append("<option value='"+result[i].id+"'>"
 																								+ result[i].date
 																								+ "</option>");
-																	} else {
-																		$(
-																				"#date")
-																				.append(
-																						"<option value=''>"
+																     	}
+																	} else {$("#date").append("<option value=''>"
 																								+ result
 																								+ "</option>");
-																		break;
-																	}
 																}
 															}
 														});
@@ -248,52 +226,34 @@
 	</script>
 
 	<script type="text/javascript">
-		$(document)
-				.ready(
-						function() {
-							$("#date")
-									.change(
-											function() {
-												var schedule_id = $('#date')
-														.val();
-												$
-														.ajax({
+		$(document).ready(function() {
+							$("#date").change(function() {
+												var schedule_id = $('#date').val();
+												$.ajax({
 															type : 'POST',
 															data : {
 																schedule_id : schedule_id,
 																command : 'find_time_intervals_by_schedule_id_async'
 															},
 															url : 'ajaxcontroller',
-															success : function(
-																	result) {
-																console
-																		.log(result);
-																console
-																		.log(result.length);
-																$("#time")
-																		.empty();
-																$("#time")
-																		.append(
-																				"<option value=''>select time</option>");
-																for (var i = 0; i < result.length; i++) {
-																	if ((typeof result[i] == 'object')) {
-																		console
-																				.log(result[i]);
-																		$(
-																				"#time")
-																				.append(
+															success : function(result) {
+																console.log(result);
+																console.log(result.length);
+																$("#time").empty();
+																$("#time").append("<option value=''>select time</option>");
+																if(typeof result=='object'){
+																for (var i = 0; i < result.length; i++) {					
+																		console.log(result[i]);
+																		$("#time").append(
 																						"<option value='"+result[i]+"'>"
 																								+ result[i]
 																								+ "</option>");
-																	} else {
-																		$(
-																				"#time")
-																				.append(
-																						"<option value=''>"
+																	} 
+																}else {
+																		$("#time").append("<option value=''>"
 																								+ result
 																								+ "</option>");
-																		break;
-																	}
+																	
 																}
 															}
 														});

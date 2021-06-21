@@ -1,8 +1,6 @@
 package by.metelski.webtask.model.service.impl;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -11,20 +9,18 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.ParameterAndAttribute;
-import by.metelski.webtask.entity.DoctorSchedule;
 import by.metelski.webtask.entity.Procedure;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ProcedureDao;
-import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
 import by.metelski.webtask.model.service.ProcedureService;
 
 public class ProcedureServiceImpl implements ProcedureService {
 	private static final Logger logger = LogManager.getLogger();
 	private ProcedureDao procedureDao;
-	
+
 	public ProcedureServiceImpl(ProcedureDao procedureDao) {
-		this.procedureDao=procedureDao;
+		this.procedureDao = procedureDao;
 	}
 
 	@Override
@@ -32,13 +28,10 @@ public class ProcedureServiceImpl implements ProcedureService {
 		logger.log(Level.DEBUG, "add(), procedureData:" + procedureData);
 		// TODO validate data
 		Duration duration = Duration.ofMinutes(Long.parseLong(procedureData.get(ParameterAndAttribute.DURATION)));
-		 Procedure procedure = new Procedure.Builder()
-					.setName(procedureData.get(ParameterAndAttribute.PROCEDURE_NAME))
-				    .setImageName(procedureData.get(ParameterAndAttribute.PROCEDURE_IMAGE))
-				    .setPrice(new BigDecimal(procedureData.get(ParameterAndAttribute.PROCEDURE_PRICE)))
-				    .setDescription(procedureData.get(ParameterAndAttribute.DESCRIPTION))
-				    .setDuration(duration)
-				    .build();
+		Procedure procedure = new Procedure.Builder().setName(procedureData.get(ParameterAndAttribute.PROCEDURE_NAME))
+				.setImageName(procedureData.get(ParameterAndAttribute.PROCEDURE_IMAGE))
+				.setPrice(new BigDecimal(procedureData.get(ParameterAndAttribute.PROCEDURE_PRICE)))
+				.setDescription(procedureData.get(ParameterAndAttribute.DESCRIPTION)).setDuration(duration).build();
 		boolean isAdded = false;
 		try {
 			isAdded = procedureDao.add(procedure);
@@ -64,6 +57,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 
 		return procedures;
 	}
+
 	@Override
 	public List<Procedure> findAllActive() throws ServiceException {
 		logger.log(Level.DEBUG, "findAllActive()");
@@ -80,8 +74,8 @@ public class ProcedureServiceImpl implements ProcedureService {
 
 	@Override
 	public Optional<Procedure> findById(long id) throws ServiceException {
-		logger.log(Level.DEBUG, "findBYId, procedure id:"+  id);
-		Optional<Procedure>procedure;
+		logger.log(Level.DEBUG, "findBYId, procedure id:" + id);
+		Optional<Procedure> procedure;
 		try {
 			procedure = procedureDao.findById(id);
 		} catch (DaoException e) {
@@ -95,7 +89,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 	public boolean setIsActive(long id, boolean isActive) throws ServiceException {
 		boolean isChanged = false;
 		try {
-			isChanged=procedureDao.setIsActive(id, isActive);
+			isChanged = procedureDao.setIsActive(id, isActive);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method setIsActive" + e);
 			throw new ServiceException(e);
@@ -112,17 +106,11 @@ public class ProcedureServiceImpl implements ProcedureService {
 			long id = Long.parseLong(procedureData.get(ParameterAndAttribute.PROCEDURE_ID));
 			String name = procedureData.get(ParameterAndAttribute.PROCEDURE_NAME);
 			String imageName = procedureData.get(ParameterAndAttribute.PROCEDURE_IMAGE);
-			BigDecimal price=new BigDecimal(procedureData.get(ParameterAndAttribute.PROCEDURE_PRICE));
+			BigDecimal price = new BigDecimal(procedureData.get(ParameterAndAttribute.PROCEDURE_PRICE));
 			String description = procedureData.get(ParameterAndAttribute.DESCRIPTION);
 			Duration duration = Duration.ofMinutes(Long.parseLong(procedureData.get(ParameterAndAttribute.DURATION)));
-			 Procedure procedure = new Procedure.Builder()
-					    .setProcedureId(id)
-						.setName(name)
-					    .setImageName(imageName)
-					    .setPrice(price)
-					    .setDescription(description)
-					    .setDuration(duration)
-					    .build();
+			Procedure procedure = new Procedure.Builder().setProcedureId(id).setName(name).setImageName(imageName)
+					.setPrice(price).setDescription(description).setDuration(duration).build();
 			isChanged = procedureDao.changeProcedure(procedure);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,

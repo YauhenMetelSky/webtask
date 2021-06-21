@@ -7,18 +7,89 @@ import java.util.Optional;
 import by.metelski.webtask.entity.DoctorSchedule;
 import by.metelski.webtask.exception.ServiceException;
 
+/**
+ * The interface schedule service
+ * @author Yauhen Metelski
+ *
+ */
 public interface ScheduleService {
-	boolean addDoctorSchedule(Map<String,String> data) throws ServiceException ;
-	boolean changeDoctorSchedule(Map<String,String> data) throws ServiceException ;
-	boolean changeFieldIsActive(long scheduleId, boolean isActive) throws ServiceException;
-	List<DoctorSchedule> findAllSchedules() throws ServiceException;
-	List<DoctorSchedule> findAllSchedulesFromRow(int pageNumber) throws ServiceException;
-	List<DoctorSchedule> findAllActiveSchedulesByDoctor(long userId) throws ServiceException;
-	List<DoctorSchedule> findAllSchedulesByDoctorId(long userId) throws ServiceException;
-	List<DoctorSchedule> findAllSchedulesByDoctorIdFromRow(long userId, int pageNumber) throws ServiceException;
-	int findNumberOfPages()throws ServiceException;
-	int findNumberOfPagesDoctorsShedules(long doctorId)throws ServiceException;
-	Optional<DoctorSchedule> findScheduleById(long id) throws ServiceException;
-	Optional<DoctorSchedule> findScheduleByDateAndDoctor(Date date,long doctorId) throws ServiceException;
-}
 
+	/**
+	 * @param data
+	 * @return boolean result of operation
+	 * @throws ServiceException
+	 */
+	boolean addDoctorSchedule(Map<String, String> data) throws ServiceException;
+
+	/**
+	 * @param data
+	 * @return boolean result of operation
+	 * @throws ServiceException
+	 */
+	boolean changeDoctorSchedule(Map<String, String> data) throws ServiceException;
+
+	/**
+	 * @param scheduleId
+	 * @param isActive
+	 * @return boolean result of operation
+	 * @throws ServiceException
+	 */
+	boolean changeFieldIsActive(long scheduleId, boolean isActive) throws ServiceException;
+
+	/**
+	 * @param pageNumber
+	 * @return List of schedules from row, calculated by page number
+	 * @throws ServiceException
+	 */
+	List<DoctorSchedule> findAllSchedulesFromRow(int pageNumber) throws ServiceException;
+
+	/**
+	 * @param userId
+	 * @return List of active schedules by doctor id
+	 * @throws ServiceException
+	 */
+	List<DoctorSchedule> findAllActiveSchedulesByDoctor(long userId) throws ServiceException;
+
+	/**
+	 * @param userId
+	 * @return List of schedules by doctor id
+	 * @throws ServiceException
+	 */
+	List<DoctorSchedule> findAllSchedulesByDoctorId(long userId) throws ServiceException;
+
+	/**
+	 * @param userId
+	 * @param pageNumber
+	 * @return List of doctor's schedules from row, calculated by page number
+	 * @throws ServiceException
+	 */
+	List<DoctorSchedule> findAllSchedulesByDoctorIdFromRow(long userId, int pageNumber) throws ServiceException;
+
+	/**
+	 * @return int number of pages for pagination, all schedules
+	 * @throws ServiceException
+	 */
+	int findNumberOfPages() throws ServiceException;
+
+	/**
+	 * @param doctorId
+	 * @return int number of pages for pagination, doctor's schedule
+	 * @throws ServiceException
+	 */
+	int findNumberOfPagesDoctorsShedules(long doctorId) throws ServiceException;
+
+	/**
+	 * @param id
+	 * @return Optional<DoctorSchedule>
+	 * @throws ServiceException
+	 */
+	Optional<DoctorSchedule> findScheduleById(long id) throws ServiceException;
+
+	/**
+	 * @param date
+	 * @param doctorId
+	 * @return Optional<DoctorSchedule>
+	 * @throws ServiceException
+	 */
+	Optional<DoctorSchedule> findScheduleByDateAndDoctor(Date date, long doctorId) throws ServiceException;
+}

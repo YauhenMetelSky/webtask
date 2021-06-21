@@ -1,13 +1,6 @@
 package by.metelski.webtask.model.dao.impl;
 
-import static by.metelski.webtask.model.dao.ColumnName.IS_BLOCKED;
-import static by.metelski.webtask.model.dao.ColumnName.ROLE;
-import static by.metelski.webtask.model.dao.ColumnName.USER_EMAIL;
-import static by.metelski.webtask.model.dao.ColumnName.USER_ID;
-import static by.metelski.webtask.model.dao.ColumnName.USER_NAME;
-import static by.metelski.webtask.model.dao.ColumnName.USER_PHONE;
-import static by.metelski.webtask.model.dao.ColumnName.USER_SURNAME;
-
+import static by.metelski.webtask.model.dao.ColumnName.*;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
@@ -31,8 +24,12 @@ import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.model.connection.ConnectionPool;
 import by.metelski.webtask.model.dao.AppointmentDao;
-import by.metelski.webtask.model.dao.ColumnName;
 
+/**
+ * Class appointment dao
+ * @author Yauhen Metelski
+ *
+ */
 public class AppointmentDaoImpl implements AppointmentDao {
 	private static final Logger logger = LogManager.getLogger();
 	private static final String SQL_ADD_APPOINTMENT = "INSERT INTO appointments (id_client,id_doctor,date,start,id_procedure,status,end) values(?,?,?,?,?,?,?)";
@@ -125,7 +122,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
 		return isChanged;
 	}
 
-
 	@Override
 	public Optional<Appointment> findById(long id) throws DaoException {
 		logger.log(Level.INFO, "Find all appointments by id, id=  " + id);
@@ -135,70 +131,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 			statement.setLong(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				long appointmentId = resultSet.getLong(ColumnName.APPOINTMENT_ID);
-				long clientId = resultSet.getLong(ColumnName.CLIENT_ID);
-				String clientName = resultSet.getString(ColumnName.CLIENT_NAME);
-				String clientSurname = resultSet.getString(ColumnName.CLIENT_SURNAME);
-				String clientEmail = resultSet.getString(ColumnName.CLIENT_EMAIL);
-				String clientPhone = resultSet.getString(ColumnName.CLIENT_PHONE);
-				boolean clientIsBlocked = resultSet.getBoolean(ColumnName.CLIENT_IS_BLOCKED);
-				Role clientRole = Role.valueOf(resultSet.getString(ColumnName.CLIENT_ROLE));
-				User client = new User.Builder()
-						.setUserID(clientId)
-						.setName(clientName)
-						.setSurname(clientSurname)
-						.setEmail(clientEmail)
-						.setPhone(clientPhone)
-						.setIsBlocked(clientIsBlocked)
-						.setRole(clientRole)
-						.build();
-				long doctorId = resultSet.getLong(ColumnName.USER_ID);
-				String doctorName = resultSet.getString(ColumnName.USER_NAME);
-				String doctorSurname = resultSet.getString(ColumnName.USER_SURNAME);
-				String doctorEmail = resultSet.getString(ColumnName.USER_EMAIL);
-				String doctorPhone = resultSet.getString(ColumnName.USER_PHONE);
-				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
-				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
-				User doctor = new User.Builder()
-						.setUserID(doctorId)
-						.setName(doctorName)
-						.setSurname(doctorSurname)
-						.setEmail(doctorEmail)
-						.setPhone(doctorPhone)
-						.setIsBlocked(doctorIsBlocked)
-						.setRole(doctorRole)
-						.build();
-				long procedureId = resultSet.getLong(ColumnName.PROCEDURE_ID);
-				String name = resultSet.getString(ColumnName.PROCEDURE_NAME);
-				String imageName = resultSet.getString(ColumnName.IMAGE_NAME);
-				BigDecimal price = resultSet.getBigDecimal(ColumnName.PRICE);
-				boolean procedureIsActive = resultSet.getBoolean(ColumnName.IS_ACTIVE);
-				String description = resultSet.getString(ColumnName.DESCRIPTION);
-				Duration duration = Duration.ofMinutes(resultSet.getInt(ColumnName.DURATION));
-				Procedure procedure = new Procedure.Builder()
-						.setProcedureId(procedureId)
-						.setName(name)
-					    .setImageName(imageName)
-					    .setPrice(price)
-					    .setIsActive(procedureIsActive)
-					    .setDescription(description)
-					    .setDuration(duration)
-					    .build();
-				Time start = resultSet.getTime(ColumnName.START);
-				Time end = resultSet.getTime(ColumnName.END);
-				Date date = resultSet.getDate(ColumnName.DATE);
-				Status procedureStatus = Status.valueOf(resultSet.getString(ColumnName.STATUS));
-				Appointment appointment = new Appointment.Builder()
-						.setId(appointmentId)
-						.setUser(client)
-						.setDoctor(doctor)
-						.setProcedure(procedure)
-						.setStartTime(start)
-						.setEndTime(end)
-						.setDate(date)
-						.setStatus(procedureStatus)
-						.build();
-				optionalAppointment = Optional.of(appointment);
+				optionalAppointment = Optional.of(createAppointment(resultSet));
 			} else {
 				optionalAppointment = Optional.empty();
 			}
@@ -217,70 +150,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 			statement.setString(1, status.name());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				long appointmentId = resultSet.getLong(ColumnName.APPOINTMENT_ID);
-				long clientId = resultSet.getLong(ColumnName.CLIENT_ID);
-				String clientName = resultSet.getString(ColumnName.CLIENT_NAME);
-				String clientSurname = resultSet.getString(ColumnName.CLIENT_SURNAME);
-				String clientEmail = resultSet.getString(ColumnName.CLIENT_EMAIL);
-				String clientPhone = resultSet.getString(ColumnName.CLIENT_PHONE);
-				boolean clientIsBlocked = resultSet.getBoolean(ColumnName.CLIENT_IS_BLOCKED);
-				Role clientRole = Role.valueOf(resultSet.getString(ColumnName.CLIENT_ROLE));
-				User client = new User.Builder()
-						.setUserID(clientId)
-						.setName(clientName)
-						.setSurname(clientSurname)
-						.setEmail(clientEmail)
-						.setPhone(clientPhone)
-						.setIsBlocked(clientIsBlocked)
-						.setRole(clientRole)
-						.build();
-				long doctorId = resultSet.getLong(ColumnName.USER_ID);
-				String doctorName = resultSet.getString(ColumnName.USER_NAME);
-				String doctorSurname = resultSet.getString(ColumnName.USER_SURNAME);
-				String doctorEmail = resultSet.getString(ColumnName.USER_EMAIL);
-				String doctorPhone = resultSet.getString(ColumnName.USER_PHONE);
-				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
-				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
-				User doctor = new User.Builder()
-						.setUserID(doctorId)
-						.setName(doctorName)
-						.setSurname(doctorSurname)
-						.setEmail(doctorEmail)
-						.setPhone(doctorPhone)
-						.setIsBlocked(doctorIsBlocked)
-						.setRole(doctorRole)
-						.build();
-				long procedureId = resultSet.getLong(ColumnName.PROCEDURE_ID);
-				String name = resultSet.getString(ColumnName.PROCEDURE_NAME);
-				String imageName = resultSet.getString(ColumnName.IMAGE_NAME);
-				BigDecimal price = resultSet.getBigDecimal(ColumnName.PRICE);
-				boolean procedureIsActive = resultSet.getBoolean(ColumnName.IS_ACTIVE);
-				String description = resultSet.getString(ColumnName.DESCRIPTION);
-				Duration duration = Duration.ofMinutes(resultSet.getInt(ColumnName.DURATION));
-				Procedure procedure = new Procedure.Builder()
-						.setProcedureId(procedureId)
-						.setName(name)
-					    .setImageName(imageName)
-					    .setPrice(price)
-					    .setIsActive(procedureIsActive)
-					    .setDescription(description)
-					    .setDuration(duration)
-					    .build();
-				Time start = resultSet.getTime(ColumnName.START);
-				Time end = resultSet.getTime(ColumnName.END);
-				Date date = resultSet.getDate(ColumnName.DATE);
-				Status procedureStatus = Status.valueOf(resultSet.getString(ColumnName.STATUS));
-				Appointment appointment = new Appointment.Builder()
-						.setId(appointmentId)
-						.setUser(client)
-						.setDoctor(doctor)
-						.setProcedure(procedure)
-						.setStartTime(start)
-						.setEndTime(end)
-						.setDate(date)
-						.setStatus(procedureStatus)
-						.build();
-				appointments.add(appointment);
+				appointments.add(createAppointment(resultSet));
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Dao exception", e);
@@ -297,70 +167,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 			statement.setLong(1, userId);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				long appointmentId = resultSet.getLong(ColumnName.APPOINTMENT_ID);
-				long clientId = resultSet.getLong(ColumnName.CLIENT_ID);
-				String clientName = resultSet.getString(ColumnName.CLIENT_NAME);
-				String clientSurname = resultSet.getString(ColumnName.CLIENT_SURNAME);
-				String clientEmail = resultSet.getString(ColumnName.CLIENT_EMAIL);
-				String clientPhone = resultSet.getString(ColumnName.CLIENT_PHONE);
-				boolean clientIsBlocked = resultSet.getBoolean(ColumnName.CLIENT_IS_BLOCKED);
-				Role clientRole = Role.valueOf(resultSet.getString(ColumnName.CLIENT_ROLE));
-				User client = new User.Builder()
-						.setUserID(clientId)
-						.setName(clientName)
-						.setSurname(clientSurname)
-						.setEmail(clientEmail)
-						.setPhone(clientPhone)
-						.setIsBlocked(clientIsBlocked)
-						.setRole(clientRole)
-						.build();
-				long doctorId = resultSet.getLong(ColumnName.USER_ID);
-				String doctorName = resultSet.getString(ColumnName.USER_NAME);
-				String doctorSurname = resultSet.getString(ColumnName.USER_SURNAME);
-				String doctorEmail = resultSet.getString(ColumnName.USER_EMAIL);
-				String doctorPhone = resultSet.getString(ColumnName.USER_PHONE);
-				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
-				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
-				User doctor = new User.Builder()
-						.setUserID(doctorId)
-						.setName(doctorName)
-						.setSurname(doctorSurname)
-						.setEmail(doctorEmail)
-						.setPhone(doctorPhone)
-						.setIsBlocked(doctorIsBlocked)
-						.setRole(doctorRole)
-						.build();
-				long procedureId = resultSet.getLong(ColumnName.PROCEDURE_ID);
-				String name = resultSet.getString(ColumnName.PROCEDURE_NAME);
-				String imageName = resultSet.getString(ColumnName.IMAGE_NAME);
-				BigDecimal price = resultSet.getBigDecimal(ColumnName.PRICE);
-				boolean procedureIsActive = resultSet.getBoolean(ColumnName.IS_ACTIVE);
-				String description = resultSet.getString(ColumnName.DESCRIPTION);
-				Duration duration = Duration.ofMinutes(resultSet.getInt(ColumnName.DURATION));
-				Procedure procedure = new Procedure.Builder()
-						.setProcedureId(procedureId)
-						.setName(name)
-					    .setImageName(imageName)
-					    .setPrice(price)
-					    .setIsActive(procedureIsActive)
-					    .setDescription(description)
-					    .setDuration(duration)
-					    .build();
-				Time start = resultSet.getTime(ColumnName.START);
-				Time end = resultSet.getTime(ColumnName.END);
-				Date date = resultSet.getDate(ColumnName.DATE);
-				Status procedureStatus = Status.valueOf(resultSet.getString(ColumnName.STATUS));
-				Appointment appointment = new Appointment.Builder()
-						.setId(appointmentId)
-						.setUser(client)
-						.setDoctor(doctor)
-						.setProcedure(procedure)
-						.setStartTime(start)
-						.setEndTime(end)
-						.setDate(date)
-						.setStatus(procedureStatus)
-						.build();
-				appointments.add(appointment);
+				appointments.add(createAppointment(resultSet));
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
@@ -383,70 +190,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 			statement.setString(3, Status.CONFIRMED.name());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				long appointmentId = resultSet.getLong(ColumnName.APPOINTMENT_ID);
-				long clientId = resultSet.getLong(ColumnName.CLIENT_ID);
-				String clientName = resultSet.getString(ColumnName.CLIENT_NAME);
-				String clientSurname = resultSet.getString(ColumnName.CLIENT_SURNAME);
-				String clientEmail = resultSet.getString(ColumnName.CLIENT_EMAIL);
-				String clientPhone = resultSet.getString(ColumnName.CLIENT_PHONE);
-				boolean clientIsBlocked = resultSet.getBoolean(ColumnName.CLIENT_IS_BLOCKED);
-				Role clientRole = Role.valueOf(resultSet.getString(ColumnName.CLIENT_ROLE));
-				User client = new User.Builder()
-						.setUserID(clientId)
-						.setName(clientName)
-						.setSurname(clientSurname)
-						.setEmail(clientEmail)
-						.setPhone(clientPhone)
-						.setIsBlocked(clientIsBlocked)
-						.setRole(clientRole)
-						.build();
-				long doctorIdFromDB = resultSet.getLong(ColumnName.USER_ID);
-				String doctorName = resultSet.getString(ColumnName.USER_NAME);
-				String doctorSurname = resultSet.getString(ColumnName.USER_SURNAME);
-				String doctorEmail = resultSet.getString(ColumnName.USER_EMAIL);
-				String doctorPhone = resultSet.getString(ColumnName.USER_PHONE);
-				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
-				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
-				User doctor = new User.Builder()
-						.setUserID(doctorIdFromDB)
-						.setName(doctorName)
-						.setSurname(doctorSurname)
-						.setEmail(doctorEmail)
-						.setPhone(doctorPhone)
-						.setIsBlocked(doctorIsBlocked)
-						.setRole(doctorRole)
-						.build();
-				long procedureId = resultSet.getLong(ColumnName.PROCEDURE_ID);
-				String name = resultSet.getString(ColumnName.PROCEDURE_NAME);
-				String imageName = resultSet.getString(ColumnName.IMAGE_NAME);
-				BigDecimal price = resultSet.getBigDecimal(ColumnName.PRICE);
-				boolean procedureIsActive = resultSet.getBoolean(ColumnName.IS_ACTIVE);
-				String description = resultSet.getString(ColumnName.DESCRIPTION);
-				Duration duration = Duration.ofMinutes(resultSet.getInt(ColumnName.DURATION));
-				Procedure procedure = new Procedure.Builder()
-						.setProcedureId(procedureId)
-						.setName(name)
-					    .setImageName(imageName)
-					    .setPrice(price)
-					    .setIsActive(procedureIsActive)
-					    .setDescription(description)
-					    .setDuration(duration)
-					    .build();
-				Time start = resultSet.getTime(ColumnName.START);
-				Time end = resultSet.getTime(ColumnName.END);
-				Date date = resultSet.getDate(ColumnName.DATE);
-				Status procedureStatus = Status.valueOf(resultSet.getString(ColumnName.STATUS));
-				Appointment appointment = new Appointment.Builder()
-						.setId(appointmentId)
-						.setUser(client)
-						.setDoctor(doctor)
-						.setProcedure(procedure)
-						.setStartTime(start)
-						.setEndTime(end)
-						.setDate(date)
-						.setStatus(procedureStatus)
-						.build();
-				appointments.add(appointment);
+				appointments.add(createAppointment(resultSet));
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
@@ -455,81 +199,20 @@ public class AppointmentDaoImpl implements AppointmentDao {
 		logger.log(Level.INFO, "Finded appointments: " + appointments);
 		return appointments;
 	}
+
 	@Override
-	public List<Appointment> findAllByDoctorIdAndDate(long doctorId,Date date) throws DaoException {
-		logger.log(Level.INFO, "Find all appointments by doctor id, doctroId=  " + doctorId +",and Date:"+ date);
+	public List<Appointment> findAllByDoctorIdAndDate(long doctorId, Date date) throws DaoException {
+		logger.log(Level.INFO, "Find all appointments by doctor id, doctroId=  " + doctorId + ",and Date:" + date);
 		List<Appointment> appointments = new ArrayList<>();
 		try (Connection connection = connectionPool.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQL_FIND_ALL_APPOINTMENTS_BY_DOCTOR_ID_AND_DATE)) {
+				PreparedStatement statement = connection
+						.prepareStatement(SQL_FIND_ALL_APPOINTMENTS_BY_DOCTOR_ID_AND_DATE)) {
 			statement.setLong(1, doctorId);
 			statement.setDate(2, date);
 			statement.setString(3, Status.CONFIRMED.name());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				long appointmentId = resultSet.getLong(ColumnName.APPOINTMENT_ID);
-				long clientId = resultSet.getLong(ColumnName.CLIENT_ID);
-				String clientName = resultSet.getString(ColumnName.CLIENT_NAME);
-				String clientSurname = resultSet.getString(ColumnName.CLIENT_SURNAME);
-				String clientEmail = resultSet.getString(ColumnName.CLIENT_EMAIL);
-				String clientPhone = resultSet.getString(ColumnName.CLIENT_PHONE);
-				boolean clientIsBlocked = resultSet.getBoolean(ColumnName.CLIENT_IS_BLOCKED);
-				Role clientRole = Role.valueOf(resultSet.getString(ColumnName.CLIENT_ROLE));
-				User client = new User.Builder()
-						.setUserID(clientId)
-						.setName(clientName)
-						.setSurname(clientSurname)
-						.setEmail(clientEmail)
-						.setPhone(clientPhone)
-						.setIsBlocked(clientIsBlocked)
-						.setRole(clientRole)
-						.build();
-				long doctorIdFromDB = resultSet.getLong(ColumnName.USER_ID);
-				String doctorName = resultSet.getString(ColumnName.USER_NAME);
-				String doctorSurname = resultSet.getString(ColumnName.USER_SURNAME);
-				String doctorEmail = resultSet.getString(ColumnName.USER_EMAIL);
-				String doctorPhone = resultSet.getString(ColumnName.USER_PHONE);
-				boolean doctorIsBlocked = resultSet.getBoolean(ColumnName.IS_BLOCKED);
-				Role doctorRole = Role.valueOf(resultSet.getString(ColumnName.ROLE));
-				User doctor = new User.Builder()
-						.setUserID(doctorIdFromDB)
-						.setName(doctorName)
-						.setSurname(doctorSurname)
-						.setEmail(doctorEmail)
-						.setPhone(doctorPhone)
-						.setIsBlocked(doctorIsBlocked)
-						.setRole(doctorRole)
-						.build();
-				long procedureId = resultSet.getLong(ColumnName.PROCEDURE_ID);
-				String name = resultSet.getString(ColumnName.PROCEDURE_NAME);
-				String imageName = resultSet.getString(ColumnName.IMAGE_NAME);
-				BigDecimal price = resultSet.getBigDecimal(ColumnName.PRICE);
-				boolean procedureIsActive = resultSet.getBoolean(ColumnName.IS_ACTIVE);
-				String description = resultSet.getString(ColumnName.DESCRIPTION);
-				Duration duration = Duration.ofMinutes(resultSet.getInt(ColumnName.DURATION));
-				Procedure procedure = new Procedure.Builder()
-						.setProcedureId(procedureId)
-						.setName(name)
-					    .setImageName(imageName)
-					    .setPrice(price)
-					    .setIsActive(procedureIsActive)
-					    .setDescription(description)
-					    .setDuration(duration)
-					    .build();
-				Time start = resultSet.getTime(ColumnName.START);
-				Time end = resultSet.getTime(ColumnName.END);
-				Date appointmentDate = resultSet.getDate(ColumnName.DATE);
-				Status procedureStatus = Status.valueOf(resultSet.getString(ColumnName.STATUS));
-				Appointment appointment = new Appointment.Builder()
-						.setId(appointmentId)
-						.setUser(client)
-						.setDoctor(doctor)
-						.setProcedure(procedure)
-						.setStartTime(start)
-						.setEndTime(end)
-						.setDate(appointmentDate)
-						.setStatus(procedureStatus)
-						.build();
-				appointments.add(appointment);
+				appointments.add(createAppointment(resultSet));
 			}
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, "SQL EXCEPTION " + e.getMessage() + "-" + e.getErrorCode());
@@ -537,5 +220,78 @@ public class AppointmentDaoImpl implements AppointmentDao {
 		}
 		logger.log(Level.INFO, "Finded appointments: " + appointments);
 		return appointments;
+	}
+
+	/**
+	 * Method create appointment
+	 * @param resultSet
+	 * @return new Appointment
+	 * @throws SQLException
+	 */
+	private Appointment createAppointment(ResultSet resultSet) throws SQLException {
+		long appointmentId = resultSet.getLong(APPOINTMENT_ID);
+		long clientId = resultSet.getLong(CLIENT_ID);
+		String clientName = resultSet.getString(CLIENT_NAME);
+		String clientSurname = resultSet.getString(CLIENT_SURNAME);
+		String clientEmail = resultSet.getString(CLIENT_EMAIL);
+		String clientPhone = resultSet.getString(CLIENT_PHONE);
+		boolean clientIsBlocked = resultSet.getBoolean(CLIENT_IS_BLOCKED);
+		Role clientRole = Role.valueOf(resultSet.getString(CLIENT_ROLE));
+		User client = new User.Builder()
+				.setUserID(clientId)
+				.setName(clientName)
+				.setSurname(clientSurname)
+				.setEmail(clientEmail)
+				.setPhone(clientPhone)
+				.setIsBlocked(clientIsBlocked)
+				.setRole(clientRole)
+				.build();
+		long doctorIdFromDB = resultSet.getLong(USER_ID);
+		String doctorName = resultSet.getString(USER_NAME);
+		String doctorSurname = resultSet.getString(USER_SURNAME);
+		String doctorEmail = resultSet.getString(USER_EMAIL);
+		String doctorPhone = resultSet.getString(USER_PHONE);
+		boolean doctorIsBlocked = resultSet.getBoolean(IS_BLOCKED);
+		Role doctorRole = Role.valueOf(resultSet.getString(ROLE));
+		User doctor = new User.Builder()
+				.setUserID(doctorIdFromDB)
+				.setName(doctorName)
+				.setSurname(doctorSurname)
+				.setEmail(doctorEmail)
+				.setPhone(doctorPhone)
+				.setIsBlocked(doctorIsBlocked)
+				.setRole(doctorRole)
+				.build();
+		long procedureId = resultSet.getLong(PROCEDURE_ID);
+		String name = resultSet.getString(PROCEDURE_NAME);
+		String imageName = resultSet.getString(IMAGE_NAME);
+		BigDecimal price = resultSet.getBigDecimal(PRICE);
+		boolean procedureIsActive = resultSet.getBoolean(IS_ACTIVE);
+		String description = resultSet.getString(DESCRIPTION);
+		Duration duration = Duration.ofMinutes(resultSet.getInt(DURATION));
+		Procedure procedure = new Procedure.Builder()
+				.setProcedureId(procedureId)
+				.setName(name)
+				.setImageName(imageName)
+				.setPrice(price)
+				.setIsActive(procedureIsActive)
+				.setDescription(description)
+				.setDuration(duration)
+				.build();
+		Time start = resultSet.getTime(START);
+		Time end = resultSet.getTime(END);
+		Date appointmentDate = resultSet.getDate(DATE);
+		Status procedureStatus = Status.valueOf(resultSet.getString(STATUS));
+		Appointment appointment = new Appointment.Builder()
+				.setId(appointmentId)
+				.setUser(client)
+				.setDoctor(doctor)
+				.setProcedure(procedure)
+				.setStartTime(start)
+				.setEndTime(end)
+				.setDate(appointmentDate)
+				.setStatus(procedureStatus)
+				.build();
+		return appointment;
 	}
 }

@@ -142,18 +142,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 		return isChanged;
 	}
-@Deprecated
-	@Override
-	public List<DoctorSchedule> findAllSchedules() throws ServiceException {
-		List<DoctorSchedule> schedules = new ArrayList<>();
-		try {
-			schedules = dao.findAllSchedules();
-		} catch (DaoException e) {
-			logger.log(Level.ERROR, "dao exception in method findAllSchedules." + e);
-			throw new ServiceException(e);
-		}
-		return schedules;
-	}
 
 	@Override
 	public List<DoctorSchedule> findAllSchedulesFromRow(int pageNumber) throws ServiceException {

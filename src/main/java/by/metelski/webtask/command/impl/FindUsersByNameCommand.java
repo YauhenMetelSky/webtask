@@ -38,7 +38,7 @@ public class FindUsersByNameCommand implements Command {
 			users = userService.findUsersByName(userName);
 			router.setPagePath(page);
 			if (users.size() > 0) {
-				request.setAttribute(ParameterAndAttribute.RESULT_LIST, users);
+				request.setAttribute(ParameterAndAttribute.LIST, users);
 			} else {
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.NOTHING_FOUNDED);
 			}

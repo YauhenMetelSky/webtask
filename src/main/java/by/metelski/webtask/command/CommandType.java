@@ -2,7 +2,7 @@ package by.metelski.webtask.command;
 
 import by.metelski.webtask.command.impl.UnknownCommand;
 import by.metelski.webtask.command.impl.UpdateAppointmentCommand;
-import by.metelski.webtask.command.impl.sendEmailCommand;
+import by.metelski.webtask.command.impl.SendEmailCommand;
 import by.metelski.webtask.command.impl.ToSignUpCommand;
 import by.metelski.webtask.command.impl.UnblockUserCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
@@ -219,7 +219,7 @@ public enum CommandType {
 	},
 	SEND_EMAIL {
 		{
-			this.command = new sendEmailCommand();
+			this.command = new SendEmailCommand();
 		}
 	},
 	SET_LOCALE {

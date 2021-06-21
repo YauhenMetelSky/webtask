@@ -16,7 +16,7 @@ import by.metelski.webtask.util.MailSender;
  * @author Yauhen Metelski
  *
  */
-public class sendEmailCommand implements Command {
+public class SendEmailCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 
 	@Override
@@ -26,10 +26,11 @@ public class sendEmailCommand implements Command {
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
 		router.setPagePath(page);
-		request.setAttribute(ParameterAndAttribute.MESSAGE, Message.EMAIL_SEND);
+		request.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.EMAIL_SEND);
 		String emailTo = request.getParameter(ParameterAndAttribute.EMAIL_TO);
+		String emailText = request.getParameter(ParameterAndAttribute.EMAIL_TEXT);
 		logger.log(Level.DEBUG, "Sending email to: " + emailTo);
-		MailSender.sendEmail(emailTo, Message.EMAIL_SUBJECT, Message.EMAIL_TEXT);
+		MailSender.sendEmail(emailTo, Message.EMAIL_SUBJECT, emailText);
 		return router;
 	}
 }

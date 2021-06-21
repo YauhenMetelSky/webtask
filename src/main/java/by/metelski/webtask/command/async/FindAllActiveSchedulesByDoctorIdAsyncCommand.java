@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 import by.metelski.webtask.command.CommandAsync;
+import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
@@ -45,7 +46,12 @@ public class FindAllActiveSchedulesByDoctorIdAsyncCommand implements CommandAsyn
 		Long userId = Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_ID));
 		try {
 			schedules = service.findAllActiveSchedulesByDoctor(userId);
-			String stringGson = new Gson().toJson(schedules);
+			String stringGson;
+			if(!schedules.isEmpty()) {
+				stringGson = new Gson().toJson(schedules);
+			}else {
+				stringGson = new Gson().toJson(Message.NOTHING_FOUNDED);
+			};
 			logger.log(Level.DEBUG, "string gson: " + stringGson);
 			response.getWriter().write(stringGson);
 		} catch (ServiceException e) {

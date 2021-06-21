@@ -66,8 +66,12 @@
 				</div>
 			</c:if>
 			<c:if test="${user.getRole().toString() ne null }">
+				<div class="message_for_user">
 				<h3>
-				${message_for_user }
+				  ${message_for_user }	
+				  </h3>	
+				</div>
+				<h3>
 					<fmt:message key="label.hello" />
 					, ${user.name}
 				</h3>
