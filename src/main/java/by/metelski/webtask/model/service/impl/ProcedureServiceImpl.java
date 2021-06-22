@@ -1,5 +1,6 @@
 package by.metelski.webtask.model.service.impl;
 
+import static by.metelski.webtask.command.ParameterAndAttribute.*;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
@@ -14,7 +15,14 @@ import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ProcedureDao;
 import by.metelski.webtask.model.service.ProcedureService;
+import by.metelski.webtask.validator.ProcedureValidator;
 
+/**
+ * Class procedure service
+ * 
+ * @author Yauhen Metelski
+ *
+ */
 public class ProcedureServiceImpl implements ProcedureService {
 	private static final Logger logger = LogManager.getLogger();
 	private ProcedureDao procedureDao;
@@ -26,16 +34,20 @@ public class ProcedureServiceImpl implements ProcedureService {
 	@Override
 	public boolean add(Map<String, String> procedureData) throws ServiceException {
 		logger.log(Level.DEBUG, "add(), procedureData:" + procedureData);
-		// TODO validate data
-		Duration duration = Duration.ofMinutes(Long.parseLong(procedureData.get(ParameterAndAttribute.DURATION)));
-		Procedure procedure = new Procedure.Builder().setName(procedureData.get(ParameterAndAttribute.PROCEDURE_NAME))
-				.setImageName(procedureData.get(ParameterAndAttribute.PROCEDURE_IMAGE))
-				.setPrice(new BigDecimal(procedureData.get(ParameterAndAttribute.PROCEDURE_PRICE)))
-				.setDescription(procedureData.get(ParameterAndAttribute.DESCRIPTION)).setDuration(duration).build();
 		boolean isAdded = false;
+		if (!checkData(procedureData, 0)) {
+			return isAdded;
+		}
+		Duration duration = Duration.ofMinutes(Long.parseLong(procedureData.get(DURATION)));
+		Procedure procedure = new Procedure.Builder()
+				.setName(procedureData.get(PROCEDURE_NAME))
+				.setImageName(procedureData.get(PROCEDURE_IMAGE))
+				.setPrice(new BigDecimal(procedureData.get(PROCEDURE_PRICE)))
+				.setDescription(procedureData.get(DESCRIPTION))
+				.setDuration(duration)
+				.build();
 		try {
 			isAdded = procedureDao.add(procedure);
-
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
 					"dao exception in method add, when we try to add procedure:" + procedure + ". " + e);
@@ -54,7 +66,6 @@ public class ProcedureServiceImpl implements ProcedureService {
 			logger.log(Level.ERROR, "dao exception in method FindAll" + e);
 			throw new ServiceException(e);
 		}
-
 		return procedures;
 	}
 
@@ -68,7 +79,6 @@ public class ProcedureServiceImpl implements ProcedureService {
 			logger.log(Level.ERROR, "dao exception in method FindAllActive" + e);
 			throw new ServiceException(e);
 		}
-
 		return procedures;
 	}
 
@@ -100,17 +110,25 @@ public class ProcedureServiceImpl implements ProcedureService {
 	@Override
 	public boolean changeProcedure(Map<String, String> procedureData) throws ServiceException {
 		logger.log(Level.DEBUG, "Change procedure; data" + procedureData);
-		// TODO validate data
 		boolean isChanged = false;
+		if (!checkData(procedureData, 0)) {
+			return isChanged;
+		}
 		try {
-			long id = Long.parseLong(procedureData.get(ParameterAndAttribute.PROCEDURE_ID));
-			String name = procedureData.get(ParameterAndAttribute.PROCEDURE_NAME);
-			String imageName = procedureData.get(ParameterAndAttribute.PROCEDURE_IMAGE);
-			BigDecimal price = new BigDecimal(procedureData.get(ParameterAndAttribute.PROCEDURE_PRICE));
-			String description = procedureData.get(ParameterAndAttribute.DESCRIPTION);
-			Duration duration = Duration.ofMinutes(Long.parseLong(procedureData.get(ParameterAndAttribute.DURATION)));
-			Procedure procedure = new Procedure.Builder().setProcedureId(id).setName(name).setImageName(imageName)
-					.setPrice(price).setDescription(description).setDuration(duration).build();
+			long id = Long.parseLong(procedureData.get(PROCEDURE_ID));
+			String name = procedureData.get(PROCEDURE_NAME);
+			String imageName = procedureData.get(PROCEDURE_IMAGE);
+			BigDecimal price = new BigDecimal(procedureData.get(PROCEDURE_PRICE));
+			String description = procedureData.get(DESCRIPTION);
+			Duration duration = Duration.ofMinutes(Long.parseLong(procedureData.get(DURATION)));
+			Procedure procedure = new Procedure.Builder()
+					.setProcedureId(id)
+					.setName(name)
+					.setImageName(imageName)
+					.setPrice(price)
+					.setDescription(description)
+					.setDuration(duration)
+					.build();
 			isChanged = procedureDao.changeProcedure(procedure);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
@@ -118,5 +136,68 @@ public class ProcedureServiceImpl implements ProcedureService {
 			throw new ServiceException(e);
 		}
 		return isChanged;
+	}
+
+	/**
+	 * @param data
+	 * @param withId two possible values: 0-if data dont't contain appointment id,
+	 *               1-if data contains appointmentId
+	 * @return boolean true if data valid
+	 */
+	private boolean checkData(Map<String, String> data, int withId) {
+		boolean isValid = true;
+		switch (withId) {
+		case 0:
+			if (!ProcedureValidator.isOnlyNumbers(data.get(ParameterAndAttribute.DURATION))) {
+				isValid = false;
+				break;
+			}
+			if (!ProcedureValidator.isValidName(data.get(ParameterAndAttribute.PROCEDURE_NAME))) {
+				isValid = false;
+				break;
+			}
+			if (!ProcedureValidator.isValidImageName(data.get(ParameterAndAttribute.PROCEDURE_IMAGE))) {
+				isValid = false;
+				break;
+			}
+			if (!ProcedureValidator.isValidPrice(data.get(ParameterAndAttribute.PROCEDURE_PRICE))) {
+				isValid = false;
+				break;
+			}
+			if (!ProcedureValidator.isValidDescription(data.get(ParameterAndAttribute.DESCRIPTION))) {
+				isValid = false;
+				break;
+			}
+			break;
+		case 1:
+			if (!ProcedureValidator.isOnlyNumbers(data.get(ParameterAndAttribute.DURATION))) {
+				isValid = false;
+				break;
+			}
+			if (!ProcedureValidator.isOnlyNumbers(data.get(ParameterAndAttribute.PROCEDURE_ID))) {
+				isValid = false;
+				break;
+			}
+			if (!ProcedureValidator.isValidName(data.get(ParameterAndAttribute.PROCEDURE_NAME))) {
+				isValid = false;
+				break;
+			}
+			if (!ProcedureValidator.isValidImageName(data.get(ParameterAndAttribute.PROCEDURE_IMAGE))) {
+				isValid = false;
+				break;
+			}
+			if (!ProcedureValidator.isValidPrice(data.get(ParameterAndAttribute.PROCEDURE_PRICE))) {
+				isValid = false;
+				break;
+			}
+			if (!ProcedureValidator.isValidDescription(data.get(ParameterAndAttribute.DESCRIPTION))) {
+				isValid = false;
+				break;
+			}
+			break;
+		default:
+			isValid = false;
+		}
+		return isValid;
 	}
 }

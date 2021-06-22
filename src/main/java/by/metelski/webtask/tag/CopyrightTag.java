@@ -8,6 +8,12 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Class CopyrightTag, custom tag.
+ * 
+ * @author Yauhen Metelski
+ *
+ */
 public class CopyrightTag extends TagSupport {
 	private static final Logger logger = LogManager.getLogger();
 	private static final String MESSAGE = "<h6>Copyright by Yauheni Miatselski Minsk 2021</h6>";

@@ -59,6 +59,7 @@ public class ToChangeAppointmentCommand implements Command {
 				Appointment appointment = optional.get();
 				DoctorSchedule schedule = scheduleService
 						.findScheduleByDateAndDoctor(appointment.getDate(), appointment.getDoctor().getUserId()).get();
+				request.setAttribute(ParameterAndAttribute.SCHEDULE_ID, schedule.getId());
 				List<Appointment> appointments = service.findAllByDoctorIdAndDate(appointment.getDoctor().getUserId(),
 						appointment.getDate());
 				List<String> intervals = IntervalCalculator.calculateIntervals(schedule, intervalIncrement,

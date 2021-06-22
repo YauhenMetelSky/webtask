@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.entity.User;
@@ -21,6 +20,11 @@ import by.metelski.webtask.util.Encoder;
 import by.metelski.webtask.util.MailSender;
 import by.metelski.webtask.validator.UserValidator;
 
+/**
+ * Class user service
+ * @author Yauhen Metelski
+ *
+ */
 public class UserServiceImpl implements UserService {
 	private static final Logger logger = LogManager.getLogger();
 	private final UserDao userDao;
@@ -63,19 +67,6 @@ public class UserServiceImpl implements UserService {
 		}
 		return optionalUser;
 	}
-//FIXME delete
-//	@Override
-//	public List<User> findAllUsers() throws ServiceException {
-//		logger.log(Level.DEBUG, "findAllUsers()");
-//		List<User> users = new ArrayList<>();
-//		try {
-//			users = userDao.findAll();
-//		} catch (DaoException e) {
-//			logger.log(Level.ERROR, "dao exception in method FindAllUsers");
-//			throw new ServiceException(e);
-//		}
-//		return users;
-//	}
 
 	@Override
 	public List<User> findUsersByName(String userName) throws ServiceException {
@@ -146,10 +137,12 @@ public class UserServiceImpl implements UserService {
 				&& UserValidator.isValidName(userData.get(ParameterAndAttribute.USER_NAME))
 				&& UserValidator.isValidEmail(userData.get(ParameterAndAttribute.USER_EMAIL))) {
 			String encodedPassword = Encoder.encodePassword(userData.get(ColumnName.PASSWORD));
-			User user = new User.Builder().setName(userData.get(ParameterAndAttribute.USER_NAME))
+			User user = new User.Builder()
+					.setName(userData.get(ParameterAndAttribute.USER_NAME))
 					.setSurname(userData.get(ParameterAndAttribute.USER_SURNAME))
 					.setEmail(userData.get(ParameterAndAttribute.USER_EMAIL))
-					.setPhone(userData.get(ParameterAndAttribute.USER_PHONE)).build();
+					.setPhone(userData.get(ParameterAndAttribute.USER_PHONE))
+					.build();
 			String uniqToken = Encoder.encodePassword(userData.get(ColumnName.USER_EMAIL));
 			String url = userData.get(ParameterAndAttribute.URL) + COMMAND_CONFIRM + TOKEN + uniqToken + EMAIL
 					+ userData.get(ParameterAndAttribute.USER_EMAIL);

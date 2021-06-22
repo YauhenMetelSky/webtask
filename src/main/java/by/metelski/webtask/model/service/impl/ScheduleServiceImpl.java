@@ -16,7 +16,13 @@ import by.metelski.webtask.exception.DaoException;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.ScheduleDao;
 import by.metelski.webtask.model.service.ScheduleService;
+import by.metelski.webtask.validator.DataValidator;
 
+/**
+ * Class appointment service
+ * @author Yauhen Metelski
+ *
+ */
 public class ScheduleServiceImpl implements ScheduleService {
 	private static final Logger logger = LogManager.getLogger();
 	private final ScheduleDao dao;
@@ -29,14 +35,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public boolean addDoctorSchedule(Map<String, String> data) throws ServiceException {
 		logger.log(Level.DEBUG, "add shedule data: " + data);
-		boolean isAdd = true;
+		boolean isAdd = false;
+		if (!checkAddScheduleData(data)) {
+			return isAdd;
+		}
 		Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
 		Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));
 		if (startTime.before(endTime)) {
-			User user = new User.Builder().setUserID(Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID))).build();
+			long doctorId = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_ID));
+			User user = createSimpleUser(doctorId);
 			Date date = Date.valueOf(data.get(ParameterAndAttribute.DATE));
-			DoctorSchedule schedule = new DoctorSchedule.Builder().setDoctor(user).setStartTime(startTime)
-					.setEndTime(endTime).setDate(date).build();
+			DoctorSchedule schedule = new DoctorSchedule.Builder()
+					.setDoctor(user)
+					.setStartTime(startTime)
+					.setEndTime(endTime)
+					.setDate(date)
+					.build();
 			try {
 				isAdd = dao.addDoctorSchedule(schedule);
 			} catch (DaoException e) {
@@ -51,7 +65,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<DoctorSchedule> findAllSchedulesByDoctorId(long userId) throws ServiceException {
 		logger.log(Level.DEBUG, "findAllSchedulesByDoctor. Id:" + userId);
 		List<DoctorSchedule> schedules = new ArrayList<>();
-		User user = new User.Builder().setUserID(userId).build();
+		User user = createSimpleUser(userId);
 		try {
 			schedules = dao.findAllSchedulesByDoctor(user);
 			logger.log(Level.DEBUG, "finded shedules:" + schedules);
@@ -66,7 +80,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<DoctorSchedule> findAllActiveSchedulesByDoctor(long userId) throws ServiceException {
 		logger.log(Level.DEBUG, "findAllActiveSchedulesByDoctor. Id:" + userId);
 		List<DoctorSchedule> schedules = new ArrayList<>();
-		User user = new User.Builder().setUserID(userId).build();
+		User user = createSimpleUser(userId);
 		try {
 			schedules = dao.findAllActiveSchedulesByDoctor(user);
 			logger.log(Level.DEBUG, "finded shedules:" + schedules);
@@ -109,15 +123,21 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public boolean changeDoctorSchedule(Map<String, String> data) throws ServiceException {
 		logger.log(Level.DEBUG, "Change schedule; data" + data);
-		// TODO validate data
 		boolean isChanged = false;
+		if (!checkChangeScheduleData(data)) {
+			return isChanged;
+		}
 		try {
 			long id = Long.parseLong(data.get(ParameterAndAttribute.DOCTOR_SCHEDULE_ID));
 			Time startTime = Time.valueOf(data.get(ParameterAndAttribute.START_TIME));
 			Time endTime = Time.valueOf(data.get(ParameterAndAttribute.END_TIME));
 			Date date = Date.valueOf(data.get(ParameterAndAttribute.DATE));
-			DoctorSchedule doctorSchedule = new DoctorSchedule.Builder().setId(id).setStartTime(startTime)
-					.setEndTime(endTime).setDate(date).build();
+			DoctorSchedule doctorSchedule = new DoctorSchedule.Builder()
+					.setId(id)
+					.setStartTime(startTime)
+					.setEndTime(endTime)
+					.setDate(date)
+					.build();
 			isChanged = dao.changeDoctorSchedule(doctorSchedule);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
@@ -168,33 +188,25 @@ public class ScheduleServiceImpl implements ScheduleService {
 		int numberOfSchedules;
 		try {
 			numberOfSchedules = dao.findNumberOfRows();
-			if(numberOfSchedules>numberOfSchedulesInPage) {
-				numberOfPages=(int)Math.ceil((double)numberOfSchedules/numberOfSchedulesInPage);
-			} else {
-				numberOfPages=1;
-			}
+			numberOfPages = calculateNumberOfPages(numberOfSchedules);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method findNumberOfPages." + e);
 			throw new ServiceException(e);
-		}	
+		}
 		return numberOfPages;
 	}
+
 	@Override
 	public int findNumberOfPagesDoctorsShedules(long doctorId) throws ServiceException {
 		int numberOfPages;
 		int numberOfSchedules;
 		try {
 			numberOfSchedules = dao.findNumberOfRowsDoctorsSchedule(doctorId);
-			//FIXME private method calculate
-			if(numberOfSchedules>numberOfSchedulesInPage) {
-				numberOfPages=(int)Math.ceil((double)numberOfSchedules/numberOfSchedulesInPage);
-			} else {
-				numberOfPages=1;
-			}
+			numberOfPages = calculateNumberOfPages(numberOfSchedules);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method findNumberOfPages." + e);
 			throw new ServiceException(e);
-		}	
+		}
 		return numberOfPages;
 	}
 
@@ -215,5 +227,73 @@ public class ScheduleServiceImpl implements ScheduleService {
 			throw new ServiceException(e);
 		}
 		return schedules;
+	}
+
+	/**
+	 * @param numberOfSchedules
+	 * @return int number of page
+	 */
+	private int calculateNumberOfPages(int numberOfSchedules) {
+		int numberOfPages;
+		if (numberOfSchedules > numberOfSchedulesInPage) {
+			numberOfPages = (int) Math.ceil((double) numberOfSchedules / numberOfSchedulesInPage);
+		} else {
+			numberOfPages = 1;
+		}
+		return numberOfPages;
+	}
+
+	/**
+	 * @param data
+	 * @return boolean result of checking
+	 */
+	private boolean checkAddScheduleData(Map<String, String> data) {
+		boolean isValid = false;
+		if (!DataValidator.isTimeFormatValid(data.get(ParameterAndAttribute.START_TIME))) {
+			return isValid;
+		}
+		if (!DataValidator.isTimeFormatValid(data.get(ParameterAndAttribute.END_TIME))) {
+			return isValid;
+		}
+		if (!DataValidator.isOnlyNumbers(data.get(ParameterAndAttribute.DOCTOR_ID))) {
+			return isValid;
+		}
+		if (!DataValidator.isDateFormatValid(data.get(ParameterAndAttribute.DATE))) {
+			return isValid;
+		}
+		isValid = true;
+		return isValid;
+	}
+	/**
+	 * @param id
+	 * @return new User, that has only one field id
+	 */
+	private User createSimpleUser(long id) {
+		User user = new User.Builder()
+				.setUserID(id)
+				.build();
+		return user;
+	}
+
+	/**
+	 * @param data
+	 * @return boolean result of checking
+	 */
+	private boolean checkChangeScheduleData(Map<String, String> data) {
+		boolean isValid = false;
+		if (!DataValidator.isTimeFormatValid(data.get(ParameterAndAttribute.START_TIME))) {
+			return isValid;
+		}
+		if (!DataValidator.isTimeFormatValid(data.get(ParameterAndAttribute.END_TIME))) {
+			return isValid;
+		}
+		if (!DataValidator.isOnlyNumbers(data.get(ParameterAndAttribute.DOCTOR_SCHEDULE_ID))) {
+			return isValid;
+		}
+		if (!DataValidator.isDateFormatValid(data.get(ParameterAndAttribute.DATE))) {
+			return isValid;
+		}
+		isValid = true;
+		return isValid;
 	}
 }

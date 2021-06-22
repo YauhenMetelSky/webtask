@@ -69,7 +69,7 @@
 						<div class="col">
 							<div class="form-group">
 								<select class="form-control" name="schedule_id" id="date" required="required">
-								<option value="${appointment.id }"><c:out value="${appointment.date}"/></option>
+								<option value="${schedule_id}"><c:out value="${appointment.date}"/></option>
 								<c:forEach var="elem" items="${doctor_schedules_list}"
 										varStatus="status">
 										<option value="${elem.id}"><c:out

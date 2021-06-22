@@ -61,12 +61,8 @@ public class FindTimeIntervalsByScheduleIdAsyncCommand implements CommandAsync {
 				schedule = optional.get();
 				appointments = appointmentService.findAllByDoctorIdAndDate(schedule.getDoctor().getUserId(),
 						schedule.getDate());
-//				if(!appointments.isEmpty()) {FIXME delete
 				intervals = IntervalCalculator.calculateIntervals(schedule, intervalIncrement, appointments);
 				intervalsGson = new Gson().toJson(intervals);
-//				} else {
-//					intervalsGson = new Gson().toJson(Message.NOTHING_FOUNDED);
-//				}
 			} else {
 				intervalsGson = new Gson().toJson(Message.NOTHING_FOUNDED);
 			}

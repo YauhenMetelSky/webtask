@@ -4,28 +4,33 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import by.metelski.webtask.validator.AppointmentValidator;
+import by.metelski.webtask.validator.ProcedureValidator;
 
-public class AppointmentValidatorTest extends Assert {
+public class ProcedureValidatorTest extends Assert {
 
 	@Test(dataProvider = "isValidNameData")
 	public void testIsValidName(String name, boolean expectedResult) {
-		boolean actualResult = AppointmentValidator.isValidName(name);
+		boolean actualResult = ProcedureValidator.isValidName(name);
 		assertEquals(actualResult, expectedResult);
 	}
 	@Test(dataProvider = "isOnlyNumbersData")
 	public void testIsOnlyNumbers(String text,boolean expectedResult) {
-		boolean actualResult = AppointmentValidator.isOnlyNumbers(text);
+		boolean actualResult = ProcedureValidator.isOnlyNumbers(text);
 		assertEquals(actualResult, expectedResult);
 	}
 	@Test(dataProvider = "isValidImageNameData")
 	public void testIsValidImageName(String text,boolean expectedResult) {
-		boolean actualResult = AppointmentValidator.isValidImageName(text);
+		boolean actualResult = ProcedureValidator.isValidImageName(text);
 		assertEquals(actualResult, expectedResult);
 	}
 	@Test(dataProvider = "isValidPriceData")
 	public void testIsValidPrice(String text,boolean expectedResult) {
-		boolean actualResult = AppointmentValidator.isValidPrice(text);
+		boolean actualResult = ProcedureValidator.isValidPrice(text);
+		assertEquals(actualResult, expectedResult);
+	}
+	@Test(dataProvider = "isValidDescriptionData")
+	public void testIsValidDescription(String text,boolean expectedResult) {
+		boolean actualResult = ProcedureValidator.isValidDescription(text);
 		assertEquals(actualResult, expectedResult);
 	}
 	@DataProvider
@@ -97,6 +102,23 @@ public class AppointmentValidatorTest extends Assert {
 			{ "<Notprice>", false },
 			{ "Number345", false }, 
 			{ "punct.,punct", false } 
+			};
+	}
+	@DataProvider
+	public Object[][] isValidDescriptionData() {
+		return new Object[][] { 
+			{ "Super procedure description", true }, 
+			{ "description ... with , and.", true },
+			{ "описание на русском языке .", true },
+			{ "Good", true },
+			{ "<", false },
+			{ "<Very", false },
+			{ "Try to hide<between words",false},
+			{">",false},
+			{"",false},
+			{" ",false},
+			{ "<Notname>", false },
+			{ "Number345 >", false }, 
 			};
 	}
 }

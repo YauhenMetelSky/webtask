@@ -2,6 +2,7 @@ package by.metelski.webtask.model.service.impl;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,8 @@ import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.AppointmentDao;
 import by.metelski.webtask.model.dao.ProcedureDao;
 import by.metelski.webtask.model.service.AppointmentService;
+import by.metelski.webtask.validator.DataValidator;
+
 import static by.metelski.webtask.command.ParameterAndAttribute.*;
 
 /**
@@ -40,9 +43,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 	public boolean add(Map<String, String> data) throws ServiceException {
 		logger.log(Level.DEBUG, "Add appointment; data" + data);
 		boolean isAdded = false;
-		try { //FIXME validate data
+		if(!checkData(data, 0)) {
+			return isAdded;
+		}
+		try { 
 			long id = Long.parseLong(data.get(PROCEDURE_ID));
-			long duration = procedureDao.findDuration(id).get().toMinutes();// FIXME pay attention return Optional
+			Optional<Duration> optional = procedureDao.findDuration(id);
+			if(optional.isEmpty()) {
+				return isAdded;
+			}
+			long duration = optional.get().toMinutes();
 			logger.log(Level.DEBUG, "procedure duration" + duration);
 			Time endTime = calculateEndTime(data.get(START_TIME), duration);
 			Time startTime = Time.valueOf(data.get(START_TIME));
@@ -50,9 +60,15 @@ public class AppointmentServiceImpl implements AppointmentService {
 			User client = createSimpleUser(data.get(USER_ID));
 			User doctor = createSimpleUser(data.get(DOCTOR_ID));
 			Procedure procedure = createSimpleProcedure(data.get(PROCEDURE_ID));
-			Appointment appointment = new Appointment.Builder().setUser(client).setDoctor(doctor)
-					.setProcedure(procedure).setStartTime(startTime).setEndTime(endTime).setDate(date)
-					.setStatus(Status.CLAIMED).build();
+			Appointment appointment = new Appointment.Builder()
+					.setUser(client)
+					.setDoctor(doctor)
+					.setProcedure(procedure)
+					.setStartTime(startTime)
+					.setEndTime(endTime)
+					.setDate(date)
+					.setStatus(Status.CLAIMED)
+					.build();
 			isAdded = appointmentDao.add(appointment);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
@@ -65,11 +81,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Override
 	public boolean change(Map<String, String> data) throws ServiceException {
 		logger.log(Level.DEBUG, "Change appointment; data" + data);
-		//FIXME validate data
 		boolean isChanged = false;
+		if(!checkData(data, 1)) {
+			return isChanged;
+		}
 		try {
 			long id = Long.parseLong(data.get(PROCEDURE_ID));
-			long duration = procedureDao.findDuration(id).get().toMinutes();// FIXME pay attention return Optional
+			Optional<Duration> optional = procedureDao.findDuration(id);
+			if(optional.isEmpty()) {
+				return isChanged;
+			}
+			long duration = optional.get().toMinutes();
 			logger.log(Level.DEBUG, "procedure duration" + duration);
 			Time endTime = calculateEndTime(data.get(START_TIME), duration);
 			long appointmentId = Long.parseLong(data.get(APPOINTMENT_ID));
@@ -78,9 +100,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 			User client = createSimpleUser(data.get(USER_ID));
 			User doctor = createSimpleUser(data.get(DOCTOR_ID));
 			Procedure procedure = createSimpleProcedure(data.get(PROCEDURE_ID));
-			Appointment appointment = new Appointment.Builder().setId(appointmentId).setUser(client).setDoctor(doctor)
-					.setProcedure(procedure).setStartTime(startTime).setEndTime(endTime).setStatus(Status.CLAIMED)
-					.setDate(date).build();
+			Appointment appointment = new Appointment.Builder()
+					.setId(appointmentId)
+					.setUser(client)
+					.setDoctor(doctor)
+					.setProcedure(procedure)
+					.setStartTime(startTime)
+					.setEndTime(endTime)
+					.setStatus(Status.CLAIMED)
+					.setDate(date)
+					.build();
 			isChanged = appointmentDao.changeAppointment(appointment);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR,
@@ -174,6 +203,71 @@ public class AppointmentServiceImpl implements AppointmentService {
 		}
 		return appointments;
 	}
+	/**
+	 * @param data
+	 * @param withId two possible values: 0-if data dont't contain appointment id, 1-if data contains appointmentId
+	 * @return boolean true if data valid
+	 */
+	private boolean checkData(Map<String,String> data,int withId) {
+		boolean isValid = true;
+		switch(withId) {
+		case 0:
+			if(!DataValidator.isOnlyNumbers(data.get(PROCEDURE_ID))) {
+				isValid=false;
+				break;
+			}
+			if(!DataValidator.isTimeFormatValid(data.get(START_TIME))){
+				isValid=false;
+				break;
+			}
+			if(!DataValidator.isDateFormatValid(data.get(APPOINTMENT_DATE))){
+				isValid=false;
+				break;
+			}
+			if(!DataValidator.isOnlyNumbers(data.get(USER_ID))) {
+				isValid=false;
+				break;
+			}
+			if(!DataValidator.isOnlyNumbers(data.get(DOCTOR_ID))){
+				isValid=false;
+				break;
+			}
+			break;
+		case 1:
+			if(!DataValidator.isOnlyNumbers(data.get(PROCEDURE_ID))){
+				isValid=false;
+				break;
+			}
+			if(!DataValidator.isOnlyNumbers(data.get(APPOINTMENT_ID))) {
+				isValid=false;
+				break;
+			}
+			if(!DataValidator.isTimeFormatValid(data.get(START_TIME))) {
+				isValid=false;
+				break;
+			}
+			if(!DataValidator.isDateFormatValid(data.get(APPOINTMENT_DATE))) {
+				isValid=false;
+				break;
+			}
+			if(!DataValidator.isOnlyNumbers(data.get(USER_ID))){
+				isValid=false;
+				break;
+			}
+			if(!DataValidator.isOnlyNumbers(data.get(DOCTOR_ID))) {
+				isValid=false;
+				break;
+			}
+			break;
+			default:
+				isValid= false;
+		}
+		return isValid;
+	}
+	/**
+	 * @param id
+	 * @return new User, that has only one field id
+	 */
 	private User createSimpleUser(String id) {
 		long userId = Long.parseLong(id);
 		User user = new User.Builder()
@@ -181,6 +275,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 				.build();
 		return user;
 	}
+	/**
+	 * @param id
+	 * @return new Procedure, that has only one field id
+	 */
 	private Procedure createSimpleProcedure(String id) {
 		long procedureId = Long.parseLong(id);
 		Procedure procedure = new Procedure.Builder()
