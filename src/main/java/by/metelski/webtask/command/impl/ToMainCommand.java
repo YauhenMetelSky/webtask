@@ -32,11 +32,13 @@ public class ToMainCommand implements Command {
 		try {
 			List<Procedure> procedures = procedureService.findAllActive();
 			session.setAttribute(ParameterAndAttribute.ACTIVE_PROCEDURES_LIST, procedures);
+			session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.TO_MAIN_PAGE);
 			router.setPagePath(PagePath.MAIN);
 		} catch (ServiceException e) {
 			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
 			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			logger.log(Level.ERROR, "ProcedureServiceException in method execute FindAllActive");
+			session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.ERROR);
 			router.setPagePath(PagePath.ERROR);
 		}
 		logger.log(Level.INFO, "ToMainCommand");

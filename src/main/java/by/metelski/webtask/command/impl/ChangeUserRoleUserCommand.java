@@ -1,50 +1,54 @@
 package by.metelski.webtask.command.impl;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import by.metelski.webtask.command.Command;
 import by.metelski.webtask.command.Message;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
-import by.metelski.webtask.entity.User;
+import by.metelski.webtask.command.Router.Type;
+import by.metelski.webtask.entity.User.Role;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.impl.UserDaoImpl;
 import by.metelski.webtask.model.service.UserService;
 import by.metelski.webtask.model.service.impl.UserServiceImpl;
 
 /**
- * The command find user by surname
+ * The command change user role on the user
  * @author Yauhen Metelski
  *
  */
-public class FindUsersBySurnameCommand implements Command {
+public class ChangeUserRoleUserCommand implements Command {
 	private static final Logger logger = LogManager.getLogger();
 	private UserService userService = new UserServiceImpl(new UserDaoImpl());
 
 	@Override
 	public Router execute(HttpServletRequest request) {
-		List<User> users;
 		Router router = new Router();
 		HttpSession session = request.getSession();
-		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
-		String userSurname = request.getParameter(ParameterAndAttribute.USER_SURNAME);
-		logger.log(Level.INFO, "Find by surname: " + userSurname);
+		boolean isChanged = false;
+		logger.log(Level.DEBUG, "execute method ChangeUserRoleAdminCommand");
+		long id = Long.parseLong(request.getParameter(ParameterAndAttribute.USER_ID));
 		try {
-			users = userService.findUsersBySurname(userSurname);
-			router.setPagePath(page);
-			if (users.size() > 0) {
-				request.setAttribute(ParameterAndAttribute.LIST, users);
-				request.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
+			String page = request.getContextPath() + PagePath.TO_PERSONAL_PAGE;
+			isChanged = userService.changeUserRole(id, Role.USER);
+			if (isChanged) {
+				router.setPagePath(page);
+				router.setType(Type.REDIRECT);
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 			} else {
-				request.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.NOTHING_FOUNDED);
+				router.setPagePath(page);
+				router.setType(Type.REDIRECT);
+				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);
 			}
 		} catch (ServiceException e) {
-			logger.log(Level.ERROR, "UserServiceException in method execute");
+			logger.log(Level.ERROR, "UserServiceException in method execute BlockUserCommand" + e);
 			request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
 			request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
 			router.setPagePath(PagePath.ERROR);
@@ -52,3 +56,4 @@ public class FindUsersBySurnameCommand implements Command {
 		return router;
 	}
 }
+

@@ -6,7 +6,7 @@ package by.metelski.webtask.validator;
  *
  */
 public class ProcedureValidator {
-	private static final String PRICE_REGEX = "\\d{1,8}(\\.\\d{2})";
+	private static final String PRICE_REGEX = "\\d{1,8}(\\.\\d{2,8})";
 	private final static String NAME_REGEX ="([\\p{Alpha}А-Яа-я]{1,15}[\\s-]?){0,9}";
 	private final static String IMAGE_NAME_REGEX ="[\\p{Alpha}А-Яа-я-_]{1,15}\\.jpg";
 	private final static String NUMBERS_REGEX ="\\d{1,10}";

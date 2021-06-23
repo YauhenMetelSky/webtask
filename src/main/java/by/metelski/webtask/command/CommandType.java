@@ -31,6 +31,7 @@ import by.metelski.webtask.command.impl.ChangePersonalInfoCommand;
 import by.metelski.webtask.command.impl.ChangeProcedureCommand;
 import by.metelski.webtask.command.impl.ChangeUserRoleAdminCommand;
 import by.metelski.webtask.command.impl.ChangeUserRoleDoctorCommand;
+import by.metelski.webtask.command.impl.ChangeUserRoleUserCommand;
 import by.metelski.webtask.command.impl.ConfirmAppointmentCommand;
 import by.metelski.webtask.command.impl.DeactivateProcedureCommand;
 import by.metelski.webtask.command.impl.FindAllActiveSchedulesByDoctorCommand;
@@ -114,6 +115,11 @@ public enum CommandType {
 	CHANGE_USER_ROLE_DOCTOR{
 		{
 		this.command=new ChangeUserRoleDoctorCommand();	
+		}
+	},
+	CHANGE_USER_ROLE_USER{
+		{
+			this.command = new ChangeUserRoleUserCommand();
 		}
 	},
 	CONFIRM_APPOINTMENT{

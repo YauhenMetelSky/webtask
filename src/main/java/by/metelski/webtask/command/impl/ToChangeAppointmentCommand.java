@@ -3,6 +3,8 @@ package by.metelski.webtask.command.impl;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,6 +50,7 @@ public class ToChangeAppointmentCommand implements Command {
 	public Router execute(HttpServletRequest request) {
 		logger.log(Level.DEBUG, "execute method ToChangeAppointmentCommand");
 		Router router = new Router();
+		HttpSession session = request.getSession();
 		logger.log(Level.DEBUG,
 				"appointmentId from request:" + request.getParameter(ParameterAndAttribute.APPOINTMENT_ID));
 		long appointmentId = Long.parseLong(request.getParameter(ParameterAndAttribute.APPOINTMENT_ID));
@@ -75,14 +78,17 @@ public class ToChangeAppointmentCommand implements Command {
 				List<Procedure> procedures = procedureService.findAll();
 				request.setAttribute(ParameterAndAttribute.PROCEDURES_LIST, procedures);
 				request.setAttribute(ParameterAndAttribute.APPOINTMENT, optional.get());
+				session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.TO_CHANGE_APPOINTMENT_PAGE);
 				router.setPagePath(PagePath.CHANGE_APPOINTMENT);
 			} else {
 				logger.log(Level.ERROR, "Nothing founded");
 				request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, Message.UNKNOWN_PROBLEM);
+				session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.ERROR);
 				router.setPagePath(PagePath.ERROR);
 			}
 		} catch (ServiceException e) {
 			logger.log(Level.ERROR, "AppointmentServiceException in method execute");
+			session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.ERROR);
 			router.setPagePath(PagePath.ERROR);
 		}
 		return router;

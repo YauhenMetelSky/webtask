@@ -112,6 +112,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 		logger.log(Level.DEBUG, "Change procedure; data" + procedureData);
 		boolean isChanged = false;
 		if (!checkData(procedureData, 0)) {
+			logger.log(Level.DEBUG, "Wrong procedure data" + procedureData);
 			return isChanged;
 		}
 		try {
@@ -149,49 +150,60 @@ public class ProcedureServiceImpl implements ProcedureService {
 		switch (withId) {
 		case 0:
 			if (!ProcedureValidator.isOnlyNumbers(data.get(ParameterAndAttribute.DURATION))) {
+				logger.log(Level.DEBUG, "first" + data.get(ParameterAndAttribute.DURATION));
 				isValid = false;
 				break;
 			}
 			if (!ProcedureValidator.isValidName(data.get(ParameterAndAttribute.PROCEDURE_NAME))) {
+				logger.log(Level.DEBUG, "Second");
 				isValid = false;
 				break;
 			}
 			if (!ProcedureValidator.isValidImageName(data.get(ParameterAndAttribute.PROCEDURE_IMAGE))) {
+				logger.log(Level.DEBUG, "3");
 				isValid = false;
 				break;
 			}
 			if (!ProcedureValidator.isValidPrice(data.get(ParameterAndAttribute.PROCEDURE_PRICE))) {
 				isValid = false;
+				logger.log(Level.DEBUG, "4");
 				break;
 			}
 			if (!ProcedureValidator.isValidDescription(data.get(ParameterAndAttribute.DESCRIPTION))) {
 				isValid = false;
+				logger.log(Level.DEBUG, "5");
 				break;
 			}
 			break;
 		case 1:
 			if (!ProcedureValidator.isOnlyNumbers(data.get(ParameterAndAttribute.DURATION))) {
 				isValid = false;
+				logger.log(Level.DEBUG, "6");
 				break;
 			}
 			if (!ProcedureValidator.isOnlyNumbers(data.get(ParameterAndAttribute.PROCEDURE_ID))) {
 				isValid = false;
+				logger.log(Level.DEBUG, "7");
 				break;
 			}
 			if (!ProcedureValidator.isValidName(data.get(ParameterAndAttribute.PROCEDURE_NAME))) {
 				isValid = false;
+				logger.log(Level.DEBUG, "8");
 				break;
 			}
 			if (!ProcedureValidator.isValidImageName(data.get(ParameterAndAttribute.PROCEDURE_IMAGE))) {
 				isValid = false;
+				logger.log(Level.DEBUG, "9");
 				break;
 			}
 			if (!ProcedureValidator.isValidPrice(data.get(ParameterAndAttribute.PROCEDURE_PRICE))) {
 				isValid = false;
+				logger.log(Level.DEBUG, "10");
 				break;
 			}
 			if (!ProcedureValidator.isValidDescription(data.get(ParameterAndAttribute.DESCRIPTION))) {
 				isValid = false;
+				logger.log(Level.DEBUG, "11");
 				break;
 			}
 			break;

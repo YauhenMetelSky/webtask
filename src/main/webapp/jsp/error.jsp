@@ -27,6 +27,12 @@
 	<br /> Exception: ${exception}
 	<br /> Message from exception: ${error_message }
 	<br />
+	
+	<br /> Status code: ${pageContext.errorData.statusCode}
+	<br /> Servlet name: ${pageContext.errorData.servletName}
+	<br /> Exception: ${pageContext.exception}
+	<br /> Message from exception: ${pageContext.exception.message}
+	<br />
 	<div>
 	<form action="controller" method="post">
 					<input type="submit" value=<fmt:message key="label.home"/>

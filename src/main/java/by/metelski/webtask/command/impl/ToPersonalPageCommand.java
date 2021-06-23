@@ -46,9 +46,11 @@ public class ToPersonalPageCommand implements Command {
 			}
 			switch (user.getRole()) {
 			case ADMIN:
+				session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.TO_PERSONAL_PAGE);
 				router.setPagePath(PagePath.ADMIN);
 				break;
 			case GUEST:
+				session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.TO_SIGN_IN_PAGE);
 				router.setPagePath(PagePath.SIGN_IN);
 				break;
 			case USER:
@@ -62,16 +64,20 @@ public class ToPersonalPageCommand implements Command {
 					logger.log(Level.ERROR, "ServiceException" + e);
 					request.setAttribute(ParameterAndAttribute.EXCEPTION, "ServiceException");
 					request.setAttribute(ParameterAndAttribute.ERROR_MESSAGE, e);
+					session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.ERROR);
 					router.setPagePath(PagePath.ERROR);
 				}
+				session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.TO_PERSONAL_PAGE);
 				router.setPagePath(PagePath.USER);
 				break;
 			case DOCTOR:
 				logger.log(Level.DEBUG, "case doctor");
+				session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.TO_PERSONAL_PAGE);
 				router.setPagePath(PagePath.DOCTOR);
 				break;
 			}
 		} else {
+			session.setAttribute(ParameterAndAttribute.CURRENT_PAGE, PagePath.TO_SIGN_IN_PAGE);
 			router.setPagePath(PagePath.SIGN_IN);
 		}
 		return router;

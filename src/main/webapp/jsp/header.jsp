@@ -29,27 +29,27 @@
 		<div class="btn-toolbar justify-content-between" role="toolbar"
 			aria-label="Toolbar with button groups">
 			<div class="btn-group" role="group" aria-label="First group">
-				<form action="controller" method="post">
+				<form action="controller" method="get">
 					<input type="submit" value=<fmt:message key="label.home"/>
 						class="btn btn-light"> <input type="hidden" name="command"
 						value="to_main">
 				</form>
-				<form action="controller" method="post">
+				<form action="controller" method="get">
 					<input type="submit" value=<fmt:message key="label.about"/>
 						class="btn btn-light"> <input type="hidden" name="command"
 						value="to_about">
 				</form>
-				<form action="controller" method="post">
+				<form action="controller" method="get">
 					<input type="submit" value=<fmt:message key="label.services"/>
 						class="btn btn-light"> <input type="hidden" name="command"
 						value="to_services">
 				</form>
-				<form action="controller" method="post">
+				<form action="controller" method="get">
 					<input type="submit" value=<fmt:message key="label.contact"/>
 						class="btn btn-light"> <input type="hidden" name="command"
 						value="to_contact">
 				</form>
-				<form action="controller" method="post">
+				<form action="controller" method="get">
 					<input type="submit" value=<fmt:message key="label.account"/>
 						class="btn btn-light"> <input type="hidden" name="command"
 						value="to_personal_page">
@@ -58,7 +58,7 @@
 			</div>
 			<c:if test="${user.getRole().toString() eq null }">
 				<div class="header_button">
-					<form action="controller" method="post">
+					<form action="controller" method="get">
 						<input type="submit" value=<fmt:message key="label.login"/>
 							class="btn btn-primary btn-sm btn-block"> <input
 							type="hidden" name="command" value="to_sign_in">

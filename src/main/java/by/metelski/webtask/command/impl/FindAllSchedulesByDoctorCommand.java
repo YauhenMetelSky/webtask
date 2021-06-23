@@ -37,6 +37,7 @@ public class FindAllSchedulesByDoctorCommand implements Command {
 		Router router = new Router();
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
+		logger.log(Level.DEBUG, "current page" +session.getAttribute(ParameterAndAttribute.CURRENT_PAGE));
 		User user = (User) session.getAttribute(ParameterAndAttribute.USER);
 		Long userId = user.getUserId();
 		try {

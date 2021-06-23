@@ -37,7 +37,7 @@
 
 				<div>
 					<h6>Show me all appointments</h6>
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary">
 							<fmt:message key="label.find_all" />
 						</button>

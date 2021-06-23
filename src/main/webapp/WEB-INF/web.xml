@@ -4,21 +4,6 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
 	version="4.0">
 	<display-name>FirstProject</display-name>
-	<filter>
-		<description>
-		</description>
-		<display-name>PageFilter</display-name>
-		<filter-name>PageFilter</filter-name>
-		<filter-class>by.metelski.webtask.controller.filter.PageFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>PageFilter</filter-name>
-		<url-pattern>/PageFilter</url-pattern>
-		<url-pattern>*.jsp</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-		<dispatcher>INCLUDE</dispatcher>
-	</filter-mapping>
 	<session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>

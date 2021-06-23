@@ -32,7 +32,7 @@
 			<div class="col">
 			<div>
 		<h6>Show all my schedules</h6>
-			<form action="controller" method="POST">
+			<form action="controller" method="GET">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.my_schedules" />
 				</button>
@@ -42,7 +42,7 @@
 					
 		<div>
 		<h6>Show me actual schedule</h6>
-			<form action="controller" method="POST">
+			<form action="controller" method="GET">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.my_active_schedules" />
 				</button>
@@ -51,7 +51,7 @@
 			</div>
 			<div>
 			<h6>Show appointments to me</h6>
-			<form action="controller" method="POST">
+			<form action="controller" method="GET">
 				<button type="submit" class="btn btn-primary">
 					<fmt:message key="label.appointments_to_me" />
 				</button>
@@ -91,14 +91,13 @@
 		</div>
 		
 			<div>
-			<table class="table table-striped">	
 		<c:if test="${doctor_schedules_list ne null}">
+			<table class="table table-striped">	
 			<tr>
 				<th><fmt:message key="label.date" /></th>
 				<th><fmt:message key="label.start_time" /></th>
 				<th><fmt:message key="label.end_time" /></th>
 			</tr>
-		</c:if>
 
 		<c:forEach var="elem" items="${doctor_schedules_list}" varStatus="status">
 			<tr>
@@ -123,6 +122,7 @@
 							</c:forEach>
 						</ul>
 					</nav>
+					</c:if>
 		</div> 
 		
 			<div>

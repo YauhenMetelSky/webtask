@@ -79,7 +79,7 @@
 				</div>
 				<br />
 				<div>
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary btn-block">
 							<fmt:message key="label.find_all_procedures" />
 						</button>
@@ -88,7 +88,7 @@
 				</div>
 				<br />
 				<div>
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary btn-block">
 							<fmt:message key="label.find_all_schedules" />
 						</button>
@@ -97,7 +97,7 @@
 				</div>
 				<br />
 				<div>
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary btn-block">
 							<fmt:message key="label.find_all_users" />
 						</button>
@@ -107,7 +107,7 @@
 				<br />
 				<!-- <h1>Show all new appointments</h1> -->
 				<div>
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary btn-block">
 							<fmt:message key="label.show_all_new_app" />
 						</button>
@@ -235,23 +235,30 @@
 							<td><c:out value="${elem.blocked }" /></td>
 							<td><c:out value="${elem.role }" /></td>
 							<td>
-								<form action="controller" method="POST">
-									<button type="submit" class="btn btn-danger btn-sm">
+							<div class="dropdown">
+							<form action="controller" method="post">
+				<button class="btn btn-danger btn-sm dropdown-toggle" type="button"
+					id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false">
+					<fmt:message key="label.change_role" />
+				</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				            <button type="submit" class="dropdown-item" name="command" value="change_user_role_doctor">
 										<fmt:message key="label.change_role_to_doctor" />
 									</button>
-									<input type="hidden" name="id" value="${elem.userId}">
-									<input type="hidden" name="command"
-										value="change_user_role_doctor">
-								</form>
-								<p>
-								<form action="controller" method="POST">
-									<button type="submit" class="btn btn-danger btn-sm">
+									
+								            <button type="submit" class="dropdown-item" name="command" value="change_user_role_admin">
 										<fmt:message key="label.change_role_to_admin" />
 									</button>
-									<input type="hidden" name="id" value="${elem.userId}">
-									<input type="hidden" name="command"
-										value="change_user_role_admin">
-								</form>
+									
+						          <button type="submit" class="dropdown-item" name="command" value="change_user_role_user">
+										<fmt:message key="label.change_role_to_user" />
+									</button>
+									<input type="hidden" name="id" value="${elem.userId}">					
+				</div>
+				</form>
+			</div>
+							
 							</td>
 							<c:if test="${elem.blocked==false}">
 								<td>

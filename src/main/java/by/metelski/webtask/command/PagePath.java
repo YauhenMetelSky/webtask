@@ -23,8 +23,19 @@ public final class PagePath {
 	public static final String SIGN_UP = "/jsp/signup.jsp";
 	public static final String USER = "/jsp/user.jsp";
 	
-	public static final String TO_PERSONAL_PAGE="/controller?command=to_personal_page";
+	public static final String TO_ABOUT_PAGE="/controller?command=to_about";
+	public static final String TO_ADD_PROCEDURE_PAGE="/controller?command=to_add_procedure";
+	public static final String TO_CHANGE_APPOINTMENT_PAGE="/controller?command=to_change_appointment";
+	public static final String TO_CHANGE_PROCEDURE_PAGE="/controller?command=to_change_procedure";
+	public static final String TO_CHANGE_PERSONAL_INFO_PAGE="/controller?command=to_change_personal_info";
+	public static final String TO_CHANGE_SCHEDULE_PAGE="/controller?command=to_change_schedule";
+	public static final String TO_CONTACT_PAGE="/controller?command=to_contact";
+	public static final String TO_DOCTOR_PAGE="/controller?command=to_doctor";
 	public static final String TO_MAIN_PAGE="/controller?command=to_main";
+	public static final String TO_PERSONAL_PAGE="/controller?command=to_personal_page";
+	public static final String TO_SERVICES_PAGE="/controller?command=to_services";
+	public static final String TO_SIGN_IN_PAGE="/controller?command=to_sign_in";
+	public static final String TO_SIGN_UP_PAGE="/controller?command=to_sign_up";
 
 	private PagePath() {
 	}
