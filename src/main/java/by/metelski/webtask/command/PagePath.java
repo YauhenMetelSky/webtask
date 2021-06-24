@@ -15,7 +15,6 @@ public final class PagePath {
 	public static final String CHANGE_PROCEDURE = "/jsp/changeprocedure.jsp";
 	public static final String CHANGE_SCHEDULE = "/jsp/changeschedule.jsp";
 	public static final String DOCTOR = "/jsp/doctor.jsp";
-	public static final String EMPTY_RESULT = "/jsp/empty.jsp";
 	public static final String ERROR = "/jsp/error.jsp";
 	public static final String MAIN = "/jsp/main.jsp";
 	public static final String SERVICES = "/jsp/services.jsp";

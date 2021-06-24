@@ -32,7 +32,7 @@ public class EncodingFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		logger.log(Level.DEBUG, "doFilter");
+		logger.log(Level.DEBUG, "encoding doFilter");
 		String codeRequest = request.getCharacterEncoding();
 		if (codeRequest == null || !codeRequest.equalsIgnoreCase(code)) {
 			request.setCharacterEncoding(code);
