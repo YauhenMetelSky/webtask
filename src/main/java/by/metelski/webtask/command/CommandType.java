@@ -8,6 +8,7 @@ import by.metelski.webtask.command.impl.UnblockUserCommand;
 import by.metelski.webtask.command.impl.FindUsersByNameCommand;
 import by.metelski.webtask.command.impl.FindUsersBySurnameCommand;
 import by.metelski.webtask.command.impl.FindUsersPaginationCommand;
+import by.metelski.webtask.command.impl.FinishAppointmentCommand;
 import by.metelski.webtask.command.impl.LogInCommand;
 import by.metelski.webtask.command.impl.LogOutCommand;
 import by.metelski.webtask.command.impl.SetLocaleCommand;
@@ -47,6 +48,7 @@ import by.metelski.webtask.command.impl.FindAllSchedulesCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
 import by.metelski.webtask.command.impl.FindSchedulesByDoctorPaginationCommand;
 import by.metelski.webtask.command.impl.FindSchedulesPaginationCommand;
+import by.metelski.webtask.command.impl.FindTodaysAppointmentsCommand;
 import by.metelski.webtask.command.impl.FindAllNewAppointmentsCommand;
 import by.metelski.webtask.command.impl.FindAllAppointmentsByUserIdCommand;
 import by.metelski.webtask.command.impl.FindUserByEmailCommand;
@@ -132,6 +134,11 @@ public enum CommandType {
 			this.command=new DeactivateProcedureCommand();
 		}
 	},
+	FINISH_APPOINTMENT{
+		{
+		this.command= new FinishAppointmentCommand();	
+		}
+	},
 	TO_CHANGE_APPOINTMENT {
 		{
 			this.command = new ToChangeAppointmentCommand();
@@ -206,6 +213,11 @@ public enum CommandType {
 	FIND_SCHEDULES_PAGINATION{
 		{
 			this.command=new FindSchedulesPaginationCommand();
+		}
+	},
+	FIND_TODAYS_APPOINTMENTS{
+		{
+			this.command=new FindTodaysAppointmentsCommand();
 		}
 	},
 	FIND_USERS_PAGINATION{

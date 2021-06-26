@@ -68,7 +68,28 @@
 					</form>
 				</div>
 				<br />
-
+				</div>
+				<div class="col">
+				<h4>Name: ${user.name }</h4>
+				<h4>Surname: ${user.surname }</h4>
+				<h4>Phone number: ${user.phone }</h4>
+				<h4>Email: ${user.email }</h4>
+				<div>
+					<form action="controller" method="POST">
+						<button type="submit" class="btn btn-primary">
+							<fmt:message key="label.change" />
+						</button>
+						<input type="hidden" name="command"
+							value="to_change_personal_info">
+					</form>
+				</div>
+				</div>
+				</div>
+				
+<!-- 				</row>
+				<row> -->
+            <div class="row">
+				<div class="col-sm-3">
 				<div>
 					<form action="controller" method="POST">
 						<button type="submit" class="btn btn-primary btn-block">
@@ -95,8 +116,10 @@
 						<input type="hidden" name="command" value="find_all_schedules">
 					</form>
 				</div>
-				<br />
-				<div>
+				<br />			
+				</div>
+				<div class="col-sm-3">
+					<div>
 					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary btn-block">
 							<fmt:message key="label.find_all_users" />
@@ -109,28 +132,24 @@
 				<div>
 					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary btn-block">
+							<fmt:message key="label.find_all_todays_appointments" />
+						</button>
+						<input type="hidden" name="command"
+							value="find_todays_appointments">
+					</form>
+				</div>
+				<br />
+				<div>
+					<form action="controller" method="GET">
+						<button type="submit" class="btn btn-primary btn-block">
 							<fmt:message key="label.show_all_new_app" />
 						</button>
 						<input type="hidden" name="command"
 							value="find_all_new_appointments">
 					</form>
 				</div>
-			</div>
-			<div class="col">
-				<h4>Name: ${user.name }</h4>
-				<h4>Surname: ${user.surname }</h4>
-				<h4>Phone number: ${user.phone }</h4>
-				<h4>Email: ${user.email }</h4>
-				<div>
-					<form action="controller" method="POST">
-						<button type="submit" class="btn btn-primary">
-							<fmt:message key="label.change" />
-						</button>
-						<input type="hidden" name="command"
-							value="to_change_personal_info">
-					</form>
-				</div>
-				<!-- <div class="scroll"> -->
+				</div>		
+				<div class="col">
 				<div style="width:100%; height:250px;overflow:scroll">
 				<table class="table table-striped" id="app_table">
 				</table>
@@ -139,7 +158,6 @@
 		</div>
 
 		<br />
-		<div class="col">
 			<table class="table table-striped">
 				<c:if test="${appointments_list ne null}">
 					<tr>
@@ -424,7 +442,6 @@
 					</nav>
 				</c:if>
 			</table>
-		</div>
 	</div>
 
 	<c:import url="footer.jsp" />

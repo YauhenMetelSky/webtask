@@ -54,6 +54,14 @@ public interface AppointmentDao {
 	 * @throws DaoException
 	 */
 	List<Appointment> findAllByDoctorIdAndDate(long doctorId, Date date) throws DaoException;
+	
+	/**
+	 * Find all appointments by date
+	 * @param date
+	 * @return List of appointments
+	 * @throws DaoException
+	 */
+	List<Appointment> findAllByDateAndStatus(Date date,Status status) throws DaoException;
 
 	/**
 	 * Find all appointments by client id

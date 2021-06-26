@@ -23,6 +23,12 @@ import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.command.PagePath;
 import by.metelski.webtask.command.ParameterAndAttribute;
 
+/**
+ * Access filter. 
+ * @author Yauhen Metelski
+ *
+ */
+
 @WebFilter(filterName = "AccessFilter", dispatcherTypes = { DispatcherType.REQUEST,
 		DispatcherType.FORWARD }, urlPatterns = "*.jsp")
 public class AccessFilter implements Filter {

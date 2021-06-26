@@ -43,5 +43,4 @@ public class EncodingFilter implements Filter {
 		}
 		chain.doFilter(request, response);
 	}
-
 }

@@ -19,7 +19,7 @@ public class Appointment {
 	private Status status;
 
 	public enum Status {
-		CLAIMED, CONFIRMED, CANCELED, ENDED
+		CLAIMED, CONFIRMED, CANCELED,FINISHED, ENDED
 	}
 
 	private Appointment() {

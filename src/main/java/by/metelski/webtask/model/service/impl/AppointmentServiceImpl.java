@@ -203,6 +203,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 		}
 		return appointments;
 	}
+	@Override
+	public List<Appointment> findAllByDateAndStatus(Date date,Status status) throws ServiceException {
+		logger.log(Level.DEBUG, "findAllByDate,date:"+ date);
+		List<Appointment> appointments = new ArrayList<>();
+		try {
+			appointments = appointmentDao.findAllByDateAndStatus(date,status);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findAllByDate(), " + e);
+			throw new ServiceException(e);
+		}
+		return appointments;
+	}
 	/**
 	 * @param data
 	 * @param withId two possible values: 0-if data dont't contain appointment id, 1-if data contains appointmentId

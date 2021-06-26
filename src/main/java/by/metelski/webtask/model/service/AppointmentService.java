@@ -59,6 +59,13 @@ public interface AppointmentService {
 	 */
 	List<Appointment> findAllByDoctorIdAndDate(long doctorId,Date date) throws ServiceException;
 	/**
+	 * @param date 
+	 * @param status appointment status 
+	 * @return List of appointments found by date
+	 * @throws ServiceException
+	 */
+	List<Appointment> findAllByDateAndStatus(Date date,Status status) throws ServiceException;
+	/**
 	 * @param id appointment id
 	 * @return Optional<Appointment>
 	 * @throws ServiceException

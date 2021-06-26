@@ -134,6 +134,7 @@
 				<th><fmt:message key="label.end_time" /></th>
 				<th><fmt:message key="label.doctor" /></th>
 				<th><fmt:message key="label.procedure" /></th>
+				<th><fmt:message key="label.price" /></th>
 				<th><fmt:message key="label.status" /></th>
 				<th><fmt:message key="label.change" /></th>
 				<th><fmt:message key="label.cancel" /></th>
@@ -149,39 +150,54 @@
 					<c:out value=" " />
 					<c:out value="${elem.doctor.surname} " /></td>
 				<td><c:out value="${elem.procedure.name }" /></td>
+				<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${elem.procedure.price}"/> BYN</td>
 				<td><c:out value="${elem.status }" /></td>
-				<c:if test="${elem.status eq 'CLAIMED' }">
-					<td>
+					<td> 
 						<form action="controller" method="POST">
+				<c:if test="${elem.status eq 'CLAIMED' }">
 							<button type="submit" class="btn btn-primary">
 								<fmt:message key="label.change" />
 							</button>
 							<input type="hidden" name="app_id" value="${elem.id }"> <input
 								type="hidden" name="command" value="to_change_appointment">
+				</c:if>
+				<c:if test="${elem.status ne 'CLAIMED' }">
+							<button type="submit" disabled="disabled" class="btn btn-primary">
+								<fmt:message key="label.change" />
+							</button>
+							<input type="hidden" name="app_id" value="${elem.id }"> <input
+								type="hidden" name="command" value="to_change_appointment">
+				</c:if>
 						</form>
 					</td>
-					<td>
-						<form action="controller" method="POST">
+					<%-- <td>
+		 				<form action="controller" method="POST">
 							<button type="submit" class="btn btn-danger">
 								<fmt:message key="label.cancel" />
 							</button>
 							<input type="hidden" name="app_id" value="${elem.id }"> <input
 								type="hidden" name="command" value="cancel_appointment">
-						</form>
-					</td>
-				</c:if>
-				<c:if test="${elem.status eq 'CONFIRMED' }">
-					<td></td>
+						</form> 
+					</td> --%>
+					<!-- <td></td> -->
 					<td>
 						<form action="controller" method="POST">
+				<c:if test="${(elem.status eq 'CONFIRMED') or (elem.status eq 'CLAIMED') }">
 							<button type="submit" class="btn btn-danger">
 								<fmt:message key="label.cancel" />
 							</button>
 							<input type="hidden" name="app_id" value="${elem.id }"> <input
 								type="hidden" name="command" value="cancel_appointment">
+				</c:if>
+				<c:if test="${(elem.status ne 'CONFIRMED') and (elem.status ne 'CLAIMED') }">
+							<button type="submit" disabled="disabled" class="btn btn-danger">
+								<fmt:message key="label.cancel" />
+							</button>
+							<input type="hidden" name="app_id" value="${elem.id }"> <input
+								type="hidden" name="command" value="cancel_appointment">
+				</c:if>
 						</form>
 					</td>
-				</c:if>
 			</tr>
 		</c:forEach>
 	</table>
