@@ -239,7 +239,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 				numberOfRows = resultSet.getInt(1);
 			}
 		} catch (SQLException e) {
-			logger.log(Level.ERROR, "SQLException in findAll: " + e.getMessage() + " : " + e.getErrorCode());
+			logger.log(Level.ERROR, "SQLException in findNumberOfRows: " + e.getMessage() + " : " + e.getErrorCode());
 			throw new DaoException("Dao exception", e);
 		}
 		return numberOfRows;

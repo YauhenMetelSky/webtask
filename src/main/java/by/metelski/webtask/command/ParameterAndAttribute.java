@@ -11,6 +11,7 @@ public final class ParameterAndAttribute {
 	public static final String APPOINTMENT_DATA = "app_data";
 	public static final String APPOINTMENT_DATE = "app_date";
 	public static final String APPOINTMENT_ID = "app_id";
+	public static final String APPOINTMENT_STATUS = "app_status";
 	public static final String APPOINTMENTS_LIST = "appointments_list";
 	public static final String EMAIL_TEXT = "email_text";
 	public static final String EMAIL_TO = "email_to";

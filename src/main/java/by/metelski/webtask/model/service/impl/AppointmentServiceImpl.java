@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.metelski.webtask.entity.Appointment;
+import by.metelski.webtask.entity.DoctorSchedule;
 import by.metelski.webtask.entity.Appointment.Status;
 import by.metelski.webtask.entity.Procedure;
 import by.metelski.webtask.entity.User;
@@ -31,6 +32,7 @@ import static by.metelski.webtask.command.ParameterAndAttribute.*;
  */
 public class AppointmentServiceImpl implements AppointmentService {
 	private static final Logger logger = LogManager.getLogger();
+	private final int numberOfAppointmentsInPage = 10;
 	AppointmentDao appointmentDao;
 	ProcedureDao procedureDao;
 
@@ -132,15 +134,22 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public List<Appointment> findAllByStatus(Status status) throws ServiceException {
+	public List<Appointment> findAllByStatusFromRow(Status status,int pageNumber) throws ServiceException {
 		logger.log(Level.DEBUG, "findByStatus(), status:" + status);
 		List<Appointment> appointments = new ArrayList<>();
+		int fromRow;
+		if (pageNumber > 1) {
+			fromRow = (pageNumber - 1) * numberOfAppointmentsInPage;
+		} else {
+			fromRow = 0;
+		}
 		try {
-			appointments = appointmentDao.findAllByStatus(status);
+			appointments = appointmentDao.findAllByStatusFromRow(status,fromRow,numberOfAppointmentsInPage);
 		} catch (DaoException e) {
-			logger.log(Level.ERROR, "dao exception in method findAllByStatus()" + e);
+			logger.log(Level.ERROR, "dao exception in method findAllByStatusFromRow." + e);
 			throw new ServiceException(e);
 		}
+
 		return appointments;
 	}
 
@@ -155,14 +164,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 			throw new ServiceException(e);
 		}
 		return appointments;
-	}
-
-	private Time calculateEndTime(String startTime, long duration) {
-		LocalTime tmpTime = LocalTime.parse(startTime);
-		logger.log(Level.DEBUG, "tmpTime:" + tmpTime);
-		Time endTime = Time.valueOf(tmpTime.plusMinutes(duration));
-		logger.log(Level.DEBUG, "tmpTime:" + tmpTime + " End time: " + endTime);
-		return endTime;
 	}
 
 	@Override
@@ -215,6 +216,21 @@ public class AppointmentServiceImpl implements AppointmentService {
 		}
 		return appointments;
 	}
+	
+	@Override
+	public int findNumberOfPages(Status status) throws ServiceException {
+		int numberOfPages;
+		int numberOfSchedules;
+		try {
+			numberOfSchedules = appointmentDao.findNumberOfRowsWithStatus(status);
+			numberOfPages = calculateNumberOfPages(numberOfSchedules);
+		} catch (DaoException e) {
+			logger.log(Level.ERROR, "dao exception in method findNumberOfPages." + e);
+			throw new ServiceException(e);
+		}
+		return numberOfPages;
+	}
+	
 	/**
 	 * @param data
 	 * @param withId two possible values: 0-if data dont't contain appointment id, 1-if data contains appointmentId
@@ -297,5 +313,34 @@ public class AppointmentServiceImpl implements AppointmentService {
 				.setProcedureId(procedureId)
 				.build();
 		return procedure;
+	}
+	
+	/**
+	 * Calculate end time of procedure according to procedure duration
+	 * @param startTime
+	 * @param duration
+	 * @return Time 
+	 */
+	private Time calculateEndTime(String startTime, long duration) {
+		LocalTime tmpTime = LocalTime.parse(startTime);
+		logger.log(Level.DEBUG, "tmpTime:" + tmpTime);
+		Time endTime = Time.valueOf(tmpTime.plusMinutes(duration));
+		logger.log(Level.DEBUG, "tmpTime:" + tmpTime + " End time: " + endTime);
+		return endTime;
+	}
+	
+	/**
+	 * Calculated number of pages for pagination
+	 * @param numberOfSchedules
+	 * @return int number of page
+	 */
+	private int calculateNumberOfPages(int numberOfAppointments) {
+		int numberOfPages;
+		if (numberOfAppointments > numberOfAppointmentsInPage) {
+			numberOfPages = (int) Math.ceil((double) numberOfAppointments / numberOfAppointmentsInPage);
+		} else {
+			numberOfPages = 1;
+		}
+		return numberOfPages;
 	}
 }

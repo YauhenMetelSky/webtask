@@ -39,6 +39,13 @@ public interface AppointmentDao {
 	boolean changeAppointment(Appointment appointment) throws DaoException;
 
 	/**
+	 * @param status
+	 * @return int - number of appointments with status in database
+	 * @throws DaoException
+	 */
+	int findNumberOfRowsWithStatus(Status status) throws DaoException;
+	
+	/**
 	 * Find all appointments by doctor id
 	 * @param doctorId
 	 * @return List of appointments
@@ -71,13 +78,16 @@ public interface AppointmentDao {
 	 */
 	List<Appointment> findAllByUserId(long userId) throws DaoException;
 
+
 	/**
 	 * Find all appointments by status
 	 * @param status
-	 * @returnList of appointments
+	 * @param fromRow
+	 * @param numberOfAppointmentsInPage
+	 * @return List of appointments
 	 * @throws DaoException
 	 */
-	List<Appointment> findAllByStatus(Status status) throws DaoException;
+	List<Appointment> findAllByStatusFromRow(Status status,int fromRow, int numberOfAppointmentsInPage) throws DaoException;
 
 	/**
 	 * Find appointment by id

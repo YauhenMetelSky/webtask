@@ -46,11 +46,13 @@ import by.metelski.webtask.command.impl.FindAllSchedulesByDoctorCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesByIdCommand;
 import by.metelski.webtask.command.impl.FindAllSchedulesCommand;
 import by.metelski.webtask.command.impl.FindAllUsersCommand;
+import by.metelski.webtask.command.impl.FindAppointmentsPaginationCommand;
 import by.metelski.webtask.command.impl.FindSchedulesByDoctorPaginationCommand;
 import by.metelski.webtask.command.impl.FindSchedulesPaginationCommand;
 import by.metelski.webtask.command.impl.FindTodaysAppointmentsCommand;
 import by.metelski.webtask.command.impl.FindAllNewAppointmentsCommand;
 import by.metelski.webtask.command.impl.FindAllAppointmentsByUserIdCommand;
+import by.metelski.webtask.command.impl.FindAllFinishedAppointmentsCommand;
 import by.metelski.webtask.command.impl.FindUserByEmailCommand;
 
 /**
@@ -179,6 +181,11 @@ public enum CommandType {
 			this.command= new FindAllActiveSchedulesByDoctorCommand();
 		}
 	},
+	FIND_ALL_FINISHED_APPOINTMENTS{
+		{
+			this.command= new FindAllFinishedAppointmentsCommand();
+		}
+	},
 	FIND_ALL_SCHEDULES_BY_DOCTOR {
 		{
 			this.command = new FindAllSchedulesByDoctorCommand();
@@ -203,6 +210,11 @@ public enum CommandType {
 	FIND_BY_SURNAME{
 		{
 			this.command = new FindUsersBySurnameCommand();
+		}
+	},
+	FIND_APPOINTMENTS_PAGINATION{
+		{
+			this.command= new FindAppointmentsPaginationCommand();
 		}
 	},
 	FIND_SCHEDULES_BY_DOCTOR_PAGINATION{

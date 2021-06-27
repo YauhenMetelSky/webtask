@@ -211,7 +211,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public List<DoctorSchedule> findAllSchedulesByDoctorIdFromRow(long userId, int pageNumber) throws ServiceException {
+	public List<DoctorSchedule> findAllSchedulesByDoctorIdFromRow(long doctorId, int pageNumber) throws ServiceException {
 		logger.log(Level.DEBUG, "findAllSchedulesFromRow(), row:" + pageNumber);
 		List<DoctorSchedule> schedules = new ArrayList<>();
 		int fromRow;
@@ -221,7 +221,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			fromRow = 0;
 		}
 		try {
-			schedules = dao.findAllSchedulesFromRow(fromRow, numberOfSchedulesInPage);
+			schedules = dao.findAllDoctorSchedulesFromRow(fromRow, numberOfSchedulesInPage,doctorId);
 		} catch (DaoException e) {
 			logger.log(Level.ERROR, "dao exception in method findAllSchedulesFromRow." + e);
 			throw new ServiceException(e);

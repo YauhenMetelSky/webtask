@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -35,11 +36,12 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	private static final String SQL_ADD_APPOINTMENT = "INSERT INTO appointments (id_client,id_doctor,date,start,id_procedure,status,end) values(?,?,?,?,?,?,?)";
 	private static final String SQL_CHANGE_APPOINTMENT = "UPDATE appointments SET id_client=?,id_doctor=?,date=?,start=?,id_procedure=?,status=?,end=? WHERE id_appointment=?";
 	private static final String SQL_CHANGE_APPOINTMENT_STATUS = "UPDATE appointments set status=? WHERE id_appointment=?";
+	private static final String SQL_COUNT_ALL_APPOINTMENTS_WITH_STATUS = "SELECT COUNT(*) FROM appointments WHERE status=?";
 	private static final String SQL_FIND_ALL_APPOINTMENTS_BY_USER_ID = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_client=? ORDER BY date";
 	private static final String SQL_FIND_ALL_APPOINTMENTS_BY_DOCTOR_ID = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users d ON id_doctor=d.user_id JOIN users c ON id_client=c.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_doctor=? AND date>=? AND status=? ORDER BY date";
 	private static final String SQL_FIND_ALL_APPOINTMENTS_BY_DOCTOR_ID_AND_DATE = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users d ON id_doctor=d.user_id JOIN users c ON id_client=c.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_doctor=? AND date=? AND status=? ORDER BY start";
 	private static final String SQL_FIND_ALL_APPOINTMENTS_BY_DATE_AND_STATUS = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users d ON id_doctor=d.user_id JOIN users c ON id_client=c.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE date=? AND status=? ORDER BY start";
-	private static final String SQL_FIND_APPOINTMENTS_BY_STATUS = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE status=? ORDER BY date";
+	private static final String SQL_FIND_APPOINTMENTS_BY_STATUS_FROM_ROW = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE status=? ORDER BY date LIMIT ?,?";
 	private static final String SQL_FIND_APPOINTMENT_BY_ID = "SELECT id_appointment, c.user_id client_id,c.name client_name,c.surname client_surname,c.email client_email,c.phone client_phone,c.is_blocked client_is_blocked,c.role client_role,d.user_id,d.name,d.surname,d.email,d.phone,d.is_blocked,d.role,date,start,p.procedure_id,p.name procedure_name,p.image_name,p.is_active, p.price,p.description,p.duration,status,end FROM appointments JOIN users c ON id_client=user_id JOIN users d ON id_doctor=d.user_id JOIN procedures p ON id_procedure=procedure_id  WHERE id_appointment=?";
 	private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
@@ -143,12 +145,14 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	}
 
 	@Override
-	public List<Appointment> findAllByStatus(Status status) throws DaoException {
-		logger.log(Level.INFO, "Find all appointments by status, status=  " + status);
+	public List<Appointment> findAllByStatusFromRow(Status status,int fromRow,int numberOfAppointmentsInPage) throws DaoException {
+		logger.log(Level.INFO, "Find all appointments by status, status=  " + status+" from row:" + fromRow);
 		List<Appointment> appointments = new ArrayList<>();
 		try (Connection connection = connectionPool.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQL_FIND_APPOINTMENTS_BY_STATUS)) {
+				PreparedStatement statement = connection.prepareStatement(SQL_FIND_APPOINTMENTS_BY_STATUS_FROM_ROW)) {
 			statement.setString(1, status.name());
+			statement.setInt(2, fromRow);
+			statement.setInt(3, numberOfAppointmentsInPage);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				appointments.add(createAppointment(resultSet));
@@ -157,6 +161,25 @@ public class AppointmentDaoImpl implements AppointmentDao {
 			throw new DaoException("Dao exception", e);
 		}
 		return appointments;
+	}
+	
+
+	@Override
+	public int findNumberOfRowsWithStatus(Status status) throws DaoException {
+		logger.log(Level.INFO, "findNumberOfRows");
+		int numberOfRows = 0;
+		try (Connection connection = connectionPool.getConnection();
+				PreparedStatement statement = connection.prepareStatement(SQL_COUNT_ALL_APPOINTMENTS_WITH_STATUS)) {
+			statement.setString(1, status.name());
+			ResultSet resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				numberOfRows = resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, "SQLException in findNumberOfRowsWithStatus: " + e.getMessage() + " : " + e.getErrorCode());
+			throw new DaoException("Dao exception", e);
+		}
+		return numberOfRows;
 	}
 
 	@Override

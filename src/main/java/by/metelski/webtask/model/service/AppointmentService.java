@@ -38,7 +38,7 @@ public interface AppointmentService {
 	 * @return List of appointments with such status
 	 * @throws ServiceException
 	 */
-	List<Appointment> findAllByStatus(Status status) throws ServiceException;
+	List<Appointment> findAllByStatusFromRow(Status status, int row) throws ServiceException;
 	/**
 	 * @param userId
 	 * @return List of appointments belongs user with this id
@@ -65,6 +65,14 @@ public interface AppointmentService {
 	 * @throws ServiceException
 	 */
 	List<Appointment> findAllByDateAndStatus(Date date,Status status) throws ServiceException;
+	
+	/**
+	 * @param status
+	 * @return int number of pages for pagination
+	 * @throws ServiceException
+	 */
+	int findNumberOfPages(Status status) throws ServiceException;
+	
 	/**
 	 * @param id appointment id
 	 * @return Optional<Appointment>

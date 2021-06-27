@@ -16,7 +16,7 @@
 	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 	crossorigin="anonymous">
 
-<link rel="stylesheet" href="css/main.css">
+<!-- <link rel="stylesheet" href="css/main.css"> -->
 <link rel="stylesheet" href="css/elements.css">
 <link rel="stylesheet" href="css/content.css">
 
@@ -47,22 +47,43 @@
 			<div class="carousel-item active">
 				<img src="images/carousel1.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
-					<h5>First slide label</h5>
-					<p>«Красота — это когда ты остаешься самим собой». Жан-Поль Готье</p>
+					<div class = "row">
+					<div class="col">
+					</div>
+					<div class="col">
+					<div class="custom_text">«Красота — это когда ты остаешься самим собой».</div>
+					<div class="custom_text">Жан-Поль Готье</div>
+					</div>
+					</div>
+					
 				</div>
 			</div>
 			<div class="carousel-item">
 				<img src="images/carousel3.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
-					<h5>Second slide label</h5>
-					<p>«Самое красивое лицо в мире — ваше». Эсте Лаудер</p>
+					<div class = "row">
+					<div class="col">
+					<div class="custom_text_black">«Самое красивое лицо в мире — ваше».</div>
+					<div class="custom_text_black">Эсте Лаудер</div>
+					</div>
+					<div class="col">
+					</div>
+					</div>
+				
 				</div>
 			</div>
 			<div class="carousel-item">
 				<img src="images/carousel2.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
-					<h5>Third slide label</h5>
-					<p>«Глядя на красивую женщину, я не могу не влюбиться в нее, я от нее без ума. Это как удар молнии и длится столько же: мгновение». Жюль Ренар</p>
+					<div class = "row">
+					<div class="col">
+					</div>
+					<div class="col">
+					<div class="custom_text_black_right">«Глядя на красивую женщину, я не могу не влюбиться в нее, я от нее без ума. Это как удар молнии и длится столько же: мгновение».</div>
+					<div class="custom_text_black_right">Жюль Ренар</div>
+					</div>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -78,19 +99,13 @@
 	</div>
 
 	<div class="row">
-		<div class="col">
-			<h1>Our clinic is the best of the best</h1>
+	<div class="col"></div>
+	<div class="col"><div class="text-mor">We are waiting for you!</div></div>
+	<div class="col"></div>
+	<div class="text-mor-center"></div>
 			<br>
-			<p> We are waiting for you </p>
-		</div>
-		<div class="col">
-			<h1>Content for all</h1>
-			<br>
-			<p> We are waiting for you </p>
-		</div>
-
 	</div>
-
+	
 	<div class="container">
 		<div class="row">
 		

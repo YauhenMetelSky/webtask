@@ -108,6 +108,7 @@
 		</c:forEach>
 			</table>
 			<nav aria-label="Page navigation example">
+			<c:if test="${number_of_pages >1}">
 						<ul class="pagination">
 							<c:forEach begin="1" end="${number_of_pages }" var="i">
 								<li class="page-item">
@@ -121,6 +122,7 @@
 								</li>
 							</c:forEach>
 						</ul>
+						</c:if>
 					</nav>
 					</c:if>
 		</div> 

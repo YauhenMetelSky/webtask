@@ -170,16 +170,6 @@
 				</c:if>
 						</form>
 					</td>
-					<%-- <td>
-		 				<form action="controller" method="POST">
-							<button type="submit" class="btn btn-danger">
-								<fmt:message key="label.cancel" />
-							</button>
-							<input type="hidden" name="app_id" value="${elem.id }"> <input
-								type="hidden" name="command" value="cancel_appointment">
-						</form> 
-					</td> --%>
-					<!-- <td></td> -->
 					<td>
 						<form action="controller" method="POST">
 				<c:if test="${(elem.status eq 'CONFIRMED') or (elem.status eq 'CLAIMED') }">

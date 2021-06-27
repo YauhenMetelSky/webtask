@@ -116,15 +116,23 @@
 						<input type="hidden" name="command" value="find_all_schedules">
 					</form>
 				</div>
-				<br />			
-				</div>
-				<div class="col-sm-3">
+				<br />
 					<div>
 					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary btn-block">
 							<fmt:message key="label.find_all_users" />
 						</button>
 						<input type="hidden" name="command" value="find_all_users">
+					</form>
+				</div>			
+				</div>
+				<div class="col-sm-3">
+					<div>
+					<form action="controller" method="GET">
+						<button type="submit" class="btn btn-primary btn-block">
+							<fmt:message key="label.find_all_finished" />
+						</button>
+						<input type="hidden" name="command" value="find_all_finished_appointments">
 					</form>
 				</div>
 				<br />
@@ -158,8 +166,9 @@
 		</div>
 
 		<br />
-			<table class="table table-striped">
-				<c:if test="${appointments_list ne null}">
+			
+				<c:if test="${(appointments_list ne null) and (appointments_list[0].status ne 'FINISHED')}">
+					<table class="table table-striped">
 					<tr>
 						<th><fmt:message key="label.id" /></th>
 						<th><fmt:message key="label.date" /></th>
@@ -170,11 +179,8 @@
 						<th><fmt:message key="label.client" /></th>
 						<th><fmt:message key="label.phone" /></th>
 						<th><fmt:message key="label.confirm" /></th>
-						<th><fmt:message key="label.change" /></th>
-						<th><fmt:message key="label.decline" /></th>
+						<th><fmt:message key="label.finish" /></th>
 					</tr>
-				</c:if>
-
 				<c:forEach var="elem" items="${appointments_list}"
 					varStatus="status">
 					<tr>
@@ -196,35 +202,120 @@
 						<td><c:out value="${elem.user.phone }" /></td>
 						<td>
 							<form action="controller" method="POST">
-								<button type="submit" class="btn btn-success">
+								<button type="submit" class="btn btn-success btn-block">
 									<fmt:message key="label.confirm" />
 								</button>
 								<input type="hidden" name="app_id" value="${elem.id}"> <input
 									type="hidden" name="command" value="confirm_appointment">
 							</form>
-						</td>
-						<td>
-							<form action="controller" method="POST">
-								<button type="submit" class="btn btn-primary">
+						    <form action="controller" method="POST">
+								<button type="submit" class="btn btn-primary btn-block">
 									<fmt:message key="label.change" />
 								</button>
 								<input type="hidden" name="id" value="${elem.user.userId}">
 								<input type="hidden" name="app_id" value="${elem.id}"> <input
 									type="hidden" name="command" value="to_change_appointment">
 							</form>
-						</td>
-						<td>
-							<form action="controller" method="POST">
-								<button type="submit" class="btn btn-danger">
+						<form action="controller" method="POST">
+								<button type="submit" class="btn btn-danger btn-block">
 									<fmt:message key="label.decline" />
 								</button>
 								<input type="hidden" name="app_id" value="${elem.id}"> <input
 									type="hidden" name="command" value="cancel_appointment">
 							</form>
 						</td>
+						
+						<td>
+							<form action="controller" method="POST">
+								<button type="submit" class="btn btn-danger btn-sm">
+									<fmt:message key="label.finish" />
+								</button>
+								<input type="hidden" name="app_id" value="${elem.id}"> <input
+									type="hidden" name="command" value="finish_appointment">
+							</form>
+						</td> 
+						
+					</tr>
+				</c:forEach>
+			</table>			
+			<nav aria-label="Page navigation example">
+			           <c:if test="${number_of_pages >1}">
+						<ul class="pagination">
+							<c:forEach begin="1" end="${number_of_pages }" var="i">
+								<li class="page-item">
+									<form action="controller" method="POST">
+										<button type="submit" class="page-link" value="${i }">
+											<c:out value="${i }" />
+										</button>
+										<input type="hidden" name="start_from" value="${i}"> 
+										<input type="hidden" name="app_status" value="${appointments_list[0].status}">
+										<input type="hidden" name="command" value="find_appointments_pagination">
+									</form>
+								</li>
+							</c:forEach>
+						</ul>
+						</c:if>
+					</nav>
+			</c:if>
+		
+		
+				<c:if test="${(appointments_list ne null) and (appointments_list[0].status eq 'FINISHED')}">
+			<table class="table table-striped">
+					<tr>
+						<th><fmt:message key="label.id" /></th>
+						<th><fmt:message key="label.date" /></th>
+						<th><fmt:message key="label.start_time" /></th>
+						<th><fmt:message key="label.end_time" /></th>
+						<th><fmt:message key="label.doctor" /></th>
+						<th><fmt:message key="label.procedure" /></th>
+						<th><fmt:message key="label.client" /></th>
+						<th><fmt:message key="label.phone" /></th>
+						<th><fmt:message key="label.price" /></th>					
+					</tr>
+				<c:forEach var="elem" items="${appointments_list}"
+					varStatus="status">
+					<tr>
+						<td><c:out value="${elem.id }" /></td>
+						<td><c:out value="${elem.date }" /></td>
+						<td><c:out value="${elem.startTime }" /></td>
+						<td><c:out value="${elem.endTime }" /></td>
+						<td>
+						<button class="btn btn-link" id="button_doctor"
+								value="${elem.doctor.userId}:${elem.date}">
+								<c:out value="${elem.doctor.name }" />
+								<c:out value=" " />
+								<c:out value="${elem.doctor.surname} " />
+							</button>
+							</td>
+						<td><c:out value="${elem.procedure.name }" /></td>
+						<td><c:out value="${elem.user.name }" /> <c:out value=" " />
+							<c:out value="${elem.user.surname} " /></td>
+						<td><c:out value="${elem.user.phone }" /></td>
+						<td><c:out value="${elem.procedure.price }" /></td>
 					</tr>
 				</c:forEach>
 			</table>
+			<nav aria-label="Page navigation example">
+			      <c:if test="${number_of_pages >1}">
+						<ul class="pagination">
+							<c:forEach begin="1" end="${number_of_pages }" var="i">
+								<li class="page-item">
+									<form action="controller" method="POST">
+										<button type="submit" class="page-link" value="${i }">
+											<c:out value="${i }" />
+										</button>
+										<input type="hidden" name="start_from" value="${i}"> 
+										<input type="hidden" name="app_status" value="${appointments_list[0].status}">
+										<input type="hidden" name="command" value="find_appointments_pagination">
+									</form>
+								</li>
+							</c:forEach>
+						</ul>
+						</c:if>
+					</nav>
+					
+			</c:if>	
+				
 			<br />
 
 			<table class="table table-striped">
@@ -333,7 +424,7 @@
 						<th><fmt:message key="label.change" /></th>
 						<th><fmt:message key="label.action" /></th>
 					</tr>
-				</c:if>
+				
 
 				<c:forEach var="elem" items="${procedures_list}" varStatus="status">
 					<tr>
@@ -380,7 +471,7 @@
 						</c:if>
 					</tr>
 				</c:forEach>
-
+               </c:if>
 			</table>
 
 			<table class="table table-striped">

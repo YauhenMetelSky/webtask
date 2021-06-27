@@ -44,29 +44,29 @@ public interface ScheduleService {
 	List<DoctorSchedule> findAllSchedulesFromRow(int pageNumber) throws ServiceException;
 
 	/**
-	 * @param userId
+	 * @param doctorId
 	 * @return List of active schedules by doctor id
 	 * @throws ServiceException
 	 */
-	List<DoctorSchedule> findAllActiveSchedulesByDoctor(long userId) throws ServiceException;
+	List<DoctorSchedule> findAllActiveSchedulesByDoctor(long doctorId) throws ServiceException;
 
 	/**
-	 * @param userId
+	 * @param doctorId
 	 * @return List of schedules by doctor id
 	 * @throws ServiceException
 	 */
-	List<DoctorSchedule> findAllSchedulesByDoctorId(long userId) throws ServiceException;
+	List<DoctorSchedule> findAllSchedulesByDoctorId(long doctorId) throws ServiceException;
 
 	/**
-	 * @param userId
+	 * @param doctorId
 	 * @param pageNumber
 	 * @return List of doctor's schedules from row, calculated by page number
 	 * @throws ServiceException
 	 */
-	List<DoctorSchedule> findAllSchedulesByDoctorIdFromRow(long userId, int pageNumber) throws ServiceException;
+	List<DoctorSchedule> findAllSchedulesByDoctorIdFromRow(long doctorId, int pageNumber) throws ServiceException;
 
 	/**
-	 * @return int number of pages for pagination, all schedules
+	 * @return int number of pages for pagination
 	 * @throws ServiceException
 	 */
 	int findNumberOfPages() throws ServiceException;

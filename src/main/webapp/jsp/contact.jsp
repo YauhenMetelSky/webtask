@@ -10,7 +10,9 @@
 <head>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1,  shrink-to-fit=no charset=utf-8" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	crossorigin="anonymous"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
@@ -20,19 +22,18 @@
 	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="css/elements.css">
+<title>Contact page</title>
 </head>
 <body>
-	<div class="container-fluid">
 		<c:import url="header.jsp" />
+	<div class="container-fluid bgspc">
+		<h1>Мы находились и находимся:</h1>
+		<h4>Центр города, улица Ленина д.1. п.1</h4>
+		<h4>Телефон для связи:</h4>
+		<h4>8(017) 222 44 22</h4>
 	</div>
-	<div class="container-fluid bg">
-		<h1>contact content</h1>
-		<h1>will be here</h1>
-		<h1>soon</h1>
 
-	</div>
-	<div class="container-fluid">
 		<c:import url="footer.jsp" />
-	</div>
+
 </body>
 </html>
