@@ -3,7 +3,7 @@ The web-system is an online representation of cosmethology clinic. The system co
 The user can choose procedure,doctor,date,time and make an appointment. 
 The doctor can add schedule and view appointments to him.  The administrator manages catalog, appointments and users.
 To make the appointment user needs to sign in.
-### User roles and functions available to them.
+### User roles and functions available to them:
 |function|	ADMIN| 	GUEST| 	USER| 	DOCTOR |
 |---------|-------|-------|------|----------|
 |change language|	* |	* |	* |	*|
@@ -39,11 +39,11 @@ singing in		||*|||
 create new account	||*|||	
 activate account by activation link	|*||||	
 # Appointment lifecycle
-1)Appointment creating.
+1. Appointment creating.<br/>
   User can create appointment, he must choose doctor,date and time. After creating appointment has status "CLAIMED".
-2)Appointment confirmation.
+2. Appointment confirmation.<br/>
    Administrator can see all created appointments.Administrator can see all information about appointment and client. Administrator call client and then can confirm appointment(change status on "CONFIRMED"), can change appointment or can cancel appointment (change status on "CANCELED"). Also administrator can see all other appointments to the choosed doctor, for double check.
-3)After procedure administrator must finish appointment (change appointment status to "FINISHED").
-4)Every morning before start of working day. All appointments with status "CLAIMED" and "CONFIRMED" change the status on "ENDED" (special event in database).
-# database tables
+3. After procedure.<br/> Administrator must finish appointment (change appointment status to "FINISHED").
+4. Every morning before start of working day. All appointments with status "CLAIMED" and "CONFIRMED" change the status on "ENDED" (special event in database).
+# Database tables
 ![](https://github.com/YauhenMetelSky/webtask/blob/master/database/tables.jpg)

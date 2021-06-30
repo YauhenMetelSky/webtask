@@ -23,7 +23,7 @@ public class LogOutCommand implements Command {
 		Router router = new Router();
 		HttpSession session = request.getSession();
 		session.invalidate();
-		router.setPagePath(PagePath.MAIN);
+		router.setPagePath(PagePath.TO_MAIN_PAGE);
 		return router;
 	}
 }

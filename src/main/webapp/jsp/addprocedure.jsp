@@ -47,7 +47,7 @@
 					placeholder=<fmt:message key="label.name"/>> 
 					<input type="text" name="procedure_image" value="" pattern=".*[^<>]" class="form-control"
 					placeholder=<fmt:message key="label.image"/>>
-					<input type="text" name="procedure_price" value="" required pattern="\d+[.]\d+" class="form-control"
+					<input type="text" name="procedure_price" value="" required pattern="\d+[.]\d{2,8}" class="form-control"
 					placeholder=<fmt:message key="label.price"/>>
 					<input type="text" name="duration" value="" required pattern="\d+" class="form-control"
 					placeholder=<fmt:message key="label.duration"/>>

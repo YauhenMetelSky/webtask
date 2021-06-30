@@ -36,6 +36,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 		logger.log(Level.DEBUG, "add(), procedureData:" + procedureData);
 		boolean isAdded = false;
 		if (!checkData(procedureData, 0)) {
+			logger.log(Level.DEBUG, "In if block");
 			return isAdded;
 		}
 		Duration duration = Duration.ofMinutes(Long.parseLong(procedureData.get(DURATION)));

@@ -43,6 +43,7 @@ public class ProcedureValidatorTest extends Assert {
 			{ "Very very very very very very very very too many words", false },
 			{ "Очень очень очень очень много слов", true },
 			{"Procedure-procedure",true},
+			{"Процедура",true},
 			{"",false},
 			{" ",false},
 			{ "<Notname>", false },

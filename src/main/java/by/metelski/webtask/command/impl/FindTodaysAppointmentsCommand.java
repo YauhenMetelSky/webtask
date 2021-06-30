@@ -17,7 +17,6 @@ import by.metelski.webtask.command.ParameterAndAttribute;
 import by.metelski.webtask.command.Router;
 import by.metelski.webtask.entity.Appointment;
 import by.metelski.webtask.entity.Appointment.Status;
-import by.metelski.webtask.entity.User;
 import by.metelski.webtask.exception.ServiceException;
 import by.metelski.webtask.model.dao.impl.AppointmentDaoImpl;
 import by.metelski.webtask.model.dao.impl.ProcedureDaoImpl;
@@ -35,6 +34,7 @@ public class FindTodaysAppointmentsCommand implements Command {
 		Router router = new Router();
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
+		session.setAttribute(ParameterAndAttribute.NUMBER_OF_PAGES, null);
 		Date today = Date.valueOf(LocalDate.now());
 		try {
 			appointments = service.findAllByDateAndStatus(today, Status.CONFIRMED);
