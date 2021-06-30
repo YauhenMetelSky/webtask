@@ -37,7 +37,7 @@ send email to user |*||||
 logout	|*||*|*|
 singing in		||*|||
 create new account	||*|||	
-activate account by activation link	|*||||	
+activate account by activation link	|*||*|*| <br/>	
 # Appointment lifecycle
 1. Appointment creating.<br/>
   User can create appointment, he must choose doctor,date and time. After creating appointment has status "CLAIMED".
