@@ -3,7 +3,7 @@ The web-system is an online representation of cosmethology clinic. The system co
 The user can choose procedure,doctor,date,time and make an appointment. 
 The doctor can add schedule and view appointments to him.  The administrator manages catalog, appointments and users.
 To make the appointment user needs to sign in.
-User roles and functions available to them.
+###User roles and functions available to them.
 |function|	ADMIN| 	GUEST| 	USER| 	DOCTOR |
 |---------|-------|-------|------|----------|
 |change language|	* |	* |	* |	*|
