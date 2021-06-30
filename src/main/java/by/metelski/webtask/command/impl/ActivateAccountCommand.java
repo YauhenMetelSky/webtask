@@ -34,19 +34,16 @@ public class ActivateAccountCommand implements Command {
 		logger.log(Level.DEBUG, "execute method ActivateAccountCommand");
 		String email = request.getParameter(ParameterAndAttribute.USER_EMAIL);
 		String token = request.getParameter(ParameterAndAttribute.TOKEN);
-		logger.log(Level.DEBUG, "email: " + email + " token: " + token);
 		try {
 			isActive = userService.activateAccount(token, email);
 			String page = request.getContextPath() + PagePath.TO_MAIN_PAGE;
 			if (isActive) {
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.ACCOUNT_IS_ACTIVE);
-				logger.log(Level.DEBUG, session.getAttribute(ParameterAndAttribute.MESSAGE_FOR_USER));
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.SUCCESSFUL);
 			} else {
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.CANT_ACTIVATE);
-				logger.log(Level.DEBUG, session.getAttribute(ParameterAndAttribute.MESSAGE_FOR_USER));
 				router.setPagePath(page);
 				router.setType(Type.REDIRECT);
 				session.setAttribute(ParameterAndAttribute.MESSAGE_FOR_USER, Message.UNSUCCESSFUL);

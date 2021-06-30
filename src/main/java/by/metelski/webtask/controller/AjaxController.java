@@ -28,20 +28,17 @@ public class AjaxController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		logger.log(Level.DEBUG, "doGet AjaxController");
 		processRequest(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		logger.log(Level.DEBUG, "doPost AjaxController");
 		processRequest(request, response);
 	}
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		logger.log(Level.DEBUG, "processRequest");
 		String commandFromPage = request.getParameter(ParameterAndAttribute.COMMAND);
 		CommandAsync command = CommandProviderAsync.defineCommand(commandFromPage);
 		logger.log(Level.DEBUG, "command from request: " + command);
