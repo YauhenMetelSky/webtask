@@ -31,8 +31,6 @@ public class LogInCommand implements Command {
 		Router router = new Router();
 		HttpSession session = request.getSession();
 		logger.log(Level.DEBUG, "execute method logIn");
-		String page = request.getContextPath() + PagePath.SIGN_IN;
-		logger.log(Level.DEBUG, "page path=" + page);
 		User user;
 		String email = request.getParameter(ParameterAndAttribute.USER_EMAIL);
 		String password = request.getParameter(ParameterAndAttribute.USER_PASSWORD);
@@ -42,7 +40,7 @@ public class LogInCommand implements Command {
 			optionalUser = userService.findUserByEmailPassword(email, password);
 			if (optionalUser.isPresent()) {
 				user = optionalUser.get();
-				router.setPagePath(PagePath.MAIN);
+				router.setPagePath(PagePath.TO_MAIN_PAGE);
 				session.setAttribute(ParameterAndAttribute.USER, user);
 			} else {
 				router.setPagePath(PagePath.SIGN_IN);

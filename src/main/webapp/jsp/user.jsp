@@ -49,7 +49,7 @@
 				<h1>
 					<fmt:message key="label.appointment" />
 				</h1>
-				<form action="controller" method="POST" class="form-container">
+				<form action="controller" method="GET" class="form-container">
 					<div class="row">
 						<div class="col">
 							<div class="form-group">
@@ -113,7 +113,7 @@
 				<h4>Phone number: ${user.phone }</h4>
 				<h4>Email: ${user.email }</h4>
 				<div>
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary">
 							<fmt:message key="label.change" />
 						</button>

@@ -33,11 +33,11 @@
 		<c:import url="header.jsp" />
 	<div class="container-fluid mybg">
 	</br>
-		<div class="container">
-		<div class="row">
-		
+	<div class="container">
+		<div class="row">		
 		<c:forEach var="elem" items="${active_procedures_list}" varStatus="status">
-			<div class="col">
+	<c:if test="${status.getIndex()<3 }">
+	          <div class="col">
 				<div class="card" style="width: 18rem;">
 					<img src="images/${elem.imageName}" class="card-img-top" alt="...">
 					<div class="card-body">
@@ -47,17 +47,54 @@
 						<p class="card-text">${elem.description}</p>
 						<h5 class="card-text"><fmt:formatNumber type="number" maxFractionDigits="2" value="${elem.price}"/> BYN</h5>
 					</div>
-					<!-- 	<a href="#" class="btn btn-primary">Go somewhere</a> -->
 					</div>
 				</div>
-			</div>
+				</div>
+    </c:if>
 			</c:forEach>
-
-
 		</div>
+		<br/>
+			<div class="row">	
+		<c:forEach var="elem" items="${active_procedures_list}" varStatus="status">
+	<c:if test="${status.getIndex()>2 and status.getIndex()<6 }">
+	          <div class="col">
+				<div class="card" style="width: 18rem;">
+					<img src="images/${elem.imageName}" class="card-img-top" alt="...">
+					<div class="card-body">
+					<div class="content_block">
+					<a class="content_toggle" href="#"><fmt:message key="label.show"/></a>
+						<h5 class="card-title">${elem.name }</h5>
+						<p class="card-text">${elem.description}</p>
+						<h5 class="card-text"><fmt:formatNumber type="number" maxFractionDigits="2" value="${elem.price}"/> BYN</h5>
+					</div>
+					</div>
+				</div>
+				</div>
+    </c:if>
+			</c:forEach>
+		</div>
+		<br/>
+			<div class="row">	
+		<c:forEach var="elem" items="${active_procedures_list}" varStatus="status">
+	<c:if test="${status.getIndex()>5 and status.getIndex()<9 }">
+	          <div class="col">
+				<div class="card" style="width: 18rem;">
+					<img src="images/${elem.imageName}" class="card-img-top" alt="...">
+					<div class="card-body">
+					<div class="content_block">
+					<a class="content_toggle" href="#"><fmt:message key="label.show"/></a>
+						<h5 class="card-title">${elem.name }</h5>
+						<p class="card-text">${elem.description}</p>
+						<h5 class="card-text"><fmt:formatNumber type="number" maxFractionDigits="2" value="${elem.price}"/> BYN</h5>
+					</div>
+					</div>
+				</div>
+				</div>
+    </c:if>
+			</c:forEach>
+		</div>
+		
 	</div>
-
-
 	</div>
 	
 		<c:import url="footer.jsp" />

@@ -31,9 +31,6 @@ import by.metelski.webtask.model.service.impl.ScheduleServiceImpl;
 public class ScheduleServiceImplTest extends Assert {
 	private ScheduleDao dao;
 	private ScheduleService service;
-	//FIXME TEST delete unused
-//	private DoctorScheduleFactory factory;
-//	private MockedStatic<DoctorScheduleFactory> mockedStatic;
 	private DoctorSchedule schedule1;
 	private DoctorSchedule schedule2;
 	private DoctorSchedule scheduleFromDb;
@@ -47,8 +44,6 @@ public class ScheduleServiceImplTest extends Assert {
     public void setUp() {
     	  	dao = mock(ScheduleDaoImpl.class);
     	  	service = new ScheduleServiceImpl(dao);
-//    	  	factory = mock(DoctorScheduleFactory.class);
-//    	  	mockedStatic = Mockito.mockStatic(DoctorScheduleFactory.class); 
     	  	data = new HashMap<>();
     	  	data.put(ParameterAndAttribute.DOCTOR_SCHEDULE_ID, "3");
     	  	data.put(ParameterAndAttribute.DOCTOR_ID, "1");
@@ -141,12 +136,4 @@ public class ScheduleServiceImplTest extends Assert {
 		boolean actualREsult = service.changeFieldIsActive(1, true);
 		assertEquals(actualREsult, expectedResult);
 	}
-	/*
-	 * @Test public void testFindAllSchedules() throws DaoException,
-	 * ServiceException { List<DoctorSchedule> expectedResult =
-	 * schedulesListDoctor1;
-	 * when(dao.findAllSchedules()).thenReturn(schedulesListDoctor1);
-	 * List<DoctorSchedule> actualResult = service.findAllSchedules();
-	 * assertEquals(actualResult, expectedResult); }
-	 */
 }

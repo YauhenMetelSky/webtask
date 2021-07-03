@@ -43,9 +43,7 @@ public class Controller extends HttpServlet {
 			throws ServletException, IOException {
 		String commandFromPage = request.getParameter(ParameterAndAttribute.COMMAND);
 		Command command = CommandProvider.defineCommand(commandFromPage);
-		logger.log(Level.DEBUG, "command " + command);
 		Router router = command.execute(request);
-		logger.log(Level.DEBUG, "page from command " + router.getPagePath());
 		switch (router.getType()) {
 		case FORWARD:
 			logger.log(Level.DEBUG, "forward");

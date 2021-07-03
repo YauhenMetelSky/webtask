@@ -2,7 +2,6 @@ package by.metelski.webtask.command;
 
 import by.metelski.webtask.command.async.FindAllActiveSchedulesByDoctorIdAsyncCommand;
 import by.metelski.webtask.command.async.FindAllAppointmentsByDoctorIDAndDateAsyncCommand;
-import by.metelski.webtask.command.async.FindScheduleByIdAsyncCommand;
 import by.metelski.webtask.command.async.FindTimeIntervalsByScheduleIdAsyncCommand;
 import by.metelski.webtask.command.async.UnknownCommandAsync;
 
@@ -21,11 +20,6 @@ public enum CommandTypeAsync {
 	FIND_ALL_ACTIVE_SCHEDULES_BY_DOCTOR_ASYNC{
 		{
 			this.command= new FindAllActiveSchedulesByDoctorIdAsyncCommand();
-		}
-	},
-	FIND_SCHEDULE_BY_ID_ASYNC {
-		{
-			this.command = new FindScheduleByIdAsyncCommand();
 		}
 	},
 

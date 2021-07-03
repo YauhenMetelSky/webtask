@@ -32,7 +32,7 @@ public class FindAllSchedulesByIdCommand implements Command {
 		HttpSession session = request.getSession();
 		String page = (String) session.getAttribute(ParameterAndAttribute.CURRENT_PAGE);
 		Long userId = Long.parseLong(request.getParameter(ParameterAndAttribute.DOCTOR_ID));
-		try {//FIXME the similar method used by findAllSchedulesByIdCommand(we can add show all attribute boolean, and re use it)
+		try {
 			schedules = service.findAllSchedulesByDoctorId(userId);
 			router.setPagePath(page);
 			request.setAttribute(ParameterAndAttribute.DOCTOR_SCHEDULES_LIST, schedules);

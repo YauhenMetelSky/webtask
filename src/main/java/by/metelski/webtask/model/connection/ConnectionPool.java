@@ -30,12 +30,12 @@ public class ConnectionPool {
 	private ConnectionPool() {
 		freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
 		givenAwayConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
+		logger.log(Level.INFO, "Try to create connection pool");
 		for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
 			try {
 				Connection connection = ConnectionCreator.getConnection();
 				ProxyConnection proxyConnection = new ProxyConnection(connection);
 				boolean isAddded = freeConnection.add(proxyConnection);
-				logger.log(Level.INFO, "connection added to freeConnection: " + isAddded);
 			} catch (SQLException e) {
 				logger.log(Level.ERROR, "coudn't create connection to data base: " + e.getMessage());
 			}
@@ -44,6 +44,7 @@ public class ConnectionPool {
 			logger.log(Level.FATAL, "connections poll don't created, pool size: " + freeConnection.size());
 			throw new RuntimeException("connections poll don't created");
 		}
+		logger.log(Level.INFO, "Connection pool was created");
 	}
 
 	public static ConnectionPool getInstance() {
@@ -55,7 +56,6 @@ public class ConnectionPool {
 			}
 			locker.unlock();
 		}
-		logger.log(Level.DEBUG, "created instanse" + instance);
 		return instance;
 	}
 
@@ -63,7 +63,6 @@ public class ConnectionPool {
 		Connection connection = null;
 		try {
 			connection = freeConnection.take();
-			logger.log(Level.DEBUG, "Gave connection " + connection);
 			givenAwayConnections.add((ProxyConnection) connection);
 		} catch (InterruptedException e) {
 			logger.log(Level.ERROR, "InterruptedException in method getConnection " + e.getMessage());
@@ -74,7 +73,6 @@ public class ConnectionPool {
 
 	public void releaseConnection(Connection connection) {
 		if (connection instanceof ProxyConnection && givenAwayConnections.remove(connection)) {
-			logger.log(Level.DEBUG, "release connection " + connection);
 			try {
 				freeConnection.put((ProxyConnection) connection);
 			} catch (InterruptedException e) {

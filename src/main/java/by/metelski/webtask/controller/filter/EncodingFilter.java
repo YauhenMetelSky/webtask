@@ -10,10 +10,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 /**
  * Encoding filter. Set encoding
  * @author Yauhen Metelski
@@ -22,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 @WebFilter(filterName = "Encoding", urlPatterns = { "/*" }, initParams = {
 		@WebInitParam(name = "encoding", value = "UTF-8", description = "Encoding Param") })
 public class EncodingFilter implements Filter {
-	private static final Logger logger = LogManager.getLogger();
 	private String code;
 
 	@Override
@@ -32,7 +27,6 @@ public class EncodingFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		logger.log(Level.DEBUG, "Encoding filter, code:" + code);
 		String codeRequest = request.getCharacterEncoding();
 		if (codeRequest == null || !codeRequest.equalsIgnoreCase(code)) {
 			request.setCharacterEncoding(code);

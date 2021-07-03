@@ -4,9 +4,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-   <jsp:forward page="/controller">
-        <jsp:param name="command" value="to_main"/>
-    </jsp:forward>
+<jsp:forward page="controller?command=to_main"/>
 </body>
 </html>
 

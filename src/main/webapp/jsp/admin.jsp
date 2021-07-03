@@ -32,7 +32,7 @@
 			<!--  <div class="form-group"> -->
 			<div class="col">
 				<div class="form-inline">
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<input type="text" name="name" value="" class="form-control"
 							placeholder=<fmt:message key="label.name"/>> <input
 							type="hidden" name="command" value="find_by_name">
@@ -44,7 +44,7 @@
 				<br />
 
 				<div class="form-inline"> 
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<input type="text" name="surname" value="" class="form-control"
 							placeholder=<fmt:message key="label.surname"/>> <input
 							type="hidden" name="command" value="find_by_surname">
@@ -75,7 +75,7 @@
 				<h4>Phone number: ${user.phone }</h4>
 				<h4>Email: ${user.email }</h4>
 				<div>
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary">
 							<fmt:message key="label.change" />
 						</button>
@@ -91,7 +91,7 @@
             <div class="row">
 				<div class="col-sm-3">
 				<div>
-					<form action="controller" method="POST">
+					<form action="controller" method="GET">
 						<button type="submit" class="btn btn-primary btn-block">
 							<fmt:message key="label.add_procedure" />
 						</button>

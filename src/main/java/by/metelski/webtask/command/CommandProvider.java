@@ -23,7 +23,7 @@ public class CommandProvider {
 	 */
 	public static Command defineCommand(String command) {
 		Command current = null;
-		logger.log(Level.INFO, "command: " + command);
+		logger.log(Level.INFO, "Command from controller: " + command);
 		if (command == null || command.isEmpty()) {
 			logger.log(Level.INFO, "empty command ");
 			return new UnknownCommand();

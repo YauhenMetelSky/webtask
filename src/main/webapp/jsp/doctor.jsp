@@ -60,7 +60,7 @@
 			</div>
 			<h6>Add schedule</h6>
 			<div class="form-inline">
-			<form action="controller" method="POST">
+			<form action="controller" method="GET">
 				<input type="date" min="2021-05-16" name="date" value="" required class="form-control"
 					placeholder=<fmt:message key="label.date"/>> 
 				<input type="time" min="09:00" max="21:00" step="2" name="start_time" value="09:00:00" required class="form-control"
@@ -80,7 +80,7 @@
 				<h4>Phone number: ${user.phone }</h4>	
 				<h4>Email: ${user.email }</h4>			
 					<div>
-			<form action="controller" method="POST">
+			<form action="controller" method="GET">
 				<button type="submit" class="btn btn-primary"><fmt:message key="label.change" />
 				</button>
 				<input type="hidden" name="command" value="to_change_personal_info">
@@ -112,7 +112,7 @@
 						<ul class="pagination">
 							<c:forEach begin="1" end="${number_of_pages }" var="i">
 								<li class="page-item">
-									<form action="controller" method="POST">
+									<form action="controller" method="GET">
 										<button type="submit" class="page-link" value="${i }">
 											<c:out value="${i }" />
 										</button>

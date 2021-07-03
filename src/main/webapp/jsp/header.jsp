@@ -76,7 +76,7 @@
 					, ${user.name}
 				</h3>
 				<div class="header_button">
-					<form action="controller" method="post">
+					<form action="controller" method="get">
 						<input type="submit" value=<fmt:message key="label.logout"/>
 							class="btn btn-primary btn-sm btn-block"> <input
 							type="hidden" name="command" value="log_out">
