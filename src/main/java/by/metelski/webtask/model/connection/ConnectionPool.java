@@ -35,7 +35,7 @@ public class ConnectionPool {
 			try {
 				Connection connection = ConnectionCreator.getConnection();
 				ProxyConnection proxyConnection = new ProxyConnection(connection);
-				boolean isAddded = freeConnection.add(proxyConnection);
+				freeConnection.add(proxyConnection);
 			} catch (SQLException e) {
 				logger.log(Level.ERROR, "coudn't create connection to data base: " + e.getMessage());
 			}

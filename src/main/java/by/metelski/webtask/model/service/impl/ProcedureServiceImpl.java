@@ -25,7 +25,7 @@ import by.metelski.webtask.validator.ProcedureValidator;
  */
 public class ProcedureServiceImpl implements ProcedureService {
 	private static final Logger logger = LogManager.getLogger();
-	private ProcedureDao procedureDao;
+	private final ProcedureDao procedureDao;
 
 	public ProcedureServiceImpl(ProcedureDao procedureDao) {
 		this.procedureDao = procedureDao;

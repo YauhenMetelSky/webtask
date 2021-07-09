@@ -33,8 +33,8 @@ import static by.metelski.webtask.command.ParameterAndAttribute.*;
 public class AppointmentServiceImpl implements AppointmentService {
 	private static final Logger logger = LogManager.getLogger();
 	private final int numberOfAppointmentsInPage = 10;
-	AppointmentDao appointmentDao;
-	ProcedureDao procedureDao;
+	private final AppointmentDao appointmentDao;
+	private final ProcedureDao procedureDao;
 
 	public AppointmentServiceImpl(AppointmentDao appointmentDao, ProcedureDao procedureDao) {
 		this.appointmentDao = appointmentDao;

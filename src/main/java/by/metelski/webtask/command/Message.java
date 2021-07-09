@@ -13,7 +13,7 @@ public final class Message {
 	public static final String CANT_ADD_USER="Can't add user";
 	public static final String EMAIL_ACTIVATE="Account created, please check your email to activate it.";
 	public static final String EMAIL_SEND="Email send";
-	public static final String EMAIL_SUBJECT ="Account activation.";
+	public static final String EMAIL_SUBJECT ="Account.";
 	public static final String EMAIL_TEXT ="We are glad to welcome you on our site.";
 	public static final String INCORRECT_EMAIL_OR_LOGIN="Incorrect email or password";
 	public static final String NOTHING_FOUNDED ="Nothing founded";
